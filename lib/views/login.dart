@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:application/Models/AccountTypes.dart';
+import 'package:application/views/widgets/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,130 +82,143 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
     return FractionallySizedBox(
         heightFactor: 0.75,
         widthFactor: 1,
-        child: SafeArea(
-            child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-                left: 4.0,
-                right: 4.0,
-                top: 4.0,
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Form(
+          key: _formKey,
+          child: SafeArea(
+              child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    title,
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: CustomTextfield(
-                      myController: uname,
-                      hintText: " Username",
-                      isPassword: false,
+              padding: EdgeInsets.only(
+                  left: 4.0,
+                  right: 4.0,
+                  top: 4.0,
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      title,
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white70,
+                          fontWeight: FontWeight.w600),
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: CustomTextfield(
-                      myController: upass,
-                      hintText: " Password",
-                      isPassword: true,
+                    const SizedBox(height: 24),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: CustomTextfield(
+                        myController: uname,
+                        hintText: " Username",
+                        isPassword: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'This field cannot be empty';
+                          }
+
+                          return null;
+                        },
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  loginin
-                      ? const CircularProgressIndicator(
-                          color: Color.fromARGB(255, 51, 83, 142),
-                        )
-                      : CustomButton(
-                          context,
-                          "Log in",
-                          () async {
-                            if (uname.text.isEmpty) {
-                              // CoolAlert.show(
-                              //   context: context,
-                              //   type: CoolAlertType.error,
-                              //   backgroundColor:
-                              //       const Color.fromARGB(255, 51, 83, 142),
-                              //   text: 'Input your username ',
-                              //   autoCloseDuration: const Duration(seconds: 2),
-                              // );
-                              return;
-                            }
-                            if (upass.text.isEmpty) {
-                              // CoolAlert.show(
-                              //   context: context,
-                              //   type: CoolAlertType.error,
-                              //   backgroundColor:
-                              //       const Color.fromARGB(255, 51, 83, 142),
-                              //   text: 'Input your password ',
-                              //   autoCloseDuration: const Duration(seconds: 2),
-                              // );
-                              return;
-                            }
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: CustomTextfield(
+                        myController: upass,
+                        hintText: " Password",
+                        isPassword: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'This field cannot be empty';
+                          }
 
-                            setState(() {
-                              loginin = true;
-                            });
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    loginin
+                        ? const CircularProgressIndicator(
+                            color: Color.fromARGB(255, 51, 83, 142),
+                          )
+                        : CustomButton(
+                            context,
+                            "Log in",
+                            () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  loginin = true;
+                                });
+                                final Map<String, dynamic> body = {
+                                  "uname": uname.text.trim(),
+                                  "upass": upass.text.trim()
+                                };
+                                Future.delayed(Duration(seconds: 3))
+                                    .then((onValue) {
+                                      setState(() {
+                                            loginin = false;
+                                      });
+                                    Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => HomeScreen(),
+                                  ),
+                                );
 
-                            // await comms_repo.loginUser("login", {
-                            //   "uname": uname.text.trim(),
-                            //   "upass": upass.text.trim()
-                            // })
-                            // .then((value) async {
-                            //   setState(() {
-                            //     loginin = false;
-                            //   });
+                                    });
+                               
 
-                            //   // printLog("USer ifo $value");
+                                // await comms_repo.loginUser("login", {
+                                //   "uname": uname.text.trim(),
+                                //   "upass": upass.text.trim()
+                                // })
+                                // .then((value) async {
+                                //   setState(() {
+                                //     loginin = false;
+                                //   });
 
-                            //   if (value["rsp"]) {
-                            //     if (value["data"].length > 0) {
-                            //       // Creating a Technician instance from JSON
+                                //   // printLog("USer ifo $value");
 
-                            //       // Navigator.of(context).pushReplacement(
-                            //       //   MaterialPageRoute(
-                            //       //     builder: (ctx) => const HomeScreen(),
-                            //       //   ),
-                            //       // );
-                            //     } else {
-                            //       // CoolAlert.show(
-                            //       //   context: context,
-                            //       //   type: CoolAlertType.error,
-                            //       //   backgroundColor:
-                            //       //       const Color.fromARGB(255, 51, 83, 142),
-                            //       //   text: "Unknown User Credentials",
-                            //       //   autoCloseDuration:
-                            //       //       const Duration(seconds: 2),
-                            //       // );
-                            //     }
-                            //   } else {
-                            //     // CoolAlert.show(
-                            //     //   context: context,
-                            //     //   type: CoolAlertType.error,
-                            //     //   backgroundColor:
-                            //     //       const Color.fromARGB(255, 51, 83, 142),
-                            //     //   text: value["msg"],
-                            //     //   autoCloseDuration: const Duration(seconds: 2),
-                            //     // );
-                            //   }
-                            // });
-                          },
-                        ),
-                  const SizedBox(height: 20),
-                ],
+                                //   if (value["rsp"]) {
+                                //     if (value["data"].length > 0) {
+                                //       // Creating a Technician instance from JSON
+
+                                //       // Navigator.of(context).pushReplacement(
+                                //       //   MaterialPageRoute(
+                                //       //     builder: (ctx) => const HomeScreen(),
+                                //       //   ),
+                                //       // );
+                                //     } else {
+                                //       // CoolAlert.show(
+                                //       //   context: context,
+                                //       //   type: CoolAlertType.error,
+                                //       //   backgroundColor:
+                                //       //       const Color.fromARGB(255, 51, 83, 142),
+                                //       //   text: "Unknown User Credentials",
+                                //       //   autoCloseDuration:
+                                //       //       const Duration(seconds: 2),
+                                //       // );
+                                //     }
+                                //   } else {
+                                //     // CoolAlert.show(
+                                //     //   context: context,
+                                //     //   type: CoolAlertType.error,
+                                //     //   backgroundColor:
+                                //     //       const Color.fromARGB(255, 51, 83, 142),
+                                //     //   text: value["msg"],
+                                //     //   autoCloseDuration: const Duration(seconds: 2),
+                                //     // );
+                                //   }
+                                // });
+                              }
+                            },
+                          ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
-          ),
-        )));
+          )),
+        ));
   }
 
   void _pickDate() async {

@@ -26,8 +26,8 @@ class SignInScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 100),
-              SvgPicture.asset(
-                'assets/images/Logo.svg',
+              Image.asset(
+                'assets/images/Logo.jpeg',
                 height: 150,
               ),
               SizedBox(height: 20),
@@ -48,7 +48,7 @@ class SignInScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 30),
               Text(
                 'Sign In As',
                 style: TextStyle(
@@ -69,9 +69,8 @@ class SignInScreen extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   // Navigator.pushNamed(context, '/signup');
-                    Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SignupScreen()));
-
                 },
                 child: RichText(
                   text: TextSpan(
@@ -116,16 +115,23 @@ class SignInScreen extends StatelessWidget {
           ),
         ),
         onPressed: () async {
-          // Navigator.pushNamed(context, '/login');
-          await LoginPage(Get.context!, ttype);
+          try {
+            await LoginPage(context, ttype);
+          } catch (e) {
+            debugPrint("error loginpage $e");
+          }
+          
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(text, style: TextStyle(fontSize: 18)),
-            Icon(Icons.arrow_forward),
-          ],
-        ),
+        child:Stack(alignment: Alignment.center,children: [Center(child:  Text(text, style: TextStyle(fontSize: 18),)), Positioned(
+          right: 0,
+          child:    Icon(Icons.arrow_forward),)],)
+        //  Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+           
+         
+        //   ],
+        // ),
       ),
     );
   }
@@ -199,8 +205,11 @@ class LoginScreen extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     //  Navigator.pushNamed(context, '/signup');
-                                       Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SignupScreen()));
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SignupScreen()));
                                   },
                                   child: RichText(
                                     text: TextSpan(

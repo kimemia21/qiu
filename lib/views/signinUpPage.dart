@@ -75,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   text: const TextSpan(
                     children: [
                       TextSpan(
-                        text: "Already have an account? ",
+                        text: "Already have an account?",
                         style: TextStyle(color: Colors.white70),
                       ),
                       TextSpan(
@@ -115,7 +115,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
         onPressed: () async {
-        //  Navigator.pushNamed(context, '/login');
+          //  Navigator.pushNamed(context, '/login');
           await LoginPage(Get.context!, ttype);
         },
         child: Row(
@@ -186,6 +186,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
+
+
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -253,8 +255,11 @@ class LoginScreen extends StatelessWidget {
                                 const Spacer(),
                                 TextButton(
                                   onPressed: () {
-                               Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SignupScreen()));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SignupScreen()));
                                   },
                                   child: RichText(
                                     text: const TextSpan(

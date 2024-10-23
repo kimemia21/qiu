@@ -4,9 +4,15 @@ class CustomTextfield extends StatefulWidget {
   final TextEditingController myController;
   final String? hintText;
   final bool? isPassword;
-  const CustomTextfield(
-      {Key? key, required this.myController, this.hintText, this.isPassword})
-      : super(key: key);
+  final String? Function(String?)? validator; // Add validator function
+
+  const CustomTextfield({
+    Key? key,
+    required this.myController,
+    this.hintText,
+    this.isPassword,
+    this.validator, // Accept validator as a parameter
+  }) : super(key: key);
 
   @override
   State<CustomTextfield> createState() => _CustomTextfieldState();
@@ -14,17 +20,18 @@ class CustomTextfield extends StatefulWidget {
 
 class _CustomTextfieldState extends State<CustomTextfield> {
   bool hidepass = false;
+
   @override
   void initState() {
     super.initState();
-    hidepass = widget.isPassword! ?? false;
+    hidepass = widget.isPassword ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: TextField(
+      child: TextFormField( // Use TextFormField instead of TextField
         keyboardType: widget.isPassword!
             ? TextInputType.visiblePassword
             : TextInputType.emailAddress,
@@ -57,10 +64,12 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
+        validator: widget.validator, // Pass the validator to TextFormField
       ),
     );
   }
 }
+
 
 Widget buildWideButton(
     BuildContext context, String text, Color color, onpressed,
@@ -109,11 +118,19 @@ Widget CustomButton(BuildContext context, String text, pressed) {
           ),
         ),
         onPressed: pressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Text(text, style: TextStyle(fontSize: 18)),
-            Icon(Icons.arrow_forward),
+            Center(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              child: Icon(Icons.arrow_forward),
+            ),
           ],
         ),
       ),
