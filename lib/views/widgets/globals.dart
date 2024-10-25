@@ -1,3 +1,4 @@
+import 'package:application/Models/DriverModel.dart';
 import 'package:application/Models/OrderModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -424,6 +425,87 @@ class OrderStatusWidget extends StatelessWidget {
 
 
 
+class DriverCard extends StatelessWidget {
+  final drivermodel model;
+
+  const DriverCard({
+    super.key,
+    required this.model,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Name
+          Text(
+            'Name: ${model.name}',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          // Assigned Truck
+          _buildInfoRow(Icons.local_shipping, 'Assigned Truck: ${model.truck}'),
+
+          // Phone
+          _buildInfoRow(Icons.phone, 'Phone: ${model.phone}'),
+
+          // Availability
+          _buildInfoRow(
+            Icons.check_circle,
+            'Availability: ${model.avaiable? "Available" : "Unavailable"}',
+            color: model.avaiable ? Colors.green : Colors.red,
+          ),
+
+          // Status
+          _buildInfoRow(Icons.info, 'Status: ${model.status}'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text, {Color? color}) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: color ?? Colors.grey,
+          size: 18,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 List<Map<String, dynamic>> dummyData = [
   {
     "status": "FULFILLED", // Changed from "delivered"
@@ -462,3 +544,44 @@ List<Map<String, dynamic>> dummyData = [
   }
 ];
 
+List driversDummy = [
+  {
+    "truck": "Freightliner Cascadia",
+    "phone": "555-0123",
+    "avaiable": true,
+    "status": "Active",
+    "name":"john Doe",
+  },
+  {
+    "truck": "Volvo VNL",
+    "phone": "555-0456",
+    "avaiable": false,
+    "status": "On Duty",
+    
+    "name":"john Doe",
+  },
+  {
+    "truck": "Kenworth T680",
+    "phone": "555-0789",
+    "avaiable": true,
+    "status": "Available",
+    
+    "name":"john Doe",
+  },
+  {
+    "truck": "Peterbilt 579",
+    "phone": "555-1011",
+    "avaiable": true,
+    "status": "Active",
+    
+    "name":"john Doe",
+  },
+  {
+    "truck": "Mack Anthem",
+    "phone": "555-1213",
+    "avaiable": false,
+    "status": "Under Maintenance",
+    
+    "name":"john Doe",
+  }
+];

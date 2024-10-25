@@ -11,11 +11,8 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
- 
-
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -62,36 +59,32 @@ class _OrdersState extends State<Orders> {
             bottom: 0,
             child: SingleChildScrollView(
               child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: FutureBuilder<List<Ordermodel>>(
-                    future: AppRequest.fetchOrders(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Ordermodel>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(
-                            child: Text(
-                                'Error: ${snapshot.error}')); // Show error if any
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
-                            child: Text(
-                                'No Orders Available')); // Show message if no data
-                      }
+                padding: const EdgeInsets.all(10.0),
+                child: FutureBuilder<List<Ordermodel>>(
+                  future: AppRequest.fetchOrders(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Ordermodel>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(
+                          child: Text('Error: ${snapshot.error}')); // Show error if any
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('No Orders Available')); // Show message if no data
+                    }
 
-                      return  Container(
-                        height: 500,
-                        child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final order = snapshot.data![index];
-                        
-                            return OrderStatusWidget(model: order);
-                          },
-                        ),
-                      );
-                    },
-                  )),
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(), // Prevent scrolling within the ListView itself
+                      shrinkWrap: true, // Ensure the ListView only takes up as much space as needed
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final order = snapshot.data![index];
+                        return OrderStatusWidget(model: order); // Custom widget
+                      },
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ],

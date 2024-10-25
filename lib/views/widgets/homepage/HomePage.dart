@@ -1,5 +1,8 @@
+import 'package:application/views/widgets/Orders/orders.dart';
+import 'package:application/views/widgets/drivers/drivers.dart';
 import 'package:application/views/widgets/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -83,7 +86,8 @@ class _HomepageState extends State<Homepage> {
 
           // Scrollable content
           Positioned(
-            top: 250, // Should match the white container's top position + some padding
+            top:
+                250, // Should match the white container's top position + some padding
             left: 0,
             right: 0,
             bottom: 0,
@@ -115,7 +119,8 @@ class _HomepageState extends State<Homepage> {
                       width: MediaQuery.of(context).size.width * 0.95,
                       decoration: BoxDecoration(
                         color: Colors.blue[100],
-                        borderRadius: BorderRadiusDirectional.all(Radius.circular(20)),
+                        borderRadius:
+                            BorderRadiusDirectional.all(Radius.circular(20)),
                       ),
                       child: ListTile(
                         leading: Icon(Icons.details_outlined),
@@ -145,7 +150,10 @@ class _HomepageState extends State<Homepage> {
                       text: 'Manage My Orders',
                       icon: Icons.list_alt_outlined,
                       onPressed: () {
-                        // Handle navigation to manage orders
+                          PersistentNavBarNavigator.pushNewScreen(
+                          withNavBar: true,
+                          context,
+                            screen: Orders());
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),
@@ -163,6 +171,10 @@ class _HomepageState extends State<Homepage> {
                       text: 'My Drivers',
                       icon: Icons.person_outline,
                       onPressed: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          withNavBar: true,
+                          context,
+                            screen: Drivers());
                         // Handle navigation to My Drivers
                       },
                       iconColor: Theme.of(context).primaryColor,
