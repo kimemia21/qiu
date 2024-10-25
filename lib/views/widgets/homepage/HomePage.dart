@@ -1,6 +1,7 @@
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/drivers/drivers.dart';
 import 'package:application/views/widgets/globals.dart';
+import 'package:application/views/widgets/trucks/Trucks.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
@@ -162,7 +163,10 @@ class _HomepageState extends State<Homepage> {
                       text: 'My Trucks',
                       icon: Icons.local_shipping_outlined,
                       onPressed: () {
-                        // Handle navigation to My Trucks
+              PersistentNavBarNavigator.pushNewScreen(
+                          withNavBar: true,
+                          context,
+                            screen: Trucks());
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),

@@ -1,4 +1,4 @@
-import 'package:application/Models/AccountTypes.dart';
+import 'package:application/views/widgets/Models/AccountTypes.dart';
 import 'package:application/views/login.dart';
 import 'package:application/views/signinpage.dart';
 import 'package:application/views/widgets/globals.dart';

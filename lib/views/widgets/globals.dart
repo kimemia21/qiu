@@ -1,5 +1,5 @@
-import 'package:application/Models/DriverModel.dart';
-import 'package:application/Models/OrderModel.dart';
+import 'package:application/views/widgets/Models/DriverModel.dart';
+import 'package:application/views/widgets/Models/OrderModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -585,3 +585,43 @@ List driversDummy = [
     "name":"john Doe",
   }
 ];
+
+
+List<Map<String, dynamic>> dummyTrucksData = [
+    {
+      "id": "1",
+      "capacity": 10.5,
+      "quality": "High",
+      "reg": "ABC-1234",
+    },
+    {
+      "id": "2",
+      "capacity": 15.0,
+      "quality": "Medium",
+      "reg": "XYZ-5678",
+    },
+    {
+      "id": "3",
+      "capacity": 8.0,
+      "quality": "Low",
+      "reg": "LMN-9012",
+    },
+    {
+      "id": "4",
+      "capacity": 12.3,
+      "quality": "High",
+      "reg": "OPQ-3456",
+    },
+    {
+      "id": "5",
+      "capacity": 20.0,
+      "quality": "Medium",
+      "reg": "RST-7890",
+    },
+    {
+      "id": "6",
+      "capacity": 5.5,
+      "quality": "Low",
+      "reg": "UVW-1357",
+    },
+  ];

@@ -1,16 +1,17 @@
-import 'package:application/views/widgets/Models/DriverModel.dart';
+
+import 'package:application/views/widgets/Models/TrucksModel.dart';
 import 'package:application/views/widgets/globals.dart';
 import 'package:application/views/widgets/request/Req.dart';
 import 'package:flutter/material.dart';
 
-class Drivers extends StatefulWidget {
-  const Drivers({super.key});
+class Trucks extends StatefulWidget {
+  const Trucks({super.key});
 
   @override
-  State<Drivers> createState() => _DriversState();
+  State<Trucks> createState() => _TrucksState();
 }
 
-class _DriversState extends State<Drivers> {
+class _TrucksState extends State<Trucks> {
   @override
   void initState() {
     super.initState();
@@ -21,7 +22,7 @@ class _DriversState extends State<Drivers> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background gradient container
+      
           Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
@@ -52,17 +53,17 @@ class _DriversState extends State<Drivers> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    FutureBuilder<List<drivermodel>>(
-                      future: AppRequest.fetchDrivers(),
+                    FutureBuilder<List<trucksmodel>>(
+                      future: AppRequest.fetchTrucks(),
                       builder: (BuildContext context,
-                          AsyncSnapshot<List<drivermodel>> snapshot) {
+                          AsyncSnapshot<List<trucksmodel>> snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return Center(child: Text('No Drivers Available'));
+                          return Center(child: Text('No Trucks Available'));
                         }
 
                         return ListView.builder(
@@ -70,20 +71,19 @@ class _DriversState extends State<Drivers> {
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final driver = snapshot.data![index];
-                            return DriverCard(model: driver);
+                            final trucks = snapshot.data![index];
+                            return TruckCard(model: trucks,);
                           },
                         );
                       },
                     ),
-                    const SizedBox(height: 12), // Space between content
+                    const SizedBox(height: 12), 
                   ],
                 ),
               ),
             ),
           ),
 
-          // Fixed Add Driver Button
           Positioned(
             left: 16,
             right: 16,
@@ -93,7 +93,7 @@ class _DriversState extends State<Drivers> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  // Add your button action here
+                 
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6B7AFF),
@@ -102,7 +102,7 @@ class _DriversState extends State<Drivers> {
                   ),
                 ),
                 child: const Text(
-                  'Add Driver',
+                  'Add Truck',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -114,6 +114,74 @@ class _DriversState extends State<Drivers> {
           ),
         ],
       ),
+    );
+  }
+}
+
+
+
+class TruckCard extends StatelessWidget {
+  final trucksmodel model;
+
+  const TruckCard({
+    super.key,
+    required this.model,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Truck ID
+          _buildInfoRow(Icons.card_travel, 'Truck ID: ${model.id}'),
+
+          // Capacity
+          _buildInfoRow(Icons.emoji_transportation, 'Capacity: ${model.capacity}'),
+
+          // Quality
+          _buildInfoRow(Icons.star, 'Quality: ${model.quality}'),
+
+          // Registration
+          _buildInfoRow(Icons.assignment, 'Registration: ${model.reg}'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: Colors.grey,
+          size: 18,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

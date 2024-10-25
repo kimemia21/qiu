@@ -1,8 +1,9 @@
 
 // import 'package:application/Models/DriverModel.dart';
 // import 'package:application/Models/Drivermodel.dart';
-import 'package:application/Models/DriverModel.dart';
-import 'package:application/Models/OrderModel.dart';
+import 'package:application/views/widgets/Models/DriverModel.dart';
+import 'package:application/views/widgets/Models/OrderModel.dart';
+import 'package:application/views/widgets/Models/TrucksModel.dart';
 import 'package:application/views/widgets/globals.dart';
 
 class AppRequest {
@@ -17,8 +18,9 @@ static Future<List<drivermodel>> fetchDrivers() {
      return Future.value(drivers);
   }
 
-// static Future<List<drivermodel>> fetchDrivers() {
-//     final  drivers = driversDummy.map((drivers) => Drivermodel.fromJson(drivers)).toList();
-// //     return Future.value(drivers);
-//   }
+  static Future<List<trucksmodel>> fetchTrucks() {
+    final  trucks = dummyTrucksData.map((trucks) =>trucksmodel.fromJson(trucks)).toList();
+     return Future.value(trucks);
+  }
+
 }

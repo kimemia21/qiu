@@ -1,3 +1,4 @@
+import 'package:application/views/widgets/Orders/CreatOrder.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/homepage/HomePage.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _AppnavState extends State<Appnav> {
 
 //
       Orders(),
-      Homepage(),
+      CreateOrderScreen(),
     ];
   }
 

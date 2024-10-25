@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:application/Models/AccountTypes.dart';
+import 'package:application/views/widgets/Models/AccountTypes.dart';
 import 'package:application/views/widgets/homepage/AppNav.dart';
 import 'package:application/views/widgets/homepage/HomeScreen.dart';
 import 'package:flutter/material.dart';

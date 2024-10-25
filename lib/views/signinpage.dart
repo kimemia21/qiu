@@ -1,4 +1,4 @@
-import 'package:application/Models/AccountTypes.dart';
+import 'package:application/views/widgets/Models/AccountTypes.dart';
 import 'package:application/views/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

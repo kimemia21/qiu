@@ -1,4 +1,4 @@
-import 'package:application/Models/OrderModel.dart';
+import 'package:application/views/widgets/Models/OrderModel.dart';
 import 'package:application/views/widgets/globals.dart';
 import 'package:application/views/widgets/request/Req.dart';
 import 'package:flutter/material.dart';
