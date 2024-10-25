@@ -103,36 +103,45 @@ class SignInScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          minimumSize: Size(double.infinity, 50),
-          backgroundColor: color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-            side: BorderSide(
-              color: Colors.white,
-              width: 1.5,
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(double.infinity, 50),
+            backgroundColor: color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              side: BorderSide(
+                color: Colors.white,
+                width: 1.5,
+              ),
             ),
           ),
-        ),
-        onPressed: () async {
-          try {
-            await LoginPage(context, ttype);
-          } catch (e) {
-            debugPrint("error loginpage $e");
-          }
-          
-        },
-        child:Stack(alignment: Alignment.center,children: [Center(child:  Text(text, style: TextStyle(fontSize: 18),)), Positioned(
-          right: 0,
-          child:    Icon(Icons.arrow_forward),)],)
-        //  Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-           
-         
-        //   ],
-        // ),
-      ),
+          onPressed: () async {
+            try {
+              await LoginPage(context, ttype);
+            } catch (e) {
+              debugPrint("error loginpage $e");
+            }
+          },
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Center(
+                  child: Text(
+                text,
+                style: TextStyle(fontSize: 18),
+              )),
+              Positioned(
+                right: 0,
+                child: Icon(Icons.arrow_forward),
+              )
+            ],
+          )
+          //  Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+
+          //   ],
+          // ),
+          ),
     );
   }
 }

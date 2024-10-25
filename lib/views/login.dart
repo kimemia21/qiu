@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:application/Models/AccountTypes.dart';
-import 'package:application/views/widgets/HomeScreen.dart';
+import 'package:application/views/widgets/homepage/AppNav.dart';
+import 'package:application/views/widgets/homepage/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -155,17 +156,15 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
                                 };
                                 Future.delayed(Duration(seconds: 3))
                                     .then((onValue) {
-                                      setState(() {
-                                            loginin = false;
-                                      });
-                                    Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (ctx) => HomeScreen(),
-                                  ),
-                                );
-
-                                    });
-                               
+                                  setState(() {
+                                    loginin = false;
+                                  });
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => Appnav(),
+                                    ),
+                                  );
+                                });
 
                                 // await comms_repo.loginUser("login", {
                                 //   "uname": uname.text.trim(),
