@@ -259,21 +259,11 @@ class ExampleUsage extends StatelessWidget {
 }
 
 class OrderStatusWidget extends StatelessWidget {
-  final String customerName;
-  final String orderNo;
-  final String status;
-  final DateTime estimatedDelivery;
-  final double estimatedCost;
   final Ordermodel model;
 
   const OrderStatusWidget({
     super.key,
-    required this.customerName,
-    required this.orderNo,
-    required this.status,
-    required this.estimatedDelivery,
-    required this.estimatedCost,
-    required  this.model,
+    required this.model,
   });
 
   @override
@@ -299,7 +289,7 @@ class OrderStatusWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-           Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
               'Order NO. ${model.id}',
@@ -324,11 +314,10 @@ class OrderStatusWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-
-        _buildStatusDot('PENDING', model.status=="PENDING"),
-        _buildStatusDot('CONFIRMED', model.status=="CONFIRMED"),
-        _buildStatusDot('CANCELLED',model.status=="CANCELLED"),
-        _buildStatusDot('FULFILLED', model.status=="FULFILLED"),
+        _buildStatusDot('PENDING', model.status == "PENDING"),
+        _buildStatusDot('CONFIRMED', model.status == "CONFIRMED"),
+        _buildStatusDot('CANCELLED', model.status == "CANCELLED"),
+        _buildStatusDot('FULFILLED', model.status == "FULFILLED"),
       ],
     );
   }
@@ -359,15 +348,15 @@ class OrderStatusWidget extends StatelessWidget {
   Widget _buildOrderDetails() {
     return Column(
       children: [
-        Text('Customer: $customerName'),
+        Text('Customer: ${model.name}'),
         const SizedBox(height: 8),
-        Text('Order No: $orderNo'),
+        Text('Order No: ${model.id}'),
         const SizedBox(height: 8),
-        Text('Status: $status'),
+        Text('Status: ${model.status}'),
         const SizedBox(height: 8),
-        Text('Estimated Delivery Time: ${_formatDateTime(estimatedDelivery)}'),
+        Text('Estimated Delivery Time: ${_formatDateTime(model.deliveryDate)}'),
         const SizedBox(height: 8),
-        Text('Estimated Cost: ${estimatedCost.toStringAsFixed(0)} ksh'),
+        Text('Estimated Cost: ${model.price.toStringAsFixed(0)} ksh'),
       ],
     );
   }
@@ -432,3 +421,44 @@ class OrderStatusWidget extends StatelessWidget {
     }
   }
 }
+
+
+
+List<Map<String, dynamic>> dummyData = [
+  {
+    "status": "FULFILLED", // Changed from "delivered"
+    "name": "Order A",
+    "id": 1,
+    "deliveryDate": DateTime.parse("2024-10-01"),
+    "price": 100.50
+  },
+  {
+    "status": "PENDING", // Changed from "pending"
+    "name": "Order B",
+    "id": 2,
+    "deliveryDate": DateTime.parse("2024-10-15"),
+    "price": 200.75
+  },
+  {
+    "status": "FULFILLED", // Changed from "shipped"
+    "name": "Order C",
+    "id": 3,
+    "deliveryDate": DateTime.parse("2024-11-01"),
+    "price": 150.00
+  },
+  {
+    "status": "CANCELLED", // Changed from "canceled"
+    "name": "Order D",
+    "id": 4,
+    "deliveryDate": DateTime.parse("2024-09-25"),
+    "price": 80.00
+  },
+  {
+    "status": "CONFIRMED", // Changed from "processing"
+    "name": "Order E",
+    "id": 5,
+    "deliveryDate": DateTime.parse("2024-12-05"),
+    "price": 300.00
+  }
+];
+

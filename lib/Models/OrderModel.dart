@@ -2,7 +2,7 @@ class Ordermodel {
   final String status;
   final String name;
   final dynamic id;
-  final dynamic deliveryDate;
+  final DateTime deliveryDate;
   final dynamic price;
 
   Ordermodel({
