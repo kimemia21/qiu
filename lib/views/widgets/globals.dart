@@ -625,3 +625,17 @@ List<Map<String, dynamic>> dummyTrucksData = [
       "reg": "UVW-1357",
     },
   ];
+
+  List<Map<String, dynamic>> locationData = [
+  {
+    "place": "Home",
+    "lat": 40.748817,
+    "lng": -73.985428,
+    "description": "New York City Apartment",
+  },
+  {
+    "place": "Office",
+    "lat": 34.052235,
+    "lng": -118.243683,
+    "description": "Los Angeles Downtown Office",
+  },];
