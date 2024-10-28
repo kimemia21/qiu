@@ -1,4 +1,4 @@
-import 'package:application/views/widgets/Orders/CreatOrder.dart';
+import 'package:application/views/widgets/Maps/MapScreen.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/homepage/HomePage.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,6 @@ class Appnav extends StatefulWidget {
   final int initialIndex;
   final Widget? newScreen;
 
-  // Add default values for the constructor parameters
   Appnav({this.initialIndex = 0, this.newScreen});
 
   @override
@@ -42,10 +41,8 @@ class _AppnavState extends State<Appnav> {
   List<Widget> _buildScreens() {
     return [
       Homepage(),
-
-//
       Orders(),
-      CreateOrderScreen(),
+   MapScreen()
     ];
   }
 

@@ -1,6 +1,5 @@
 import 'package:application/views/signinUpPage.dart';
 import 'package:application/views/signinpage.dart';
-import 'package:application/views/widgets/TestLab.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
       //   "/signup":(context)=>SignUpScreen()
       
       // } ,
-      home: MapScreen(),
+      home: SignInScreen(),
     );
   }
 }
