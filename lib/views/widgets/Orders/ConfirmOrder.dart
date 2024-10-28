@@ -113,7 +113,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                             Row(
                               children: [
                                 Text(
-                                  'QTY: 5000 Liters',
+                                  'QTY: ${context.watch<Appbloc>().quantityLiters} Liters',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,

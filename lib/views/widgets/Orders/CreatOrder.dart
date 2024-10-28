@@ -1,6 +1,9 @@
+import 'package:application/main.dart';
+import 'package:application/views/state/appbloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   @override
@@ -14,11 +17,13 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   void increaseQuantity() {
     setState(() {
       quantity++;
+
       int currentQuantity = int.parse(quantityController.text);
       if (currentQuantity > 0) {
         quantityController.text = (currentQuantity + 1).toString();
       }
     });
+    context.read<Appbloc>().changeLiters(quantity);
   }
 
   void decreaseQuantity() {
@@ -30,6 +35,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
           quantityController.text = (currentQuantity - 1).toString();
         }
       });
+
+      context.read<Appbloc>().changeLiters(quantity);
     }
   }
 
@@ -40,8 +47,23 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (Provider.of<Appbloc>(context, listen: false).quantityLiters == null) {
+      quantity = 0;
+      quantityController.text = 0.toString();
+    } else {
+      quantity = Provider.of<Appbloc>(context, listen: false).quantityLiters!;
+      quantityController.text = Provider.of<Appbloc>(context, listen: false)
+          .quantityLiters!
+          .toString();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final formattedQuantity = NumberFormat('#,###').format(quantity * 1000);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -54,8 +76,10 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 height: 200,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [  Color(0xFF9FA8DA),
-                  Color(0xFF7E57C2),],
+                    colors: [
+                      Color(0xFF9FA8DA),
+                      Color(0xFF7E57C2),
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -69,7 +93,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Container(
-                  height: 500, // Adjust height to suit
+                  height: 500,
                   width: double.infinity,
                   padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
@@ -80,13 +104,13 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-  '$formattedQuantity Litres',
-  style: TextStyle(
-    fontSize: 20,
-    color: Colors.blue,
-    fontWeight: FontWeight.w500,
-  ),
-),
+                        '$formattedQuantity Litres',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       SizedBox(height: 20),
                       // Quantity section
                       Container(
@@ -128,6 +152,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                                               quantity =
                                                   int.tryParse(value) ?? 1;
                                             });
+                                            context.read<Appbloc>().changeLiters(quantity);
                                           },
                                           decoration: InputDecoration(
                                             contentPadding:
@@ -216,9 +241,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                           ),
                           child: Text(
                             'CONFIRM ORDER',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                         ),
                       ),

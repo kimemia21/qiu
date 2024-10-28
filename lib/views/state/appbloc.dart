@@ -7,7 +7,7 @@ class Appbloc extends ChangeNotifier {
 
  
 LocationModel?  get  location => _location;
-  get quantityLiters => _quantityLiters;
+ int?  get quantityLiters => _quantityLiters;
 
   void changeLocation(LocationModel data) {
     _location = data;
