@@ -161,7 +161,7 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
                                   });
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                      builder: (ctx) => Appnav(),
+                                      builder: (ctx) => HomeScreen(),
                                     ),
                                   );
                                 });

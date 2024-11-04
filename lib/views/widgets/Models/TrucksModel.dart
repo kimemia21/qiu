@@ -4,7 +4,7 @@ class trucksmodel {
   final String quality;
   final String reg;
 
-  // Constructor
+
   trucksmodel({
     required this.id,
     required this.capacity,
@@ -12,7 +12,7 @@ class trucksmodel {
     required this.reg,
   });
 
-  // Factory method to create an instance from JSON
+
   factory trucksmodel.fromJson(Map<String, dynamic> json) {
     // Check for null values in required fields
     if (json['id'] == null ||

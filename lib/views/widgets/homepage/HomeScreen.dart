@@ -1,3 +1,4 @@
+import 'package:application/views/widgets/homepage/AppNav.dart';
 import 'package:application/views/widgets/homepage/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (ctx) => Homepage()));
+                            MaterialPageRoute(builder: (ctx) => Appnav()));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,

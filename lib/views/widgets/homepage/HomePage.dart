@@ -1,3 +1,4 @@
+import 'package:application/views/signinpage.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/drivers/drivers.dart';
 import 'package:application/views/widgets/globals.dart';
@@ -151,10 +152,8 @@ class _HomepageState extends State<Homepage> {
                       text: 'Manage My Orders',
                       icon: Icons.list_alt_outlined,
                       onPressed: () {
-                          PersistentNavBarNavigator.pushNewScreen(
-                          withNavBar: true,
-                          context,
-                            screen: Orders());
+                        PersistentNavBarNavigator.pushNewScreen(
+                            withNavBar: true, context, screen: Orders());
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),
@@ -163,10 +162,8 @@ class _HomepageState extends State<Homepage> {
                       text: 'My Trucks',
                       icon: Icons.local_shipping_outlined,
                       onPressed: () {
-              PersistentNavBarNavigator.pushNewScreen(
-                          withNavBar: true,
-                          context,
-                            screen: Trucks());
+                        PersistentNavBarNavigator.pushNewScreen(
+                            withNavBar: true, context, screen: Trucks());
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),
@@ -176,9 +173,7 @@ class _HomepageState extends State<Homepage> {
                       icon: Icons.person_outline,
                       onPressed: () {
                         PersistentNavBarNavigator.pushNewScreen(
-                          withNavBar: true,
-                          context,
-                            screen: Drivers());
+                            withNavBar: true, context, screen: Drivers());
                         // Handle navigation to My Drivers
                       },
                       iconColor: Theme.of(context).primaryColor,
@@ -197,6 +192,23 @@ class _HomepageState extends State<Homepage> {
                       text: 'Account Settings',
                       icon: Icons.settings_outlined,
                       onPressed: () {
+                        // Handle navigation to Account Settings
+                      },
+                      iconColor: Theme.of(context).primaryColor,
+                    ),
+                    CustomMenuItem(
+                      dense: true,
+                      text: 'Logout',
+                      icon: Icons.logout,
+                      onPressed: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          withNavBar: false,
+                          context,
+                            screen: SignInScreen());
+
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (context) => P));
+
                         // Handle navigation to Account Settings
                       },
                       iconColor: Theme.of(context).primaryColor,

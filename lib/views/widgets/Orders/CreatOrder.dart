@@ -1,8 +1,10 @@
 import 'package:application/main.dart';
 import 'package:application/views/state/appbloc.dart';
+import 'package:application/views/widgets/Maps/MapScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class CreateOrderScreen extends StatefulWidget {
@@ -23,7 +25,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
         quantityController.text = (currentQuantity + 1).toString();
       }
     });
-    context.read<Appbloc>().changeLiters(quantity);
+    context.read<Appbloc>().changeLiters(quantity * 1000);
   }
 
   void decreaseQuantity() {
@@ -36,7 +38,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
         }
       });
 
-      context.read<Appbloc>().changeLiters(quantity);
+      context.read<Appbloc>().changeLiters(quantity * 1000);
     }
   }
 
@@ -53,10 +55,10 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       quantity = 0;
       quantityController.text = 0.toString();
     } else {
-      quantity = Provider.of<Appbloc>(context, listen: false).quantityLiters!;
-      quantityController.text = Provider.of<Appbloc>(context, listen: false)
-          .quantityLiters!
-          .toString();
+      quantity =
+          (Provider.of<Appbloc>(context, listen: false).quantityLiters!/1000)
+              .toInt();
+      quantityController.text = quantity.toString();
     }
   }
 
@@ -152,7 +154,9 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                                               quantity =
                                                   int.tryParse(value) ?? 1;
                                             });
-                                            context.read<Appbloc>().changeLiters(quantity);
+                                            context
+                                                .read<Appbloc>()
+                                                .changeLiters(quantity * 1000);
                                           },
                                           decoration: InputDecoration(
                                             contentPadding:
@@ -229,7 +233,9 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         alignment: Alignment.center,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Confirm order action
+                            // Confirm order action\\\\\\\\\\\\\
+                            PersistentNavBarNavigator.pushNewScreen(
+                                withNavBar: true, context, screen: MapScreen());
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
