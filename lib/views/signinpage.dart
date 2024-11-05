@@ -1,3 +1,4 @@
+import 'package:application/views/signUpPage.dart';
 import 'package:application/views/widgets/Models/AccountTypes.dart';
 import 'package:application/views/login.dart';
 import 'package:flutter/material.dart';
@@ -218,7 +219,7 @@ class LoginScreen extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                SignupScreen()));
+                                              SignupScreen()));
                                   },
                                   child: RichText(
                                     text: TextSpan(
@@ -247,37 +248,40 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class SignupScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign Up'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(labelText: 'Full Name'),
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement sign-up functionality here
-              },
-              child: Text('Sign Up'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+
+
+
+// class SignupScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Sign Up'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(20.0),
+//         child: Column(
+//           children: [
+//             TextField(
+//               decoration: InputDecoration(labelText: 'Full Name'),
+//             ),
+//             TextField(
+//               decoration: InputDecoration(labelText: 'Email'),
+//             ),
+//             TextField(
+//               decoration: InputDecoration(labelText: 'Password'),
+//               obscureText: true,
+//             ),
+//             SizedBox(height: 20),
+//             ElevatedButton(
+//               onPressed: () {
+//                 // Implement sign-up functionality here
+//               },
+//               child: Text('Sign Up'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

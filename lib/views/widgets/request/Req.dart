@@ -1,6 +1,4 @@
 
-// import 'package:application/Models/DriverModel.dart';
-// import 'package:application/Models/Drivermodel.dart';
 import 'package:application/views/widgets/Models/DriverModel.dart';
 import 'package:application/views/widgets/Models/Location.dart';
 import 'package:application/views/widgets/Models/OrderModel.dart';
@@ -29,5 +27,8 @@ static Future<List<drivermodel>> fetchDrivers() {
     final  locations = locationData.map((locations) =>LocationModel.fromJson(locations)).toList();
      return Future.value(locations);
   }
+  
+
+
 
 }
