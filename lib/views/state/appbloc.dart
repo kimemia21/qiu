@@ -2,19 +2,26 @@ import 'package:application/views/widgets/Models/Location.dart';
 import 'package:flutter/material.dart';
 
 class Appbloc extends ChangeNotifier {
- LocationModel? _location;
+  LocationModel? _location;
   int? _quantityLiters;
+  bool _isLoading = false;
 
- 
-LocationModel?  get  location => _location;
- int?  get quantityLiters => _quantityLiters;
+  LocationModel? get location => _location;
+  int? get quantityLiters => _quantityLiters;
+  bool get isLoading => _isLoading;
 
   void changeLocation(LocationModel data) {
     _location = data;
     notifyListeners();
   }
-    void changeLiters(int data) {
-   _quantityLiters = data;
+
+  void changeLiters(int data) {
+    _quantityLiters = data;
+    notifyListeners();
+  }
+
+  void changeIsLoading(bool loading) {
+    _isLoading = loading;
     notifyListeners();
   }
 }

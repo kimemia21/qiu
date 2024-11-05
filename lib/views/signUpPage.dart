@@ -1,3 +1,4 @@
+import 'package:application/views/widgets/request/AuthRequest.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,6 +16,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final _confirmPasswordController = TextEditingController();
 
   final _phoneNumberController = TextEditingController();
+  bool PS = false;
+  bool CPS = false;
 
   @override
   void dispose() {
@@ -66,6 +69,52 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
       style: TextStyle(color: Colors.white),
       obscureText: isPassword,
+      validator: validator,
+    );
+  }
+
+  Widget _buildPasswordTextField({
+    required TextEditingController controller,
+    required String label,
+    required bool secure,
+    required VoidCallback toggleSecure,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.2),
+        suffixIcon: IconButton(
+          onPressed: toggleSecure, // Call toggle function here
+          icon: Icon(secure ? Icons.visibility_off : Icons.visibility),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.white, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.red.shade300),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.red.shade300, width: 2),
+        ),
+        errorStyle: TextStyle(color: Colors.red.shade300),
+      ),
+      style: TextStyle(color: Colors.white),
+      obscureText: secure,
       validator: validator,
     );
   }
@@ -162,7 +211,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             _buildTextField(
                               controller: _phoneNumberController,
                               label: 'Phone Number',
-                              isPassword: true,
+                              isPassword: false,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your phone number';
@@ -172,10 +221,15 @@ class _SignupScreenState extends State<SignupScreen> {
                               },
                             ),
                             SizedBox(height: 20),
-                            _buildTextField(
+                            _buildPasswordTextField(
                               controller: _passwordController,
                               label: 'Password',
-                              isPassword: true,
+                              secure: PS,
+                              toggleSecure: () {
+                                setState(() {
+                                  PS = !PS;
+                                });
+                              },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter a password';
@@ -187,10 +241,15 @@ class _SignupScreenState extends State<SignupScreen> {
                               },
                             ),
                             SizedBox(height: 20),
-                            _buildTextField(
+                            _buildPasswordTextField(
                               controller: _confirmPasswordController,
                               label: 'Confirm Password',
-                              isPassword: true,
+                              secure: CPS,
+                              toggleSecure: () {
+                                setState(() {
+                                  CPS = !CPS;
+                                });
+                              },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please confirm your password';
@@ -202,33 +261,59 @@ class _SignupScreenState extends State<SignupScreen> {
                               },
                             ),
                             SizedBox(height: 30),
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  final Map<String, dynamic> body = {
-                                    "fullname": _nameController.text.trim(),
-                                    "email": _emailController.text.trim(),
-                                    "phoneNumber":
-                                        _phoneNumberController.text.trim(),
-                                    "password": _passwordController.text.trim(),
-                                  };
+                            Container(
+                              width: double.infinity,
+                              height: 55,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    final Map<String, dynamic> body = {
+                                      "fullname": _nameController.text.trim(),
+                                      "email": _emailController.text.trim(),
+                                      "phoneNumber":
+                                          _phoneNumberController.text.trim(),
+                                      "password":
+                                          _passwordController.text.trim(),
+                                    };
 
-                                  // Implement sign-up functionality here
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 40, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
+                                    await Authrequest.createUser(
+                                        context: context, body: body);
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Color(0xFF7E64D4),
+                                  padding: EdgeInsets.zero,
+                                  elevation: 5,
+                                  shadowColor: Colors.black.withOpacity(0.3),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                 ),
-                              ),
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: Color(0xFF7E64D4),
-                                  fontWeight: FontWeight.bold,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Colors.white,
+                                        Colors.white.withOpacity(0.9),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Sign Up',
+                                      style: TextStyle(
+                                        color: Color(0xFF7E64D4),
+                                        fontSize: 18, // Slightly larger text
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing:
+                                            1.2, // Spacing between letters
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
