@@ -1,10 +1,9 @@
 import 'dart:ffi';
 
 import 'package:application/views/state/appbloc.dart';
-import 'package:application/views/widgets/Models/Location.dart';
+import 'package:application/Models/Location.dart';
 import 'package:application/views/widgets/Orders/ConfirmOrder.dart';
 import 'package:application/views/widgets/Orders/CreatOrder.dart';
-import 'package:application/views/widgets/request/Req.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -14,6 +13,8 @@ import 'package:google_places_flutter/model/prediction.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+
+import '../../../comms/Req.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);

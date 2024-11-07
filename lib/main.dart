@@ -1,4 +1,4 @@
-import 'package:application/views/signUpPage.dart';
+import 'package:application/views/signinUpPage.dart';
 import 'package:application/views/signinpage.dart';
 import 'package:application/views/state/appbloc.dart';
 import 'package:flutter/material.dart';

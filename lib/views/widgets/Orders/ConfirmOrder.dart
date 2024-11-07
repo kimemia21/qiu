@@ -1,6 +1,6 @@
 import 'package:application/main.dart';
 import 'package:application/views/state/appbloc.dart';
-import 'package:application/views/widgets/Models/Location.dart';
+import 'package:application/Models/Location.dart';
 import 'package:application/views/widgets/Orders/CreatOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,9 +19,9 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   Widget build(BuildContext context) {
     LocationModel? location =
         Provider.of<Appbloc>(context, listen: true).location;
-        
-    final formattedQuantity = NumberFormat('#,###').format(Provider.of<Appbloc>(context, listen: false).quantityLiters);
-    
+
+    final formattedQuantity = NumberFormat('#,###')
+        .format(Provider.of<Appbloc>(context, listen: false).quantityLiters);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

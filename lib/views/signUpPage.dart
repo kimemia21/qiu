@@ -1,5 +1,12 @@
-import 'package:application/views/widgets/request/AuthRequest.dart';
+import 'package:application/Models/user.dart';
+import 'package:application/comms/credentials.dart';
+import 'package:application/utils/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../utils/utils.dart';
+import 'widgets/homepage/HomeScreen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -10,6 +17,7 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _lastnameController = TextEditingController();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -18,10 +26,11 @@ class _SignupScreenState extends State<SignupScreen> {
   final _phoneNumberController = TextEditingController();
   bool PS = false;
   bool CPS = false;
-
+  bool logging_on = false;
   @override
   void dispose() {
     _nameController.dispose();
+    _lastnameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -152,20 +161,20 @@ class _SignupScreenState extends State<SignupScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 50),
-                      Image.asset(
-                        'assets/images/Logo.jpeg',
-                        height: 120,
+                      SvgPicture.asset(
+                        'assets/images/Logo.svg',
+                        height: 150,
                       ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                      // SizedBox(height: 20),
+                      // Text(
+                      //   'Sign Up',
+                      //   style: TextStyle(
+                      //     fontSize: 20,
+                      //     color: Colors.white,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      //   textAlign: TextAlign.center,
+                      // ),
                       SizedBox(height: 10),
                       Text(
                         'Join us to Buy, Manage, and Monitor',
@@ -175,17 +184,17 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 40),
+                      SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
                           children: [
                             _buildTextField(
                               controller: _nameController,
-                              label: 'Full Name',
+                              label: 'First Name',
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter your full name';
+                                  return 'Please enter your First name';
                                 }
                                 if (value.length < 2) {
                                   return 'Name must be at least 2 characters long';
@@ -193,7 +202,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                 return null;
                               },
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 10),
+                            _buildTextField(
+                              controller: _lastnameController,
+                              label: 'Last Name',
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your Last name';
+                                }
+                                if (value.length < 2) {
+                                  return 'Name must be at least 2 characters long';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 10),
                             _buildTextField(
                               controller: _emailController,
                               label: 'Email',
@@ -266,19 +289,81 @@ class _SignupScreenState extends State<SignupScreen> {
                               height: 55,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    final Map<String, dynamic> body = {
-                                      "fullname": _nameController.text.trim(),
-                                      "email": _emailController.text.trim(),
-                                      "phoneNumber":
-                                          _phoneNumberController.text.trim(),
-                                      "password":
-                                          _passwordController.text.trim(),
-                                    };
-
-                                    await Authrequest.createUser(
-                                        context: context, body: body);
+                                  if (!_formKey.currentState!.validate()) {
+                                    return;
                                   }
+                                  setState(() {
+                                    logging_on = true;
+                                  });
+
+                                  final Map<String, dynamic> body = {
+                                    "fullname": _nameController.text.trim(),
+                                    "email": _emailController.text.trim(),
+                                    "phoneNumber":
+                                        _phoneNumberController.text.trim(),
+                                    "password": _passwordController.text.trim(),
+                                  };
+
+                                  var params = {
+                                    "firstName": _nameController.text.trim(),
+                                    "lastName": _lastnameController.text.trim(),
+                                    "email": _emailController.text.trim(),
+                                    "password": _passwordController.text.trim(),
+                                    "phoneNo":
+                                        _phoneNumberController.text.trim(),
+                                    "deviceToken": firebaseToken
+                                  };
+
+                                  await comms_repo.QueryAPIpost(
+                                          "auth/register", params)
+                                      .then((value) {
+                                    printLog("USer ifo $value");
+                                    setState(() {
+                                      logging_on = false;
+                                    });
+
+                                    if (value["success"] ?? false) {
+                                      // got o login
+                                      showalert(
+                                          true,
+                                          context,
+                                          "Success",
+                                          value["message"] ??
+                                              "User Created Successfully");
+                                      Navigator.pop(context);
+                                    } else {
+                                      showalert(
+                                          false,
+                                          context,
+                                          "Failed",
+                                          value["message"] ??
+                                              "Unable to Register"); // token generated
+                                      //   if ((value["otp"] ?? false)) {
+                                      // return Get.offAll(TwoStepVerify(
+                                      //     username: nameController.text,
+                                      //     password: passwordController.text,
+                                      //   //     sentto: value["sentto"]));
+                                      // } else {
+                                      //   // errortext =
+                                      //   //     'Sorry, ${value["msg"] ?? value["message"]}';
+                                      // }
+
+                                      // StatusAlert.show(
+                                      //   context,
+                                      //   duration: Duration(seconds: 2),
+                                      //   title: 'Failed',
+                                      //   subtitle: 'Sorry ${value["msg"] ?? value["message"]} ',
+                                      //   configuration: IconConfiguration(icon: Icons.warning),
+                                      //   maxWidth: 320,
+                                      // );
+                                    }
+                                  });
+
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             HomeScreen()));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
@@ -303,16 +388,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      'Sign Up',
-                                      style: TextStyle(
-                                        color: Color(0xFF7E64D4),
-                                        fontSize: 18, // Slightly larger text
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing:
-                                            1.2, // Spacing between letters
-                                      ),
-                                    ),
+                                    child: logging_on
+                                        ? SpinKitThreeBounce(
+                                            color: Colors.green,
+                                          )
+                                        : Text(
+                                            'Sign Up',
+                                            style: TextStyle(
+                                              color: Color(0xFF7E64D4),
+                                              fontSize:
+                                                  18, // Slightly larger text
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing:
+                                                  1.2, // Spacing between letters
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ),

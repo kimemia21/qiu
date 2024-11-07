@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -24,13 +25,9 @@ class SplashScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 60),
                 // Logo
-                const Text(
-                  'Q',
-                  style: TextStyle(
-                    fontSize: 72,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                SvgPicture.asset(
+                  'assets/images/Logo.svg',
+                  height: 150,
                 ),
                 const SizedBox(height: 20),
                 // Title text
@@ -61,7 +58,9 @@ class SplashScreen extends StatelessWidget {
                         height: 8,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: i == 0 ? Colors.white : Colors.white.withOpacity(0.4),
+                          color: i == 0
+                              ? Colors.white
+                              : Colors.white.withOpacity(0.4),
                         ),
                       ),
                   ],

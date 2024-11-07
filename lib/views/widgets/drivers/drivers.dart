@@ -1,6 +1,6 @@
-import 'package:application/views/widgets/Models/DriverModel.dart';
+import 'package:application/Models/DriverModel.dart';
 import 'package:application/views/widgets/globals.dart';
-import 'package:application/views/widgets/request/Req.dart';
+import 'package:application/comms/Req.dart';
 import 'package:flutter/material.dart';
 
 class Drivers extends StatefulWidget {
@@ -56,17 +56,20 @@ class _DriversState extends State<Drivers> {
                       future: AppRequest.fetchDrivers(),
                       builder: (BuildContext context,
                           AsyncSnapshot<List<drivermodel>> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
                           return Center(child: Text('No Drivers Available'));
                         }
 
                         return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(), // Prevents scrolling
+                          physics:
+                              NeverScrollableScrollPhysics(), // Prevents scrolling
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (BuildContext context, int index) {

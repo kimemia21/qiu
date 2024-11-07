@@ -1,5 +1,5 @@
-import 'package:application/views/widgets/Models/DriverModel.dart';
-import 'package:application/views/widgets/Models/OrderModel.dart';
+import 'package:application/Models/DriverModel.dart';
+import 'package:application/Models/OrderModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -423,8 +423,6 @@ class OrderStatusWidget extends StatelessWidget {
   }
 }
 
-
-
 class DriverCard extends StatelessWidget {
   final drivermodel model;
 
@@ -472,7 +470,7 @@ class DriverCard extends StatelessWidget {
           // Availability
           _buildInfoRow(
             Icons.check_circle,
-            'Availability: ${model.avaiable? "Available" : "Unavailable"}',
+            'Availability: ${model.avaiable ? "Available" : "Unavailable"}',
             color: model.avaiable ? Colors.green : Colors.red,
           ),
 
@@ -550,83 +548,78 @@ List driversDummy = [
     "phone": "555-0123",
     "avaiable": true,
     "status": "Active",
-    "name":"john Doe",
+    "name": "john Doe",
   },
   {
     "truck": "Volvo VNL",
     "phone": "555-0456",
     "avaiable": false,
     "status": "On Duty",
-    
-    "name":"john Doe",
+    "name": "john Doe",
   },
   {
     "truck": "Kenworth T680",
     "phone": "555-0789",
     "avaiable": true,
     "status": "Available",
-    
-    "name":"john Doe",
+    "name": "john Doe",
   },
   {
     "truck": "Peterbilt 579",
     "phone": "555-1011",
     "avaiable": true,
     "status": "Active",
-    
-    "name":"john Doe",
+    "name": "john Doe",
   },
   {
     "truck": "Mack Anthem",
     "phone": "555-1213",
     "avaiable": false,
     "status": "Under Maintenance",
-    
-    "name":"john Doe",
+    "name": "john Doe",
   }
 ];
 
-
 List<Map<String, dynamic>> dummyTrucksData = [
-    {
-      "id": "1",
-      "capacity": 10.5,
-      "quality": "High",
-      "reg": "ABC-1234",
-    },
-    {
-      "id": "2",
-      "capacity": 15.0,
-      "quality": "Medium",
-      "reg": "XYZ-5678",
-    },
-    {
-      "id": "3",
-      "capacity": 8.0,
-      "quality": "Low",
-      "reg": "LMN-9012",
-    },
-    {
-      "id": "4",
-      "capacity": 12.3,
-      "quality": "High",
-      "reg": "OPQ-3456",
-    },
-    {
-      "id": "5",
-      "capacity": 20.0,
-      "quality": "Medium",
-      "reg": "RST-7890",
-    },
-    {
-      "id": "6",
-      "capacity": 5.5,
-      "quality": "Low",
-      "reg": "UVW-1357",
-    },
-  ];
+  {
+    "id": "1",
+    "capacity": 10.5,
+    "quality": "High",
+    "reg": "ABC-1234",
+  },
+  {
+    "id": "2",
+    "capacity": 15.0,
+    "quality": "Medium",
+    "reg": "XYZ-5678",
+  },
+  {
+    "id": "3",
+    "capacity": 8.0,
+    "quality": "Low",
+    "reg": "LMN-9012",
+  },
+  {
+    "id": "4",
+    "capacity": 12.3,
+    "quality": "High",
+    "reg": "OPQ-3456",
+  },
+  {
+    "id": "5",
+    "capacity": 20.0,
+    "quality": "Medium",
+    "reg": "RST-7890",
+  },
+  {
+    "id": "6",
+    "capacity": 5.5,
+    "quality": "Low",
+    "reg": "UVW-1357",
+  },
+];
 
-  List<Map<String, dynamic>> locationData = [
+List<Map<String, dynamic>> locationData = [
   {
     "place": "Home",
     "lat": 40.748817,
@@ -638,4 +631,5 @@ List<Map<String, dynamic>> dummyTrucksData = [
     "lat": 34.052235,
     "lng": -118.243683,
     "description": "Los Angeles Downtown Office",
-  },];
+  },
+];

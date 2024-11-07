@@ -1,7 +1,6 @@
-
-import 'package:application/views/widgets/Models/TrucksModel.dart';
+import 'package:application/Models/TrucksModel.dart';
 import 'package:application/views/widgets/globals.dart';
-import 'package:application/views/widgets/request/Req.dart';
+import 'package:application/comms/Req.dart';
 import 'package:flutter/material.dart';
 
 class Trucks extends StatefulWidget {
@@ -22,7 +21,6 @@ class _TrucksState extends State<Trucks> {
     return Scaffold(
       body: Stack(
         children: [
-      
           Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
@@ -36,7 +34,6 @@ class _TrucksState extends State<Trucks> {
               ),
             ),
           ),
-
           Positioned(
             top: 100,
             left: 0,
@@ -57,33 +54,37 @@ class _TrucksState extends State<Trucks> {
                       future: AppRequest.fetchTrucks(),
                       builder: (BuildContext context,
                           AsyncSnapshot<List<trucksmodel>> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
                           return Center(child: Text('No Trucks Available'));
                         }
 
                         return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(), // Prevents scrolling
+                          physics:
+                              NeverScrollableScrollPhysics(), // Prevents scrolling
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
                           itemBuilder: (BuildContext context, int index) {
                             final trucks = snapshot.data![index];
-                            return TruckCard(model: trucks,);
+                            return TruckCard(
+                              model: trucks,
+                            );
                           },
                         );
                       },
                     ),
-                    const SizedBox(height: 12), 
+                    const SizedBox(height: 12),
                   ],
                 ),
               ),
             ),
           ),
-
           Positioned(
             left: 16,
             right: 16,
@@ -92,9 +93,7 @@ class _TrucksState extends State<Trucks> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                 
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6B7AFF),
                   shape: RoundedRectangleBorder(
@@ -117,8 +116,6 @@ class _TrucksState extends State<Trucks> {
     );
   }
 }
-
-
 
 class TruckCard extends StatelessWidget {
   final trucksmodel model;
@@ -151,7 +148,8 @@ class TruckCard extends StatelessWidget {
           _buildInfoRow(Icons.card_travel, 'Truck ID: ${model.id}'),
 
           // Capacity
-          _buildInfoRow(Icons.emoji_transportation, 'Capacity: ${model.capacity}'),
+          _buildInfoRow(
+              Icons.emoji_transportation, 'Capacity: ${model.capacity}'),
 
           // Quality
           _buildInfoRow(Icons.star, 'Quality: ${model.quality}'),

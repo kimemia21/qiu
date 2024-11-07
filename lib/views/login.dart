@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:application/views/widgets/Models/AccountTypes.dart';
+import 'package:application/Models/user.dart';
 import 'package:application/views/widgets/homepage/AppNav.dart';
 import 'package:application/views/widgets/homepage/HomeScreen.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:qiu/comms/credentials.dart';
 
+import '../Models/AccountTypes.dart';
+import '../comms/credentials.dart';
+import '../utils/utils.dart';
+import '../utils/widgets.dart';
 import 'widgets/globals.dart';
 
 Future<dynamic> LoginPage(
@@ -109,7 +113,7 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: CustomTextfield(
                         myController: uname,
-                        hintText: " Username",
+                        hintText: " Email",
                         isPassword: false,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -151,63 +155,38 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
                                   loginin = true;
                                 });
                                 final Map<String, dynamic> body = {
-                                  "uname": uname.text.trim(),
-                                  "upass": upass.text.trim()
+                                  "email": uname.text.trim(),
+                                  "password": upass.text.trim(),
+                                  "role": getRole(widget.qiuaccountType)
                                 };
-                                Future.delayed(Duration(seconds: 3))
-                                    .then((onValue) {
+
+                                printLog("Login $body");
+
+                                await comms_repo.QueryAPIpost(
+                                        "auth/login", body)
+                                    .then((value) {
+                                  printLog("USer ifo $value");
                                   setState(() {
-                                    loginin = false;
+                                    loginin = true;
                                   });
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (ctx) => HomeScreen(),
-                                    ),
-                                  );
+
+                                  if (value["success"] ?? false) {
+                                    // got o login
+                                    current_user = userModel.fromMap(value);
+
+                                    showalert(true, context, "Success",
+                                        value["message"] ?? "Welcome");
+
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (ctx) => HomeScreen(),
+                                      ),
+                                    );
+                                  } else {
+                                    showalert(false, context, "Failed",
+                                        value["message"] ?? "Unable to Login");
+                                  }
                                 });
-
-                                // await comms_repo.loginUser("login", {
-                                //   "uname": uname.text.trim(),
-                                //   "upass": upass.text.trim()
-                                // })
-                                // .then((value) async {
-                                //   setState(() {
-                                //     loginin = false;
-                                //   });
-
-                                //   // printLog("USer ifo $value");
-
-                                //   if (value["rsp"]) {
-                                //     if (value["data"].length > 0) {
-                                //       // Creating a Technician instance from JSON
-
-                                //       // Navigator.of(context).pushReplacement(
-                                //       //   MaterialPageRoute(
-                                //       //     builder: (ctx) => const HomeScreen(),
-                                //       //   ),
-                                //       // );
-                                //     } else {
-                                //       // CoolAlert.show(
-                                //       //   context: context,
-                                //       //   type: CoolAlertType.error,
-                                //       //   backgroundColor:
-                                //       //       const Color.fromARGB(255, 51, 83, 142),
-                                //       //   text: "Unknown User Credentials",
-                                //       //   autoCloseDuration:
-                                //       //       const Duration(seconds: 2),
-                                //       // );
-                                //     }
-                                //   } else {
-                                //     // CoolAlert.show(
-                                //     //   context: context,
-                                //     //   type: CoolAlertType.error,
-                                //     //   backgroundColor:
-                                //     //       const Color.fromARGB(255, 51, 83, 142),
-                                //     //   text: value["msg"],
-                                //     //   autoCloseDuration: const Duration(seconds: 2),
-                                //     // );
-                                //   }
-                                // });
                               }
                             },
                           ),
@@ -233,5 +212,14 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
         _selectedDate = pickedDate;
       });
     }
+  }
+
+  String getRole(Accountypes qiuaccountType) {
+    if (qiuaccountType == Accountypes.DRIVER) return "DR";
+    if (qiuaccountType == Accountypes.FP) return "FP";
+    if (qiuaccountType == Accountypes.OP) return "OP";
+    if (qiuaccountType == Accountypes.SP) return "SP";
+    if (qiuaccountType == Accountypes.SP) return "WSP";
+    return "SC";
   }
 }
