@@ -1,32 +1,34 @@
-class trucksmodel {
-  final String id;
+class Trucksmodel {
+  final int id;
   final capacity;
+
+  final String licence_plate;
+  final String Price;
   final String quality;
-  final String reg;
 
-
-  trucksmodel({
+  Trucksmodel({
     required this.id,
+    required this.Price,
     required this.capacity,
     required this.quality,
-    required this.reg,
+    required this.licence_plate,
   });
 
-
-  factory trucksmodel.fromJson(Map<String, dynamic> json) {
+  factory Trucksmodel.fromJson(Map<String, dynamic> json) {
     // Check for null values in required fields
     if (json['id'] == null ||
         json['capacity'] == null ||
         json['quality'] == null ||
-        json['reg'] == null) {
+        json['licence_plate'] == null) {
       throw ArgumentError('One or more required fields are null');
     }
 
-    return trucksmodel(
+    return Trucksmodel(
       id: json['id'],
+      licence_plate: json['licence_plate'],
       capacity: (json['capacity']),
+      Price: json['price'],
       quality: json['quality'],
-      reg: json['reg'],
     );
   }
 }

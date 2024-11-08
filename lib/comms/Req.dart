@@ -1,6 +1,5 @@
-
-
 import 'package:application/Models/DriverModel.dart';
+import 'package:application/Models/TrucksModel.dart';
 import 'package:application/Models/Wsp.dart';
 import 'package:application/Models/Wsp_Orders.dart';
 import 'package:application/comms/comms_repo.dart';
@@ -8,11 +7,8 @@ import 'package:application/comms/credentials.dart';
 import 'package:application/utils/utils.dart';
 import 'package:application/views/widgets/globals.dart';
 
-
-
 import '../Models/Location.dart';
 import '../Models/OrderModel.dart';
-import '../Models/TrucksModel.dart';
 
 class AppRequest {
   static Future<List<Ordermodel>> fetchOrders() {
@@ -20,23 +16,31 @@ class AppRequest {
         dummyData.map((orders) => Ordermodel.fromJson(orders)).toList();
     return Future.value(orders);
   }
-//  Drivers request 
+
+//  Drivers request
   static Future<List<Drivermodel>> fetchDrivers() async {
-    final Map<String, dynamic> drivers = await CommsRepository().queryApi("${base_url}fp/drivers");
+    final Map<String, dynamic> drivers =
+        await CommsRepository().queryApi("${base_url}fp/drivers");
     if (drivers["success"]) {
       final data = drivers['data'] as List<dynamic>;
 
       return data.map((e) => Drivermodel.fromJson(e)).toList();
     } else {
       throw Exception(drivers["message"]);
-    }     
-
+    }
   }
 
-  static Future<List<trucksmodel>> fetchTrucks() {
-       final trucks =
-        dummyTrucksData.map((trucks) => trucksmodel.fromJson(trucks)).toList();
-    return Future.value(trucks);
+  // using  a generic function CommsRepository().queryApi for get requests
+// fetch requests
+  static Future<List<Trucksmodel>> fetchTrucks() async {
+    final Map<String, dynamic> trucks =
+        await CommsRepository().queryApi("${base_url}fp/trucks");
+    if (trucks["success"]) {
+      final data = trucks['data'] as List<dynamic>;
+      return data.map((e) => Trucksmodel.fromJson(e)).toList();
+    } else {
+      throw Exception(trucks["message"]);
+    }
   }
 
   static Future<List<LocationModel>> fetchLocations() {
@@ -46,8 +50,6 @@ class AppRequest {
     return Future.value(locations);
   }
 
-  // using  a generic function CommsRepository().queryApi for get requests
-// fetch requests
   static Future<List<WspModel>> fetchWSP() async {
     final Map<String, dynamic> wsp =
         await CommsRepository().queryApi('${base_url}wsp/all');
