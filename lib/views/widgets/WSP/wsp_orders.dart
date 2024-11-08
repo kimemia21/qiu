@@ -1,30 +1,59 @@
 import 'package:application/Models/Wsp_Orders.dart';
 import 'package:application/comms/Req.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-// Import your WspOrders model and API request class
 
 class WspOrdersScreen extends StatefulWidget {
+  const WspOrdersScreen({Key? key}) : super(key: key);
+
   @override
-  _WspOrdersScreenState createState() => _WspOrdersScreenState();
+  State<WspOrdersScreen> createState() => _WspOrdersScreenState();
 }
 
 class _WspOrdersScreenState extends State<WspOrdersScreen> {
-  Future<List<WspOrders>>? _ordersData;
+  late Future<List<WspOrders>> _ordersData;
+  final _gradientColors = const [Color(0xFF7E64D4), Color(0xFF9DD6F8)];
 
   @override
   void initState() {
     super.initState();
-    _ordersData = AppRequest.fetchWSP_Orders();
+    _fetchOrders();
+  }
+
+  void _fetchOrders() {
+    setState(() {
+      _ordersData = AppRequest.fetchWSP_Orders().catchError((error) {
+        throw Exception('Failed to load orders: $error');
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      extendBodyBehindAppBar: true,
+      appBar: _buildAppBar(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: _gradientColors,
+          ),
+        ),
+        child: SafeArea(
+          child: FutureBuilder<List<WspOrders>>(
+            future: _ordersData,
+            builder: _buildOrdersList,
+          ),
+        ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() => AppBar(
         elevation: 0,
-        backgroundColor: Color(0xFF7E64D4),
-        title: Text(
+        backgroundColor: Colors.transparent,
+        title: const Text(
           'Water Orders',
           style: TextStyle(
             fontSize: 24,
@@ -34,267 +63,162 @@ class _WspOrdersScreenState extends State<WspOrdersScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {
-                _ordersData = AppRequest.fetchWSP_Orders();
-              });
-            },
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            onPressed: _fetchOrders,
           ),
         ],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF7E64D4),
-              Color(0xFF9DD6F8),
-            ],
-          ),
-        ),
-        child: FutureBuilder<List<WspOrders>>(
-          future: _ordersData,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              );
-            } else if (snapshot.hasError) {
-              print('Error loading orders: ${snapshot.error}');
-              return Center(
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.error_outline, color: Colors.red, size: 48),
-                      SizedBox(height: 16),
-                      Text(
-                        'Error loading orders ',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        '${snapshot.error}',
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-              return ListView.builder(
-                padding: EdgeInsets.all(16),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  final order = snapshot.data![index];
-                  return Card(
-                    elevation: 4,
-                    margin: EdgeInsets.only(bottom: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                        children: [
-                          // Order Header
-                          Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Color(0xFF7E64D4).withOpacity(0.1),
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        order.wspCompanyName,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF7E64D4),
-                                        ),
-                                      ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                        'Order ID: ${order.orderId}',
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                _buildStatusBadge(order.status),
-                              ],
-                            ),
-                          ),
-                          
-                          // Order Details
-                          Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                // Capacity and Amount Row
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: _buildDetailItem(
-                                        Icons.water_drop,
-                                        'Capacity',
-                                        '${order.capacity} L',
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: _buildDetailItem(
-                                        Icons.attach_money,
-                                        'Amount',
-                                        'KSH ${order.orderAmount}',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                
-                                // Source and Payment Status Row
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: _buildDetailItem(
-                                        Icons.source,
-                                        'Water Source',
-                                        order.wpWaterSrc,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: _buildDetailItem(
-                                        Icons.payment,
-                                        'Payment',
-                                        order.paymentStatus,
-                                        isPaymentStatus: true,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                
-                                // Address
-                                Padding(
-                                  padding: EdgeInsets.only(top: 16),
-                                  child: _buildDetailItem(
-                                    Icons.location_on,
-                                    'Address',
-                                    order.wspAddress,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            } else {
-              return Center(
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.inbox, color: Colors.grey, size: 48),
-                      SizedBox(height: 16),
-                      Text(
-                        'No orders found',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-          },
-        ),
+      );
+
+  Widget _buildOrdersList(
+    BuildContext context,
+    AsyncSnapshot<List<WspOrders>> snapshot,
+  ) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      );
+    }
+
+    if (snapshot.hasError) {
+      return _ErrorView(error: snapshot.error.toString());
+    }
+
+    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      return const _EmptyView();
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: snapshot.data!.length,
+      itemBuilder: (context, index) => _OrderCard(order: snapshot.data![index]),
+    );
+  }
+}
+
+class _OrderCard extends StatelessWidget {
+  final WspOrders order;
+
+  const _OrderCard({Key? key, required this.order}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        children: [
+          _buildHeader(),
+          const Divider(height: 1),
+          _buildDetails(),
+        ],
       ),
     );
   }
 
-  Widget _buildStatusBadge(String status) {
-    Color backgroundColor;
-    Color textColor;
-    IconData icon;
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  order.wspCompanyName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Order ID: ${order.orderId}',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _StatusBadge(status: order.status),
+        ],
+      ),
+    );
+  }
 
-    switch (status.toUpperCase()) {
-      case 'PENDING':
-        backgroundColor = Colors.orange.shade100;
-        textColor = Colors.orange.shade900;
-        icon = Icons.pending;
-        break;
-      case 'COMPLETED':
-        backgroundColor = Colors.green.shade100;
-        textColor = Colors.green.shade900;
-        icon = Icons.check_circle;
-        break;
-      case 'CANCELLED':
-        backgroundColor = Colors.red.shade100;
-        textColor = Colors.red.shade900;
-        icon = Icons.cancel;
-        break;
-      default:
-        backgroundColor = Colors.grey.shade100;
-        textColor = Colors.grey.shade900;
-        icon = Icons.info;
-    }
+  Widget _buildDetails() {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          _DetailRow(
+            first: _DetailItem(
+              icon: Icons.water_drop,
+              label: 'Capacity',
+              value: '${order.capacity} L',
+            ),
+            second: _DetailItem(
+              icon: Icons.attach_money,
+              label: 'Amount',
+              value: 'KSH ${order.orderAmount}',
+            ),
+          ),
+          const SizedBox(height: 16),
+          _DetailRow(
+            first: _DetailItem(
+              icon: Icons.source,
+              label: 'Water Source',
+              value: order.wpWaterSrc,
+            ),
+            second: _DetailItem(
+              icon: Icons.payment,
+              label: 'Payment',
+              value: order.paymentStatus,
+              isPaymentStatus: true,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _DetailItem(
+            icon: Icons.location_on,
+            label: 'Address',
+            value: order.wspAddress,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  final String status;
+
+  const _StatusBadge({Key? key, required this.status}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final statusConfig = _getStatusConfig(status.toUpperCase());
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: statusConfig.color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: textColor),
-          SizedBox(width: 4),
+          Icon(statusConfig.icon, size: 16, color: statusConfig.color),
+          const SizedBox(width: 4),
           Text(
             status,
             style: TextStyle(
-              color: textColor,
+              color: statusConfig.color,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 12,
             ),
           ),
         ],
@@ -302,35 +226,79 @@ class _WspOrdersScreenState extends State<WspOrdersScreen> {
     );
   }
 
-  Widget _buildDetailItem(IconData icon, String label, String value, {bool isPaymentStatus = false}) {
-    Color valueColor = Colors.black87;
-    if (isPaymentStatus) {
-      valueColor = value.toLowerCase() == 'paid' 
-          ? Colors.green 
-          : Colors.orange;
+  ({Color color, IconData icon}) _getStatusConfig(String status) {
+    switch (status) {
+      case 'PENDING':
+        return (color: Colors.orange, icon: Icons.pending);
+      case 'COMPLETED':
+        return (color: Colors.green, icon: Icons.check_circle);
+      case 'CANCELLED':
+        return (color: Colors.red, icon: Icons.cancel);
+      default:
+        return (color: Colors.grey, icon: Icons.info);
     }
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  final Widget first;
+  final Widget second;
+
+  const _DetailRow({Key? key, required this.first, required this.second})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: first),
+        const SizedBox(width: 16),
+        Expanded(child: second),
+      ],
+    );
+  }
+}
+
+class _DetailItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final bool isPaymentStatus;
+
+  const _DetailItem({
+    Key? key,
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.isPaymentStatus = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final valueColor = isPaymentStatus
+        ? value.toLowerCase() == 'paid'
+            ? Colors.green
+            : Colors.orange
+        : Colors.black87;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 20, color: Colors.grey),
-        SizedBox(width: 8),
+        Icon(icon, size: 18, color: Colors.grey),
+        const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: valueColor,
                 ),
@@ -339,6 +307,91 @@ class _WspOrdersScreenState extends State<WspOrdersScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ErrorView extends StatelessWidget {
+  final String error;
+
+  const _ErrorView({Key? key, required this.error}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 48),
+            const SizedBox(height: 16),
+            const Text(
+              'Error Loading Orders',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              error,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyView extends StatelessWidget {
+  const _EmptyView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.inbox, color: Colors.grey, size: 48),
+            SizedBox(height: 16),
+            Text(
+              'No Orders Found',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

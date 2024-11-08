@@ -1,15 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
 
+
+import 'package:application/Models/DriverModel.dart';
 import 'package:application/Models/Wsp.dart';
 import 'package:application/Models/Wsp_Orders.dart';
 import 'package:application/comms/comms_repo.dart';
 import 'package:application/comms/credentials.dart';
 import 'package:application/utils/utils.dart';
 import 'package:application/views/widgets/globals.dart';
-import 'package:dio/dio.dart';
 
-import '../Models/DriverModel.dart';
+
+
 import '../Models/Location.dart';
 import '../Models/OrderModel.dart';
 import '../Models/TrucksModel.dart';
@@ -20,15 +20,21 @@ class AppRequest {
         dummyData.map((orders) => Ordermodel.fromJson(orders)).toList();
     return Future.value(orders);
   }
+//  Drivers request 
+  static Future<List<Drivermodel>> fetchDrivers() async {
+    final Map<String, dynamic> drivers = await CommsRepository().queryApi("${base_url}fp/drivers");
+    if (drivers["success"]) {
+      final data = drivers['data'] as List<dynamic>;
 
-  static Future<List<drivermodel>> fetchDrivers() {
-    final drivers =
-        driversDummy.map((drivers) => drivermodel.fromJson(drivers)).toList();
-    return Future.value(drivers);
+      return data.map((e) => Drivermodel.fromJson(e)).toList();
+    } else {
+      throw Exception(drivers["message"]);
+    }     
+
   }
 
   static Future<List<trucksmodel>> fetchTrucks() {
-    final trucks =
+       final trucks =
         dummyTrucksData.map((trucks) => trucksmodel.fromJson(trucks)).toList();
     return Future.value(trucks);
   }
@@ -64,7 +70,7 @@ class AppRequest {
       return data.map((e) => WspOrders.fromJson(e)).toList();
     } else {
       printLog("\n\nfetchWSP_Orders error ${wspOrders["msg"]}");
-      
+
       throw Exception(wspOrders["message"]);
     }
   }

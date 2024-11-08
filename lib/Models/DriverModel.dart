@@ -1,33 +1,40 @@
 // "mems"
 
-class drivermodel {
-  final dynamic truck;
-  final dynamic phone;
-  final dynamic avaiable;
-  final dynamic status;
-  final String name;
+class Drivermodel {
+  final String driverId;
+  final String lastName;
 
-  drivermodel({
-    required this.truck,
+  final dynamic phone;
+  final int avaiable;
+  final int isOnline;
+  final String firstName;
+  final String assignedTruck;
+
+  Drivermodel({
+    required this.driverId,
+    required this.lastName,
     required this.phone,
     required this.avaiable,
-    required this.status,
-    required  this.name
+    required this.isOnline,
+    required this.firstName,
+    required this.assignedTruck,
   });
 
-  factory drivermodel.fromJson(Map<String, dynamic> json) {
+  factory Drivermodel.fromJson(Map<String, dynamic> json) {
     json.forEach((key, value) {
       if (value == null) {
         print('The value for $key is null');
       }
     });
 
-    return drivermodel(
-      truck: json["truck"],
+    return Drivermodel(
+      driverId: json["driverId"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      assignedTruck: json["assignedTruck"],
       phone: json["phone"],
-      avaiable: json["avaiable"],
-      status: json["status"],
-      name: json["name"]
+      avaiable: json["isAvailable"],
+      isOnline: json["isOnline"],
     );
   }
 }
