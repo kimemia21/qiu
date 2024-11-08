@@ -22,7 +22,7 @@ class _DriversState extends State<Drivers> {
   }
 
   void _initializeData() {
-    _driversFuture = AppRequest.fetchDrivers().catchError((error) {
+    _driversFuture = AppRequest.fetchDrivers(isProfile: false).catchError((error) {
       throw Exception('Failed to load drivers: $error');
     });
   }

@@ -18,9 +18,12 @@ class AppRequest {
   }
 
 //  Drivers request
-  static Future<List<Drivermodel>> fetchDrivers() async {
+  static Future<List<Drivermodel>> fetchDrivers({required bool isProfile}) async {
+    final uri = isProfile
+        ? "${base_url}drivers/profile"
+        : "${base_url}fp/drivers";
     final Map<String, dynamic> drivers =
-        await CommsRepository().queryApi("${base_url}fp/drivers");
+        await CommsRepository().queryApi(uri);
     if (drivers["success"]) {
       final data = drivers['data'] as List<dynamic>;
 
@@ -28,7 +31,28 @@ class AppRequest {
     } else {
       throw Exception(drivers["message"]);
     }
+
+
   }
+
+//   static Future<List<Drivermodel>> fetchDrivers() async {
+//   final List<Map<String, dynamic>> orders = [
+//     {
+//       "id": "ddfb7d98-6069-11ef-a99b-509a4c683487",
+//       "firstName": "William",
+//       "lastName": "Waweru",
+//       "phone": "254123876543",
+//       "assignedTruck": "KBC1234",
+//       "driverFp": 1,
+//       "isAvailable": 0
+//     }
+//   ];
+
+//   final order = orders.map((order) => Drivermodel.fromJson(order)).toList();
+//   return Future.value(order);
+// }
+
+        
 
   // using  a generic function CommsRepository().queryApi for get requests
 // fetch requests
