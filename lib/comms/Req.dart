@@ -1,4 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:application/Models/Wsp.dart';
+import 'package:application/Models/Wsp_Orders.dart';
+import 'package:application/comms/comms_repo.dart';
+import 'package:application/comms/credentials.dart';
+import 'package:application/utils/utils.dart';
 import 'package:application/views/widgets/globals.dart';
+import 'package:dio/dio.dart';
 
 import '../Models/DriverModel.dart';
 import '../Models/Location.dart';
@@ -29,5 +38,34 @@ class AppRequest {
         .map((locations) => LocationModel.fromJson(locations))
         .toList();
     return Future.value(locations);
+  }
+
+  // using  a generic function CommsRepository().queryApi for get requests
+// fetch requests
+  static Future<List<WspModel>> fetchWSP() async {
+    final Map<String, dynamic> wsp =
+        await CommsRepository().queryApi('${base_url}wsp/all');
+    if (wsp["rsp"]) {
+      final data = wsp['result'] as List<dynamic>;
+      return data.map((e) => WspModel.fromJson(e)).toList();
+    } else {
+      print("Wsp error ${wsp["msg"]}");
+      throw Exception(wsp["msg"]);
+    }
+  }
+
+  static Future<List<WspOrders>> fetchWSP_Orders() async {
+    printLog("\n\nfetchWSP_Orders called");
+    final Map<String, dynamic> wspOrders =
+        await CommsRepository().queryApi('${base_url}fp/wsp-orders');
+    if (wspOrders["success"]) {
+      print("success");
+      final data = wspOrders['data'] as List<dynamic>;
+      return data.map((e) => WspOrders.fromJson(e)).toList();
+    } else {
+      printLog("\n\nfetchWSP_Orders error ${wspOrders["msg"]}");
+      
+      throw Exception(wspOrders["message"]);
+    }
   }
 }

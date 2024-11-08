@@ -71,3 +71,6 @@ linux/build/
 .packages
 .pub-cache/
 pubspec.lock
+
+# FVM Version Cache
+.fvm/

@@ -661,13 +661,14 @@ class CommsRepository {
     return {"rsp": false, "message": "Unable to Process Request."};
   }
 
-  Future<Map<String, dynamic>> queryApi(endpoint,
-      [String filterquery = ""]) async {
+// here
+  Future<Map<String, dynamic>> queryApi(endpoint,[String filterquery = ""]) async {
     printLog(' Get $base_url "$endpoint$filterquery"}');
+ String token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI0YzM2ZWY4Yi05ZDBiLTExZWYtYTk5Yi01MDlhNGM2ODM0ODciLCJpYXQiOjE3MzA5ODU3MzIsImV4cCI6MTczMTA3MjEzMn0.RJ8aMxdRYwT4rElp1a-TzAeB68JrnIaDd8efNhhx3u0";
 
     try {
-      _dio.options.headers['Authorization'] =
-          'Bearer ${current_user!.access_token!}';
+      _dio.options.headers['Authorization'] ='Bearer $token';
+
       Response response = await _dio.get("$endpoint$filterquery");
       printLog("get $endpoint response ${response.statusCode}");
       if (response.statusCode == 200) {
@@ -706,6 +707,8 @@ class CommsRepository {
 
     return {"rsp": false, "message": "Unable to Process Request."};
   }
+
+
 
 // pay_to_merchant_pocket
 // pay_to_merchant_gate
