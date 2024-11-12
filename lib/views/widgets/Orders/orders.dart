@@ -98,3 +98,202 @@ class _OrdersState extends State<Orders> {
     );
   }
 }
+
+
+
+
+
+class OrderStatusWidget extends StatelessWidget {
+  final Ordermodel model;
+
+  const OrderStatusWidget({
+    super.key,
+    required this.model,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildOrderCard();
+  }
+
+  Widget _buildOrderCard() {
+    return Container(
+      margin: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFFF0E6FF),
+            Color(0xFFE6D9FF),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Order NO. ${model.id}',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          _buildStatusIndicators(),
+          const SizedBox(height: 25),
+          _buildOrderDetails(),
+          const SizedBox(height: 20),
+          _buildArchiveButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusIndicators() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildStatusDot('PENDING', model.status == "PENDING"),
+        _buildStatusDot('CONFIRMED', model.status == "CONFIRMED"),
+        _buildStatusDot('CANCELLED', model.status == "CANCELLED"),
+        _buildStatusDot('FULFILLED', model.status == "FULFILLED"),
+      ],
+    );
+  }
+
+  Widget _buildStatusDot(String label, bool isActive) {
+    Color dotColor;
+    Color textColor;
+
+    if (isActive) {
+      switch (label) {
+        case 'PENDING':
+          dotColor = Colors.orange;
+          textColor = Colors.orange;
+          break;
+        case 'CONFIRMED':
+          dotColor = Colors.green;
+          textColor = Colors.green;
+          break;
+        case 'CANCELLED':
+          dotColor = Colors.red;
+          textColor = Colors.red;
+          break;
+        case 'FULFILLED':
+          dotColor = Colors.blue;
+          textColor = Colors.blue;
+          break;
+        default:
+          dotColor = Colors.grey;
+          textColor = Colors.grey;
+      }
+    } else {
+      dotColor = Colors.grey[300]!;
+      textColor = Colors.grey;
+    }
+
+    return Column(
+      children: [
+        Container(
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: dotColor,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 10,
+            color: textColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOrderDetails() {
+    return Column(
+      children: [
+        Text('Customer: ${model.name}'),
+        const SizedBox(height: 8),
+        Text('Order No: ${model.id}'),
+        const SizedBox(height: 8),
+        Text('Status: ${model.status}'),
+        const SizedBox(height: 8),
+        Text('Estimated Delivery Time: ${_formatDateTime(model.deliveryDate)}'),
+        const SizedBox(height: 8),
+        Text('Estimated Cost: ${model.price.toStringAsFixed(0)} ksh'),
+      ],
+    );
+  }
+
+  Widget _buildArchiveButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF7B89F4),
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: const Text('ARCHIVE ORDER'),
+      ),
+    );
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    final day = dateTime.day;
+    final month = _getMonth(dateTime.month);
+    final year = dateTime.year;
+
+    return '$hour:$minute AM $day${_getDaySuffix(day)} $month $year';
+  }
+
+  String _getMonth(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return months[month - 1];
+  }
+
+  String _getDaySuffix(int day) {
+    if (day >= 11 && day <= 13) return 'th';
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+}

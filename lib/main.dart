@@ -1,6 +1,7 @@
 import 'package:application/views/signinUpPage.dart';
 import 'package:application/views/signinpage.dart';
 import 'package:application/views/state/appbloc.dart';
+import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/WSP/WSP.dart';
 import 'package:application/views/widgets/WSP/wsp_orders.dart';
 import 'package:application/views/widgets/drivers/DriverProfile.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: DriverProfile(),
+        home: Orders(),
       ),
     );
   }
