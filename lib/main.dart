@@ -1,5 +1,7 @@
+import 'package:application/utils/utils.dart';
+import 'package:application/views/login.dart';
 import 'package:application/views/signinUpPage.dart';
-import 'package:application/views/signinpage.dart';
+import 'package:application/views/OnBoardScreen.dart';
 import 'package:application/views/state/appbloc.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/WSP/WSP.dart';
@@ -12,7 +14,14 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-void main() {
+import 'views/Splash.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorage.init();
+  current_role = LocalStorage().getString("current_role");
+  current_role = current_role == "" ? "SC" : current_role;
+
   runApp(const MyApp());
 }
 
@@ -24,20 +33,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => Appbloc())],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: Orders(),
-      ),
-    );
+        providers: [ChangeNotifierProvider(create: (context) => Appbloc())],
+        child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
+            ),
+            home: SignUpScreen()) // SplashScreen()),
+        );
   }
 }
-
-
 
 class DynamicInputScreen extends StatefulWidget {
   @override
@@ -79,7 +85,7 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
     for (var truck in _truckData) {
       if (truck['capacity'].isEmpty ||
           truck['licencePlate'].isEmpty ||
-          truck["quality"].isEmpty||
+          truck["quality"].isEmpty ||
           truck['price'].isEmpty) {
         return false;
       }
@@ -176,7 +182,6 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                                   _updateTruckData(index, 'capacity', value),
                               decoration: InputDecoration(
                                 hintText: 'Capacity',
-                                
                                 label: Text("Capacity"),
                                 border: OutlineInputBorder(),
                                 errorText: _truckData[index]['capacity'].isEmpty
@@ -202,7 +207,6 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                             ),
                             const SizedBox(height: 8),
                             TextField(
-                              
                               onChanged: (value) => _updateTruckData(
                                   index, 'licencePlate', value),
                               decoration: InputDecoration(
@@ -221,7 +225,6 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                               onChanged: (value) =>
                                   _updateTruckData(index, 'price', value),
                               decoration: InputDecoration(
-                                
                                 label: Text("Price"),
                                 hintText: 'Price',
                                 border: OutlineInputBorder(),

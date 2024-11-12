@@ -37,15 +37,15 @@ class _CustomTextfieldState extends State<CustomTextfield> {
       padding: const EdgeInsets.all(10.0),
       child: TextFormField(
         // Use TextFormField instead of TextField
-        keyboardType: widget.isPassword!
+        keyboardType: (widget.isPassword ?? false)
             ? TextInputType.visiblePassword
             : TextInputType.emailAddress,
-        enableSuggestions: widget.isPassword! ? false : true,
-        autocorrect: widget.isPassword! ? false : true,
+        enableSuggestions: (widget.isPassword ?? false) ? false : true,
+        autocorrect: (widget.isPassword ?? false) ? false : true,
         obscureText: hidepass,
         controller: widget.myController,
         decoration: InputDecoration(
-          suffixIcon: widget.isPassword!
+          suffixIcon: (widget.isPassword ?? false)
               ? IconButton(
                   icon: Icon(Icons.remove_red_eye,
                       color: hidepass ? Colors.grey : Colors.green),
@@ -260,13 +260,6 @@ class ExampleUsage extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
 List<Map<String, dynamic>> dummyData = [
   {
     "status": "FULFILLED", // Changed from "delivered"
@@ -306,20 +299,20 @@ List<Map<String, dynamic>> dummyData = [
 ];
 
 List<Map<String, dynamic>> dummyTrucksData = [
-     {
-            "id": 1,
-            "licence_plate": "KBC 1234",
-            "capacity": "10000",
-            "price": "10000",
-            "quality": "1"
-        },
-        {
-            "id": 2,
-            "licence_plate": "KCC 1234",
-            "capacity": "5000",
-            "price": "500",
-            "quality": "1"
-        }
+  {
+    "id": 1,
+    "licence_plate": "KBC 1234",
+    "capacity": "10000",
+    "price": "10000",
+    "quality": "1"
+  },
+  {
+    "id": 2,
+    "licence_plate": "KCC 1234",
+    "capacity": "5000",
+    "price": "500",
+    "quality": "1"
+  }
 ];
 
 List<Map<String, dynamic>> locationData = [

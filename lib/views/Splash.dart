@@ -1,5 +1,9 @@
+import 'package:application/Models/AccountTypes.dart';
+import 'package:application/views/signinUpPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'login.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -71,7 +75,9 @@ class SplashScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      // await LoginPage(context, Accountypes.DRIVER);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFF6B4DE6),
@@ -94,7 +100,7 @@ class SplashScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 56,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () async {},
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.white),
                       foregroundColor: Colors.white,

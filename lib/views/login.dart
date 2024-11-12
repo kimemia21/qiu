@@ -14,7 +14,7 @@ import '../utils/utils.dart';
 import '../utils/widgets.dart';
 import 'widgets/globals.dart';
 
-Future<dynamic> LoginPage(
+Future<dynamic> LoginPagePop(
     BuildContext context, Accountypes qiuaccountType) async {
   return showModalBottomSheet(
       shape: const RoundedRectangleBorder(

@@ -40,11 +40,7 @@ class _AppnavState extends State<Appnav> {
   }
 
   List<Widget> _buildScreens() {
-    return [
-      Homepage(),
-      Orders(),
-   CreateOrderScreen()
-    ];
+    return [Homepage(), Orders(), CreateOrderScreen()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() => [
@@ -61,8 +57,8 @@ class _AppnavState extends State<Appnav> {
           inactiveColorPrimary: Color(0xFF9FA8DA),
         ),
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.more),
-          title: "More",
+          icon: const Icon(Icons.new_label),
+          title: "Order",
           activeColorPrimary: Colors.green.shade300,
           inactiveColorPrimary: Color(0xFF9FA8DA),
         ),

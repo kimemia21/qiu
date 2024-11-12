@@ -1,10 +1,12 @@
 import 'package:application/Models/AccountTypes.dart';
-import 'package:application/views/login.dart';
-import 'package:application/views/signinpage.dart';
+import 'package:application/utils/utils.dart';
+
 import 'package:application/views/widgets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import 'loginPage.dart';
 // import 'package:qiu/utils/utils.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -64,12 +66,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-              if (accounttype == null) ...ListOptions() else ...ListSelection(),
+              if (this.accounttype == null)
+                ...ListOptions()
+              else
+                ...ListSelection(),
               const Spacer(),
               TextButton(
                 onPressed: () {
+                  print("got sign in");
                   Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => SignInScreen()));
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: RichText(
                   text: const TextSpan(
@@ -116,7 +122,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         onPressed: () async {
           //  Navigator.pushNamed(context, '/login');
-          await LoginPage(Get.context!, ttype);
+          // await LoginPage(Get.context!, ttype).then(
+          //   (value) {
+          //     printLog("Login page is back");
+          //   },
+          // );
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

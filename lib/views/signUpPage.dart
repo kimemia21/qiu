@@ -324,6 +324,17 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                     if (value["success"] ?? false) {
                                       // got o login
+
+                                      current_user = userModel(
+                                        access_token: value["accessToken"],
+                                        active: true,
+                                        email: _emailController.text.trim(),
+                                        first_name: _nameController.text.trim(),
+                                        last_name:
+                                            _lastnameController.text.trim(),
+                                        user_name: _nameController.text.trim(),
+                                      );
+
                                       showalert(
                                           true,
                                           context,

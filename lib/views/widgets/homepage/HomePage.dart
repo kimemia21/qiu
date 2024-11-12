@@ -1,4 +1,6 @@
-import 'package:application/views/signinpage.dart';
+import 'package:application/utils/utils.dart';
+import 'package:application/views/OnBoardScreen.dart';
+import 'package:application/views/loginPage.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/drivers/drivers.dart';
 import 'package:application/views/widgets/globals.dart';
@@ -157,27 +159,29 @@ class _HomepageState extends State<Homepage> {
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),
-                    CustomMenuItem(
-                      dense: true,
-                      text: 'My Trucks',
-                      icon: Icons.local_shipping_outlined,
-                      onPressed: () {
-                        PersistentNavBarNavigator.pushNewScreen(
-                            withNavBar: true, context, screen: Trucks());
-                      },
-                      iconColor: Theme.of(context).primaryColor,
-                    ),
-                    CustomMenuItem(
-                      dense: true,
-                      text: 'My Drivers',
-                      icon: Icons.person_outline,
-                      onPressed: () {
-                        PersistentNavBarNavigator.pushNewScreen(
-                            withNavBar: true, context, screen: Drivers());
-                        // Handle navigation to My Drivers
-                      },
-                      iconColor: Theme.of(context).primaryColor,
-                    ),
+                    if ((current_role == "FP") || (current_role == "DR"))
+                      CustomMenuItem(
+                        dense: true,
+                        text: 'My Trucks',
+                        icon: Icons.local_shipping_outlined,
+                        onPressed: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                              withNavBar: true, context, screen: Trucks());
+                        },
+                        iconColor: Theme.of(context).primaryColor,
+                      ),
+                    if ((current_role == "FP") || (current_role == "DR"))
+                      CustomMenuItem(
+                        dense: true,
+                        text: 'My Drivers',
+                        icon: Icons.person_outline,
+                        onPressed: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                              withNavBar: true, context, screen: Drivers());
+                          // Handle navigation to My Drivers
+                        },
+                        iconColor: Theme.of(context).primaryColor,
+                      ),
                     CustomMenuItem(
                       dense: true,
                       text: 'FAQs & Support',
@@ -187,6 +191,19 @@ class _HomepageState extends State<Homepage> {
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),
+                    if (current_role == "SC")
+                      CustomMenuItem(
+                        dense: true,
+                        text: 'Change to Service Provider',
+                        icon: Icons.settings_outlined,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => OnBoardScreen()));
+                        },
+                        iconColor: Theme.of(context).primaryColor,
+                      ),
                     CustomMenuItem(
                       dense: true,
                       text: 'Account Settings',
@@ -202,9 +219,7 @@ class _HomepageState extends State<Homepage> {
                       icon: Icons.logout,
                       onPressed: () {
                         PersistentNavBarNavigator.pushNewScreen(
-                          withNavBar: false,
-                          context,
-                            screen: SignInScreen());
+                            withNavBar: false, context, screen: LoginPage());
 
                         // Navigator.pushReplacement(context,
                         //     MaterialPageRoute(builder: (context) => P));

@@ -88,7 +88,8 @@ class userModel {
       user_type: json["user_type"] ?? "".toString(),
       user_status: json["user_status"] ?? "".toString(),
       user_name: json["user_name"] ?? "".toString(),
-      active: (json["active"] ?? "").toString().toLowerCase() == "true",
+      active:
+          true, // (json["active"] ?? "").toString().toLowerCase() == "true",
       islandlord: json["user_type"] == "LANDLORD",
       access_token: json["token"] ?? "".toString(),
       dob: json["dob"] ?? "".toString(),

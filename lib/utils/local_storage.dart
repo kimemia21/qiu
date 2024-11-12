@@ -26,9 +26,18 @@ class LocalStorage {
     return _prefs.setBool(key, val);
   }
 
+  String getString(String key) {
+    String? val = _prefs.getString(key);
+    return val ?? "";
+  }
+
+  Future<bool> setString(String key, String val) {
+    return _prefs.setString(key, val);
+  }
+
   bool getBool(String key) {
     bool? val = _prefs.getBool(key);
-    return val == null ? false : val;
+    return val ?? false;
   }
 
   Future<bool> remove(String key) {
