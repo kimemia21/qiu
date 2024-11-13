@@ -53,7 +53,7 @@ class userModel {
   String password = "";
   String refresh_token;
   bool active = false;
-  String dob = "";
+  String role = "";
   String date_created = "";
   bool fetchedparams = false;
   String updated_on = "";
@@ -68,7 +68,7 @@ class userModel {
       this.last_name = "",
       this.user_type = "",
       this.user_status = "",
-      this.dob = "",
+      this.role = "",
       this.phone_number = "",
       this.refresh_token = "",
       this.user_name = "",
@@ -82,9 +82,9 @@ class userModel {
 
     return userModel(
       email: json["email"] ?? "".toString(),
-      first_name: json["first_name"] ?? "".toString(),
-      last_name: json["last_name"] ?? "".toString(),
-      phone_number: json["phone_number"] ?? "".toString(),
+      first_name: json["firstName"] ?? "".toString(),
+      last_name: json["lastName"] ?? "".toString(),
+      phone_number: json["phoneNo"] ?? "".toString(),
       user_type: json["user_type"] ?? "".toString(),
       user_status: json["user_status"] ?? "".toString(),
       user_name: json["user_name"] ?? "".toString(),
@@ -92,8 +92,8 @@ class userModel {
           true, // (json["active"] ?? "").toString().toLowerCase() == "true",
       islandlord: json["user_type"] == "LANDLORD",
       access_token: json["token"] ?? "".toString(),
-      dob: json["dob"] ?? "".toString(),
-      id: (json["user_id"] ?? "").toString(),
+      role: json["role"] ?? "".toString(),
+      id: (json["id"] ?? "").toString(),
       refresh_token: (json["refresh_token"] ?? "").toString().trim(),
       date_created: (json["date_created"] ?? "").toString().trim(),
       updated_on: (json["updated_on"] ?? "").toString().trim(),

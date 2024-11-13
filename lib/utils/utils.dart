@@ -55,7 +55,7 @@ userModel current_user = userModel(
   id: "",
   phone_number: "",
   email: "",
-  dob: "2021-01-01",
+  role: "SC",
 );
 
 String firebaseToken =

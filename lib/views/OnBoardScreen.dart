@@ -289,6 +289,8 @@
 
 import 'package:application/Models/AccountTypes.dart';
 import 'package:application/utils/utils.dart';
+import 'package:application/utils/widgets.dart';
+import 'package:application/views/login.dart';
 
 import 'package:application/views/widgets/globals.dart';
 import 'package:flutter/material.dart';
@@ -296,7 +298,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
+import '../comms/credentials.dart';
 import 'loginPage.dart';
+import 'widgets/drivers/homepage/DriverHomeScreen.dart';
 import 'widgets/trucks/Trucks.dart';
 // import 'package:qiu/utils/utils.dart';
 
@@ -313,6 +317,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
   TextEditingController quality = TextEditingController();
   String lat = "";
   String long = "";
+  bool saving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -468,22 +473,74 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         ),
         CustomTextfield(
           myController: quality,
-          hintText: "Water Quality",
+          hintText: "Water Quality. Fresh or Salty",
         ),
         CustomTextfield(
           myController: source,
-          hintText: "Water source",
+          hintText: "Water source. Borehole...",
         ),
         CustomTextfield(
           myController: address,
           hintText: "Address",
         ),
         //location pick
-        CustomButton(context, "Register", () {
+        CustomButton(context, "Register", () async {
           // printLog("sign up wsp");
           if (name.text.trim() == "") {
+            showalert(false, context, "Missing", "Enter Company Name");
             return false;
           }
+          if (quality.text.trim() == "") {
+            showalert(false, context, "Missing", "Enter Water Quality");
+            return false;
+          }
+          if (source.text.trim() == "") {
+            showalert(false, context, "Missing", "Enter Source");
+            return false;
+          }
+          if (address.text.trim() == "") {
+            showalert(false, context, "Missing", "Enter Company Address");
+            return false;
+          }
+
+          setState(() {
+            saving = true;
+          });
+
+          final Map<String, dynamic> body = {
+            "role": "WSP",
+            "lon": long,
+            "lat": lat,
+            "physicalAddress": address.text,
+            "quality": quality.text,
+            "waterSource": source.text,
+            "companyName": name.text
+          };
+          printLog("Login $body");
+          await comms_repo.QueryAPIpost("users/register-service", body)
+              .then((value) async {
+            printLog("USer ifo $value");
+            setState(() {
+              saving = false;
+            });
+
+            if (value["success"] ?? false) {
+              printLog("Save current role");
+
+              current_role = "WSP";
+              await LocalStorage().setString("current_role", current_role);
+
+              showalert(true, context, "Success",
+                  value["message"] ?? "COmpany Details Saved");
+
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (ctx) => getHome()),
+              );
+            } else {
+              showalert(false, context, "Failed",
+                  value["message"] ?? "Unable to Login");
+            }
+          });
         })
       ];
     }

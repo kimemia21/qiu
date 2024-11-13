@@ -10,7 +10,7 @@ import '../comms/credentials.dart';
 import '../utils/utils.dart';
 import '../utils/widgets.dart';
 import 'widgets/globals.dart';
-import 'widgets/homepage/HomeScreen.dart';
+import 'widgets/drivers/homepage/DriverHomeScreen.dart';
 // import 'package:qiu/utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -166,13 +166,19 @@ class _LoginPageState extends State<LoginPage> {
                                           // got o login
                                           current_user =
                                               userModel.fromMap(value);
+                                          current_user.access_token =
+                                              value["accessToken"];
+
+                                          print(
+                                              " a current_user.access_token ${current_user.access_token}");
+                                          print("value $value");
 
                                           showalert(true, context, "Success",
                                               value["message"] ?? "Welcome");
 
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(
-                                              builder: (ctx) => HomeScreen(),
+                                              builder: (ctx) => getHome(),
                                             ),
                                           );
                                         } else {

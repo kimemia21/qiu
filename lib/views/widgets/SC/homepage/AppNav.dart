@@ -1,7 +1,7 @@
 import 'package:application/views/widgets/Maps/MapScreen.dart';
 import 'package:application/views/widgets/Orders/CreatOrder.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
-import 'package:application/views/widgets/homepage/HomePage.dart';
+import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
@@ -40,7 +40,7 @@ class _AppnavState extends State<Appnav> {
   }
 
   List<Widget> _buildScreens() {
-    return [Homepage(), Orders(), CreateOrderScreen()];
+    return [DriverHomepage(), Orders(), CreateOrderScreen()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() => [

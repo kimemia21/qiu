@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:application/Models/user.dart';
-import 'package:application/views/widgets/homepage/AppNav.dart';
-import 'package:application/views/widgets/homepage/HomeScreen.dart';
+import 'package:application/views/widgets/SC/homepage/SCHomeScreen.dart';
+import 'package:application/views/widgets/WSP/homepage/WSPHomeScreen.dart';
+import 'package:application/views/widgets/drivers/homepage/AppNav.dart';
+import 'package:application/views/widgets/drivers/homepage/DriverHomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -167,19 +169,27 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
                                     .then((value) {
                                   printLog("USer ifo $value");
                                   setState(() {
-                                    loginin = true;
+                                    loginin = false;
                                   });
 
                                   if (value["success"] ?? false) {
                                     // got o login
-                                    current_user = userModel.fromMap(value);
+                                    current_user =
+                                        userModel.fromMap(value["user"]);
+
+                                    current_user.access_token =
+                                        value["accessToken"];
+
+                                    print(
+                                        " a current_user.access_token ${current_user.access_token}");
+                                    print("value $value");
 
                                     showalert(true, context, "Success",
                                         value["message"] ?? "Welcome");
 
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                        builder: (ctx) => HomeScreen(),
+                                        builder: (ctx) => getHome(),
                                       ),
                                     );
                                   } else {
@@ -222,4 +232,12 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
     if (qiuaccountType == Accountypes.SP) return "WSP";
     return "SC";
   }
+}
+
+getHome() {
+  if (current_role == "WSP") return WSPHomeScreen();
+  if (current_role == "DR") return DriverHomeScreen();
+  if (current_role == "FP") return DriverHomeScreen();
+
+  return SCHomeScreen();
 }

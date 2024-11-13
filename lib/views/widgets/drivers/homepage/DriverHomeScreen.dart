@@ -1,14 +1,14 @@
-import 'package:application/views/widgets/homepage/AppNav.dart';
-import 'package:application/views/widgets/homepage/HomePage.dart';
+import 'package:application/views/widgets/drivers/homepage/AppNav.dart';
+import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends StatefulWidget {
+class DriverHomeScreen extends StatefulWidget {
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<DriverHomeScreen> createState() => _DriverHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _DriverHomeScreenState extends State<DriverHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../utils/utils.dart';
-import 'widgets/homepage/HomeScreen.dart';
+import 'widgets/drivers/homepage/DriverHomeScreen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

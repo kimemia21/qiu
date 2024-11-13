@@ -8,14 +8,14 @@ import 'package:application/views/widgets/trucks/Trucks.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+class SCHomepage extends StatefulWidget {
+  const SCHomepage({super.key});
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  State<SCHomepage> createState() => _SCHomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _SCHomepageState extends State<SCHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,7 +178,7 @@ class _HomepageState extends State<Homepage> {
                         onPressed: () {
                           PersistentNavBarNavigator.pushNewScreen(
                               withNavBar: true, context, screen: Drivers());
-                          // Handle navigation to My Drivers
+                          // Handle navigation to My SCs
                         },
                         iconColor: Theme.of(context).primaryColor,
                       ),
