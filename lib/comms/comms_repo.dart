@@ -594,10 +594,10 @@ class CommsRepository {
 
     try {
       if (!(endpoint == "login" ||
+          endpoint =='users/register-service'||
           endpoint == "register" ||
           endpoint == "otp")) {
-        _dio.options.headers['Authorization'] =
-            'Bearer ${current_user!.access_token!}';
+        _dio.options.headers['Authorization'] ='Bearer ${current_user!.access_token!}';
       } else {
         printLog("Hit $base_url to $endpoint $jsonstring");
       }

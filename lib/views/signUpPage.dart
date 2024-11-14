@@ -130,6 +130,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+final _lastnameController = TextEditingController(text: "Doe");
+final _nameController = TextEditingController(text: "John");
+final _emailController = TextEditingController(text: "johndoe@example.com");
+final _passwordController = TextEditingController(text: "dummyPassword123");
+final _confirmPasswordController = TextEditingController(text: "dummyPassword123");
+final _phoneNumberController = TextEditingController(text: "+254769922984");
     return Scaffold(
       body: Container(
         width: double.infinity,

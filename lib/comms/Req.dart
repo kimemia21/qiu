@@ -1,11 +1,19 @@
+import 'dart:convert';
+
 import 'package:application/Models/DriverModel.dart';
 import 'package:application/Models/TrucksModel.dart';
 import 'package:application/Models/Wsp.dart';
 import 'package:application/Models/Wsp_Orders.dart';
 import 'package:application/comms/comms_repo.dart';
 import 'package:application/comms/credentials.dart';
+import 'package:application/main.dart';
 import 'package:application/utils/utils.dart';
+import 'package:application/views/state/appbloc.dart';
+import 'package:application/views/widgets/WSP/homepage/WSPHomeScreen.dart';
 import 'package:application/views/widgets/globals.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../Models/Location.dart';
 import '../Models/OrderModel.dart';
@@ -18,12 +26,11 @@ class AppRequest {
   }
 
 //  Drivers request
-  static Future<List<Drivermodel>> fetchDrivers({required bool isProfile}) async {
-    final uri = isProfile
-        ? "${base_url}drivers/profile"
-        : "${base_url}fp/drivers";
-    final Map<String, dynamic> drivers =
-        await CommsRepository().queryApi(uri);
+  static Future<List<Drivermodel>> fetchDrivers(
+      {required bool isProfile}) async {
+    final uri =
+        isProfile ? "${base_url}drivers/profile" : "${base_url}fp/drivers";
+    final Map<String, dynamic> drivers = await CommsRepository().queryApi(uri);
     if (drivers["success"]) {
       final data = drivers['data'] as List<dynamic>;
 
@@ -31,8 +38,6 @@ class AppRequest {
     } else {
       throw Exception(drivers["message"]);
     }
-
-
   }
 
 //   static Future<List<Drivermodel>> fetchDrivers() async {
@@ -51,8 +56,6 @@ class AppRequest {
 //   final order = orders.map((order) => Drivermodel.fromJson(order)).toList();
 //   return Future.value(order);
 // }
-
-        
 
   // using  a generic function CommsRepository().queryApi for get requests
 // fetch requests
@@ -98,6 +101,31 @@ class AppRequest {
       printLog("\n\nfetchWSP_Orders error ${wspOrders["msg"]}");
 
       throw Exception(wspOrders["message"]);
+    }
+  }
+
+  static Future WSPSignup(
+      {required BuildContext context,
+      required Map<String, dynamic> data}) async {
+    printLog("\n\nfetchWSP_Orders called");
+    Appbloc blog = context.read<Appbloc>();
+    final jsonString = jsonEncode(data);
+    print("changing global loading state to true");
+    blog.changeLoading(true);
+    final Map<String, dynamic> signup = await CommsRepository()
+        .QueryAPIpost('${base_url}users/register-service', jsonString);
+
+    print("changing global loading state to false");
+    blog.changeLoading(false);
+    if (signup["success"]) {
+      print("success");
+
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => WSPHomeScreen()));
+    } else {
+      printLog("\n\singupWSP error ${signup["msg"]}");
+
+      throw Exception(signup["message"]);
     }
   }
 }

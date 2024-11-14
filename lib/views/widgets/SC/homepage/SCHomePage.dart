@@ -225,6 +225,7 @@ class _SCHomepageState extends State<SCHomepage> {
                         //     MaterialPageRoute(builder: (context) => P));
 
                         // Handle navigation to Account Settings
+                      
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),

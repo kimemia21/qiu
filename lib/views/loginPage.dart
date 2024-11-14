@@ -11,8 +11,6 @@ import '../utils/utils.dart';
 import '../utils/widgets.dart';
 import 'widgets/globals.dart';
 import 'widgets/drivers/homepage/DriverHomeScreen.dart';
-// import 'package:qiu/utils/utils.dart';
-
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -20,120 +18,122 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _issueDescriptionController =
-      TextEditingController();
-  final TextEditingController uname = TextEditingController();
-  final TextEditingController upass = TextEditingController();
-  String? _issueType;
-  DateTime? _selectedDate;
+   TextEditingController uname = TextEditingController();
+   TextEditingController upass = TextEditingController();
   bool loginin = false;
   String title = "";
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+uname = TextEditingController(text: "johndoe@example.com");
+upass = TextEditingController(text: "dummyPassword123");
+
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF7E64D4),
-              Color(0xFF9DD6F8),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 100),
-              SvgPicture.asset(
-                'assets/images/Logo.svg',
-                height: 150,
+      resizeToAvoidBottomInset: true,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final bool isSmallScreen = constraints.maxWidth < 600;
+
+          return Container(
+            width: screenWidth,
+            height: screenHeight,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF7E64D4),
+                  Color(0xFF9DD6F8),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-              SizedBox(height: 20),
-              Text(
-                'Your end to end water utility App',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white70,
-                ),
-                textAlign: TextAlign.center,
+            ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              SizedBox(height: 10),
-              Text(
-                'Buy. Manage. Monitor',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 30),
-              Text(
-                'Sign In',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white70,
-                ),
-              ),
-              Form(
-                key: _formKey,
-                child: SafeArea(
-                    child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 4.0,
-                        right: 4.0,
-                        top: 4.0,
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: isSmallScreen ? screenHeight * 0.1 : 100),
+                  SvgPicture.asset(
+                    'assets/images/Logo.svg',
+                    height: isSmallScreen ? 100 : 150,
+                  ),
+                  SizedBox(height: isSmallScreen ? 10 : 20),
+                  Text(
+                    'Your end-to-end water utility App',
+                    style: TextStyle(
+                      fontSize: isSmallScreen ? 14 : 16,
+                      color: Colors.white70,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: isSmallScreen ? 8 : 10),
+                  Text(
+                    'Buy. Manage. Monitor',
+                    style: TextStyle(
+                      fontSize: isSmallScreen ? 18 : 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: isSmallScreen ? 20 : 30),
+                  Text(
+                    'Sign In',
+                    style: TextStyle(
+                      fontSize: isSmallScreen ? 16 : 18,
+                      color: Colors.white70,
+                    ),
+                  ),
+                  Form(
+                    key: _formKey,
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: <Widget>[
                           Text(
                             title,
                             style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.white70,
-                                fontWeight: FontWeight.w600),
+                              fontSize: isSmallScreen ? 24 : 30,
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           const SizedBox(height: 24),
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
+                            width: screenWidth * 0.8,
                             child: CustomTextfield(
                               myController: uname,
-                              hintText: " Email",
+                              hintText: "Email",
                               isPassword: false,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'This field cannot be empty';
                                 }
-
                                 return null;
                               },
                             ),
                           ),
+                          SizedBox(height: isSmallScreen ? 12 : 20),
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
+                            width: screenWidth * 0.8,
                             child: CustomTextfield(
                               myController: upass,
-                              hintText: " Password",
+                              hintText: "Password",
                               isPassword: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'This field cannot be empty';
                                 }
-
                                 return null;
                               },
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          SizedBox(height: isSmallScreen ? 16 : 20),
                           loginin
                               ? const CircularProgressIndicator(
                                   color: Color.fromARGB(255, 51, 83, 142),
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                       final Map<String, dynamic> body = {
                                         "email": uname.text.trim(),
                                         "password": upass.text.trim(),
-                                        "role": current_role // my saved tole
+                                        "role": current_role,
                                       };
 
                                       printLog("Login $body");
@@ -157,24 +157,22 @@ class _LoginPageState extends State<LoginPage> {
                                       await comms_repo.QueryAPIpost(
                                               "auth/login", body)
                                           .then((value) {
-                                        printLog("USer ifo $value");
+                                        printLog("User info $value");
                                         setState(() {
-                                          loginin = true;
+                                          loginin = false;
                                         });
 
                                         if (value["success"] ?? false) {
-                                          // got o login
                                           current_user =
                                               userModel.fromMap(value);
                                           current_user.access_token =
                                               value["accessToken"];
-
-                                          print(
-                                              " a current_user.access_token ${current_user.access_token}");
-                                          print("value $value");
-
-                                          showalert(true, context, "Success",
-                                              value["message"] ?? "Welcome");
+                                          showalert(
+                                            true,
+                                            context,
+                                            "Success",
+                                            value["message"] ?? "Welcome",
+                                          );
 
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(
@@ -183,52 +181,55 @@ class _LoginPageState extends State<LoginPage> {
                                           );
                                         } else {
                                           showalert(
-                                              false,
-                                              context,
-                                              "Failed",
-                                              value["message"] ??
-                                                  "Unable to Login");
+                                            false,
+                                            context,
+                                            "Failed",
+                                            value["message"] ??
+                                                "Unable to Login",
+                                          );
                                         }
                                       });
                                     }
                                   },
                                 ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: isSmallScreen ? 16 : 20),
                         ],
                       ),
                     ),
                   ),
-                )),
-              ),
-              Spacer(),
-              TextButton(
-                onPressed: () {
-                  // Navigator.pushNamed(context, '/signup');
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignupScreen()));
-                },
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Don't have an account? ",
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      TextSpan(
-                        text: 'Sign Up',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignupScreen(),
                         ),
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Don't have an account? ",
+                            style: TextStyle(color: Colors.white70),
+                          ),
+                          TextSpan(
+                            text: 'Sign Up',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  SizedBox(height: isSmallScreen ? 10 : 20),
+                ],
               ),
-              SizedBox(height: 20),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

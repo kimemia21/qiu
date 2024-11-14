@@ -1,8 +1,12 @@
 import 'package:application/Models/DriverModel.dart';
 import 'package:application/Models/Drivermodel.dart';
 import 'package:application/Models/OrderModel.dart';
+import 'package:application/main.dart';
+import 'package:application/views/state/appbloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class CustomTextfield extends StatefulWidget {
   final TextEditingController myController;
@@ -105,6 +109,8 @@ Widget buildWideButton(
 }
 
 Widget CustomButton(BuildContext context, String text, pressed) {
+  Appbloc bloc = context.watch<Appbloc>();
+
   return Container(
     width: 220,
     child: Padding(
@@ -122,7 +128,16 @@ Widget CustomButton(BuildContext context, String text, pressed) {
           ),
         ),
         onPressed: pressed,
-        child: Stack(
+        child: bloc.isLoading?
+        Center(
+        child: LoadingAnimationWidget.stretchedDots(
+         color: Colors.white,
+          size: 30,
+        ),):
+      
+
+
+         Stack(
           alignment: Alignment.center,
           children: [
             Center(

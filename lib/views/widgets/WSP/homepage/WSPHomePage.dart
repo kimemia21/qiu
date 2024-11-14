@@ -6,6 +6,11 @@ import 'package:application/views/widgets/globals.dart';
 import 'package:application/views/widgets/trucks/Trucks.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:application/utils/utils.dart';
+import 'package:application/views/OnBoardScreen.dart';
+import 'package:application/views/loginPage.dart';
+import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class WSPHomepage extends StatefulWidget {
   const WSPHomepage({super.key});
@@ -35,9 +40,9 @@ class _WSPHomepageState extends State<WSPHomepage> {
             ),
           ),
 
-          // White rounded container that stays fixed
+          // White rounded container
           Positioned(
-            top: 200, // Adjust this value to position the white container
+            top: 200,
             left: 0,
             right: 0,
             bottom: 0,
@@ -48,11 +53,18 @@ class _WSPHomepageState extends State<WSPHomepage> {
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, -5),
+                  ),
+                ],
               ),
             ),
           ),
 
-          // Profile image that stays fixed
+          // Profile image
           Positioned(
             top: 120,
             left: 0,
@@ -61,12 +73,24 @@ class _WSPHomepageState extends State<WSPHomepage> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  ClipOval(
-                    child: Image.network(
-                      "https://imgix.ranker.com/list_img_v2/8131/3168131/original/3168131?fit=crop&fm=pjpg&q=80&dpr=2&w=1200&h=720",
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.cover,
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.network(
+                        "https://imgix.ranker.com/list_img_v2/8131/3168131/original/3168131?fit=crop&fm=pjpg&q=80&dpr=2&w=1200&h=720",
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -89,143 +113,153 @@ class _WSPHomepageState extends State<WSPHomepage> {
 
           // Scrollable content
           Positioned(
-            top:
-                250, // Should match the white container's top position + some padding
+            top: 250,
             left: 0,
             right: 0,
             bottom: 0,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Sasa Stark',
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 8),
                     Text(
                       'sansa@example.com',
                       style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 13,
+                        fontSize: 14,
                       ),
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 24),
+                    
+                    // New Action Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF7E57C2),
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            icon: Icon(Icons.add_road, color: Colors.white),
+                            label: Text(
+                              'Add Traffic',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              // Handle Add Traffic
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF9FA8DA),
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            icon: Icon(Icons.assignment, color: Colors.white),
+                            label: Text(
+                              'Manage Orders',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              // Handle Manage Orders
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    SizedBox(height: 32),
+                    
+                    // Menu Items
                     Container(
-                      margin: EdgeInsets.all(10),
-                      height: 100,
-                      width: MediaQuery.of(context).size.width * 0.95,
                       decoration: BoxDecoration(
-                        color: Colors.blue[100],
-                        borderRadius:
-                            BorderRadiusDirectional.all(Radius.circular(20)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                          ),
+                        ],
                       ),
-                      child: ListTile(
-                        leading: Icon(Icons.details_outlined),
-                        title: Text("Account Description"),
-                        subtitle: Text("Account SubTitle"),
+                      child: Column(
+                        children: [
+                          if (current_role == "SC")
+                            ListTile(
+                              leading: Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF9FA8DA).withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Icon(Icons.swap_horiz, color: Color(0xFF7E57C2)),
+                              ),
+                              title: Text(
+                                'Change to Service Provider',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (ctx) => OnBoardScreen()),
+                                );
+                              },
+                            ),
+                          Divider(height: 1),
+                          ListTile(
+                            leading: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.red.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(Icons.logout, color: Colors.red),
+                            ),
+                            title: Text(
+                              'Logout',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: LoginPage(),
+                                withNavBar: false,
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'My DashBoard',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    CustomMenuItem(
-                      dense: true,
-                      text: 'Home',
-                      icon: Icons.home_outlined,
-                      onPressed: () {
-                        // Handle navigation
-                      },
-                      iconColor: Theme.of(context).primaryColor,
-                    ),
-                    CustomMenuItem(
-                      dense: true,
-                      text: 'Manage My Orders',
-                      icon: Icons.list_alt_outlined,
-                      onPressed: () {
-                        PersistentNavBarNavigator.pushNewScreen(
-                            withNavBar: true, context, screen: Orders());
-                      },
-                      iconColor: Theme.of(context).primaryColor,
-                    ),
-                    if ((current_role == "FP") || (current_role == "DR"))
-                      CustomMenuItem(
-                        dense: true,
-                        text: 'My Trucks',
-                        icon: Icons.local_shipping_outlined,
-                        onPressed: () {
-                          PersistentNavBarNavigator.pushNewScreen(
-                              withNavBar: true, context, screen: Trucks());
-                        },
-                        iconColor: Theme.of(context).primaryColor,
-                      ),
-                    // if ((current_role == "FP") || (current_role == "DR"))
-                    //   CustomMenuItem(
-                    //     dense: true,
-                    //     text: 'My WSP',
-                    //     icon: Icons.person_outline,
-                    //     onPressed: () {
-                    //       PersistentNavBarNavigator.pushNewScreen(
-                    //           withNavBar: true, context, screen: WSPs());
-                    //       // Handle navigation to My WSPs
-                    //     },
-                    //     iconColor: Theme.of(context).primaryColor,
-                    //   ),
-                    CustomMenuItem(
-                      dense: true,
-                      text: 'FAQs & Support',
-                      icon: Icons.help_outline,
-                      onPressed: () {
-                        // Handle navigation to FAQs & Support
-                      },
-                      iconColor: Theme.of(context).primaryColor,
-                    ),
-                    if (current_role == "SC")
-                      CustomMenuItem(
-                        dense: true,
-                        text: 'Change to Service Provider',
-                        icon: Icons.settings_outlined,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) => OnBoardScreen()));
-                        },
-                        iconColor: Theme.of(context).primaryColor,
-                      ),
-                    CustomMenuItem(
-                      dense: true,
-                      text: 'Account Settings',
-                      icon: Icons.settings_outlined,
-                      onPressed: () {
-                        // Handle navigation to Account Settings
-                      },
-                      iconColor: Theme.of(context).primaryColor,
-                    ),
-                    CustomMenuItem(
-                      dense: true,
-                      text: 'Logout',
-                      icon: Icons.logout,
-                      onPressed: () {
-                        PersistentNavBarNavigator.pushNewScreen(
-                            withNavBar: false, context, screen: LoginPage());
-
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (context) => P));
-
-                        // Handle navigation to Account Settings
-                      },
-                      iconColor: Theme.of(context).primaryColor,
                     ),
                   ],
                 ),
