@@ -300,6 +300,7 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 import '../comms/credentials.dart';
 import 'loginPage.dart';
+import 'widgets/Fps/homepage/FPHomePage.dart';
 import 'widgets/drivers/homepage/DriverHomeScreen.dart';
 import 'widgets/trucks/Trucks.dart';
 // import 'package:qiu/utils/utils.dart';
@@ -445,8 +446,13 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         });
       }, showarrow: false),
       buildWideButton(context, 'Fulfillment Partner', Colors.transparent, () {
-        PersistentNavBarNavigator.pushNewScreen(
-            withNavBar: true, context, screen: Trucks());
+        // PersistentNavBarNavigator.pushNewScreen(
+        //     withNavBar: true, context, screen: FPHomePage()); // Trucks());
+
+        print("Shwo new home page");
+
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => FPHomePage()));
         // setState(() {
         //   accounttype = Accountypes.FP;
         // });

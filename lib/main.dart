@@ -22,6 +22,11 @@ void main() async {
   current_role = LocalStorage().getString("current_role");
   current_role = current_role == "" ? "SC" : current_role;
 
+  printLog("Init user role ${current_role}");
+
+  // current_role = "SC";
+  // await LocalStorage().setString("current_role", current_role);
+
   runApp(const MyApp());
 }
 

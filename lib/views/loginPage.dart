@@ -146,6 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                                       setState(() {
                                         loginin = true;
                                       });
+
                                       final Map<String, dynamic> body = {
                                         "email": uname.text.trim(),
                                         "password": upass.text.trim(),
@@ -159,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                                           .then((value) {
                                         printLog("USer ifo $value");
                                         setState(() {
-                                          loginin = true;
+                                          loginin = false;
                                         });
 
                                         if (value["success"] ?? false) {

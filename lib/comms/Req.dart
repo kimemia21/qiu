@@ -18,12 +18,11 @@ class AppRequest {
   }
 
 //  Drivers request
-  static Future<List<Drivermodel>> fetchDrivers({required bool isProfile}) async {
-    final uri = isProfile
-        ? "${base_url}drivers/profile"
-        : "${base_url}fp/drivers";
-    final Map<String, dynamic> drivers =
-        await CommsRepository().queryApi(uri);
+  static Future<List<Drivermodel>> fetchDrivers(
+      {required bool isProfile}) async {
+    final uri =
+        isProfile ? "${base_url}drivers/profile" : "${base_url}fp/drivers";
+    final Map<String, dynamic> drivers = await CommsRepository().queryApi(uri);
     if (drivers["success"]) {
       final data = drivers['data'] as List<dynamic>;
 
@@ -31,8 +30,6 @@ class AppRequest {
     } else {
       throw Exception(drivers["message"]);
     }
-
-
   }
 
 //   static Future<List<Drivermodel>> fetchDrivers() async {
@@ -52,18 +49,20 @@ class AppRequest {
 //   return Future.value(order);
 // }
 
-        
-
   // using  a generic function CommsRepository().queryApi for get requests
 // fetch requests
   static Future<List<Trucksmodel>> fetchTrucks() async {
     final Map<String, dynamic> trucks =
         await CommsRepository().queryApi("${base_url}fp/trucks");
+
+    printLog("trucks RSP $trucks");
+
     if (trucks["success"]) {
       final data = trucks['data'] as List<dynamic>;
       return data.map((e) => Trucksmodel.fromJson(e)).toList();
     } else {
-      throw Exception(trucks["message"]);
+      return [];
+      // throw Exception(trucks["message"]);
     }
   }
 

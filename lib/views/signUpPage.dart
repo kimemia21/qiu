@@ -316,7 +316,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                   await comms_repo.QueryAPIpost(
                                           "auth/register", params)
-                                      .then((value) {
+                                      .then((value) async {
                                     printLog("USer ifo $value");
                                     setState(() {
                                       logging_on = false;
@@ -324,6 +324,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                     if (value["success"] ?? false) {
                                       // got o login
+
+                                      current_role = "SC";
+                                      await LocalStorage().setString(
+                                          "current_role", current_role);
 
                                       current_user = userModel(
                                         access_token: value["accessToken"],
