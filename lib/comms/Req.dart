@@ -62,11 +62,15 @@ class AppRequest {
   static Future<List<Trucksmodel>> fetchTrucks() async {
     final Map<String, dynamic> trucks =
         await CommsRepository().queryApi("${base_url}fp/trucks");
+
+    printLog("trucks RSP $trucks");
+
     if (trucks["success"]) {
       final data = trucks['data'] as List<dynamic>;
       return data.map((e) => Trucksmodel.fromJson(e)).toList();
     } else {
-      throw Exception(trucks["message"]);
+      return [];
+      // throw Exception(trucks["message"]);
     }
   }
 

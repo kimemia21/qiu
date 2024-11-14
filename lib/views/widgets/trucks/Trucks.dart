@@ -2,6 +2,7 @@ import 'package:application/Models/TrucksModel.dart';
 import 'package:application/views/widgets/globals.dart';
 import 'package:application/comms/Req.dart';
 import 'package:application/views/widgets/trucks/TruckCard.dart';
+import 'package:application/views/widgets/trucks/createTruck.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -102,7 +103,8 @@ class _TrucksState extends State<Trucks> {
                         future: AppRequest.fetchTrucks(),
                         builder: (BuildContext context,
                             AsyncSnapshot<List<Trucksmodel>> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return Center(
                               child: CircularProgressIndicator(
                                 color: Color(0xFF6B7AFF),
@@ -118,7 +120,11 @@ class _TrucksState extends State<Trucks> {
                                 ),
                               ),
                             );
-                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            // setState(() {
+                            //   gottrucks = false;
+                            // });
                             return Center(
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -126,14 +132,14 @@ class _TrucksState extends State<Trucks> {
                                 children: [
                                   Icon(
                                     Icons.local_shipping_outlined,
-                                    size: 48,
+                                    size: 70,
                                     color: Colors.grey,
                                   ),
                                   SizedBox(height: 16),
                                   Text(
                                     'No Trucks Available',
                                     style: GoogleFonts.poppins(
-                                      fontSize: 16,
+                                      fontSize: 20,
                                       color: Colors.grey,
                                     ),
                                   ),
@@ -144,14 +150,16 @@ class _TrucksState extends State<Trucks> {
 
                           return Center(
                             child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.5, // Adjust the height as needed
+                              height: MediaQuery.of(context).size.height *
+                                  0.5, // Adjust the height as needed
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   final trucks = snapshot.data![index];
                                   return Container(
-                                    width: MediaQuery.of(context).size.width * 0.85,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.85,
                                     margin: EdgeInsets.symmetric(horizontal: 8),
                                     child: TruckCard(
                                       model: trucks,
@@ -188,7 +196,9 @@ class _TrucksState extends State<Trucks> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  CreateNewTruck(context);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF6B7AFF),
                   elevation: 0,

@@ -322,7 +322,7 @@ final _phoneNumberController = TextEditingController(text: "+254769922984");
 
                                   await comms_repo.QueryAPIpost(
                                           "auth/register", params)
-                                      .then((value) {
+                                      .then((value) async {
                                     printLog("USer ifo $value");
                                     setState(() {
                                       logging_on = false;
@@ -330,6 +330,10 @@ final _phoneNumberController = TextEditingController(text: "+254769922984");
 
                                     if (value["success"] ?? false) {
                                       // got o login
+
+                                      current_role = "SC";
+                                      await LocalStorage().setString(
+                                          "current_role", current_role);
 
                                       current_user = userModel(
                                         access_token: value["accessToken"],
