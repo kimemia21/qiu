@@ -1,6 +1,6 @@
-import 'package:application/Models/OrderModel.dart';
-import 'package:application/views/widgets/globals.dart';
-import 'package:application/comms/Req.dart';
+import '../../../Models/OrderModel.dart';
+import '../globals.dart';
+import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatefulWidget {
@@ -99,9 +99,43 @@ class _OrdersState extends State<Orders> {
   }
 }
 
+class WspOrders extends StatefulWidget {
+  final List<Ordermodel> orders;
+  const WspOrders({super.key, required this.orders});
 
+  @override
+  State<WspOrders> createState() => _WspOrdersState();
+}
 
+// virginia
+class _WspOrdersState extends State<WspOrders> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height, // Explicit height
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: widget.orders.length,
+            itemBuilder: (BuildContext context, int index) {
+              final order = widget.orders[index];
+              return OrderStatusWidget(model: order); // Custom widget
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class OrderStatusWidget extends StatelessWidget {
   final Ordermodel model;

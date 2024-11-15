@@ -1,10 +1,10 @@
-import 'package:application/utils/utils.dart';
-import 'package:application/views/OnBoardScreen.dart';
-import 'package:application/views/loginPage.dart';
-import 'package:application/views/widgets/Orders/orders.dart';
-import 'package:application/views/widgets/drivers/drivers.dart';
-import 'package:application/views/widgets/globals.dart';
-import 'package:application/views/widgets/trucks/Trucks.dart';
+import '../../../../utils/utils.dart';
+import '../../../OnBoardScreen.dart';
+import '../../../loginPage.dart';
+import '../../Orders/orders.dart';
+import '../../drivers/drivers.dart';
+import '../../globals.dart';
+import '../../trucks/Trucks.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 

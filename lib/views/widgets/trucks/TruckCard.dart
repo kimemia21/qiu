@@ -1,4 +1,4 @@
-import 'package:application/Models/TrucksModel.dart';
+import '../../../Models/TrucksModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

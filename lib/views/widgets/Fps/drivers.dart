@@ -1,7 +1,7 @@
-import 'package:application/Models/DriverModel.dart';
-import 'package:application/views/widgets/drivers/DriverCard.dart';
-import 'package:application/views/widgets/globals.dart';
-import 'package:application/comms/Req.dart';
+import '../../../Models/DriverModel.dart';
+import '../drivers/DriverCard.dart';
+import '../globals.dart';
+import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 
 class Drivers extends StatefulWidget {

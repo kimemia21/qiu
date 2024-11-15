@@ -1,5 +1,5 @@
-import 'package:application/views/widgets/drivers/homepage/AppNav.dart';
-import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
+import 'AppNav.dart';
+import 'DriverHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

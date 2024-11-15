@@ -1,6 +1,6 @@
-import 'package:application/main.dart';
-import 'package:application/views/state/appbloc.dart';
-import 'package:application/views/widgets/Maps/MapScreen.dart';
+import '../../../main.dart';
+import '../../state/appbloc.dart';
+import '../Maps/MapScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';

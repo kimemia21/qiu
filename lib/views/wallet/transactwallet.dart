@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:application/utils/widgets.dart';
+import '../../utils/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

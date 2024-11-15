@@ -1,5 +1,5 @@
-import 'package:application/Models/Wsp_Orders.dart';
-import 'package:application/comms/Req.dart';
+import '../../../Models/Wsp_Orders.dart';
+import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 
 class WspOrdersScreen extends StatefulWidget {

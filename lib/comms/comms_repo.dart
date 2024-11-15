@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:application/Models/OrderModel.dart';
+import 'package:application/comms/Req.dart';
+import 'package:application/views/state/appbloc.dart';
+import 'package:flutter/material.dart';
+
+import '../Models/OrderModel.dart';
 import 'package:dio/dio.dart';
 import 'package:get/state_manager.dart';
 
@@ -8,6 +12,7 @@ import '../Models/user.dart';
 import '../Models/walletmodel.dart';
 import '../utils/utils.dart';
 import 'credentials.dart';
+import 'package:provider/provider.dart';
 
 class CommsRepository {
   final Dio _dio = Dio(BaseOptions(
@@ -588,16 +593,23 @@ class CommsRepository {
     return {"rsp": false, "msg": "Got some Error"};
   }
 
-  Future<Map<String, dynamic>> QueryAPIpost(String endpoint, jsonstring) async {
+  Future<Map<String, dynamic>> QueryAPIpost(String endpoint, jsonstring, BuildContext context) async {
     printLog(
         "QueryAPIpost $base_url$endpoint $jsonstring, ${current_user!.access_token!} ");
 
+ Appbloc blog = context.read<Appbloc>();
+
+  
+
     try {
+      
+      blog.changeLoading(true);
       if (!(endpoint == "login" ||
-          endpoint =='users/register-service'||
+          endpoint == 'users/register-service' ||
           endpoint == "register" ||
           endpoint == "otp")) {
-        _dio.options.headers['Authorization'] ='Bearer ${current_user!.access_token!}';
+        _dio.options.headers['Authorization'] =
+            'Bearer ${current_user!.access_token!}';
       } else {
         printLog("Hit $base_url to $endpoint $jsonstring");
       }
@@ -606,6 +618,90 @@ class CommsRepository {
 
       Response response = await _dio.post("$endpoint", data: jsonstring);
       printLog("Response sttaus code ${response.statusCode}");
+      
+      blog.changeLoading(false);
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      if (response.statusCode == 201) {
+        return response.data;
+      }
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        printLog("Logout. Sesion Expired");
+
+        //    Get.to(const Logout());
+      }
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      // return {"rsp": false, "mess
+      //age": "Unable to process"};
+    } on DioException catch (e) {
+      
+      blog.changeLoading(false);
+      // printLog("$e");
+
+      if (e.response != null) {
+        printLog("Response sttaus code ${e.response!.statusCode}");
+
+        printLog("my new e ${e.response}");
+        printLog("my new ersp ${e.response!.data}");
+        return e.response!.data as Map<String, dynamic>;
+      }
+      if (e.error != null) {
+        printLog("my new e ${e.response}");
+        printLog("my new ersp ${e.response!.data}");
+        return e.response!.data as Map<String, dynamic>;
+      }
+      printLog(
+          " Error ${e.message.toString()} erro ${e.error}  rsp ${e.response}");
+
+      if (e.error.toString().contains("Connection refused")) {
+        return {"rsp": false, "message": "Unable to contact the server."};
+      }
+      if (e.error.toString().contains("host") ||
+          e.error.toString().contains("unreachable")) {
+        return {"rsp": false, "message": "No Internet Connection."};
+      }
+      if (e.response!.statusCode == 409) {
+        return {
+          "rsp": false,
+          "message": "Sorry, Phone or Email already in Use"
+        };
+      }
+    } catch (e) {
+      // printLog(e);
+
+      printLog('24e  ae Error ${e.toString()}');
+    }
+
+    return {"rsp": false, "message": "Unable to Process Request."};
+  }
+
+  Future<Map<String, dynamic>> QueryAPIPatch(
+      String endpoint, jsonstring, BuildContext context) async {
+    printLog(
+        "QueryAPIpost $base_url$endpoint $jsonstring, ${current_user!.access_token!} ");
+    Appbloc blog = context.read<Appbloc>();
+    try {
+      blog.changeLoading(true);
+      if (!(endpoint == "login" ||
+          endpoint == 'users/register-service' ||
+          endpoint == "register" ||
+          endpoint == "otp")) {
+        _dio.options.headers['Authorization'] =
+            'Bearer ${current_user!.access_token!}';
+      } else {
+        printLog("Hit $base_url to $endpoint $jsonstring");
+      }
+
+      printLog("Hit $base_url to $endpoint $jsonstring");
+
+      Response response = await _dio.patch("$endpoint", data: jsonstring);
+      printLog("Response sttaus code ${response.statusCode}");
+      
+      blog.changeLoading(false);
 
       if (response.statusCode == 200) {
         return response.data;
@@ -625,6 +721,88 @@ class CommsRepository {
     } on DioException catch (e) {
       // printLog("$e");
 
+      blog.changeLoading(false);
+      if (e.response != null) {
+        printLog("Response sttaus code ${e.response!.statusCode}");
+
+        printLog("my new e ${e.response}");
+        printLog("my new ersp ${e.response!.data}");
+        return e.response!.data as Map<String, dynamic>;
+      }
+      if (e.error != null) {
+        printLog("my new e ${e.response}");
+        printLog("my new ersp ${e.response!.data}");
+        return e.response!.data as Map<String, dynamic>;
+      }
+      printLog(
+          " Error ${e.message.toString()} erro ${e.error}  rsp ${e.response}");
+
+      if (e.error.toString().contains("Connection refused")) {
+        return {"rsp": false, "message": "Unable to contact the server."};
+      }
+      if (e.error.toString().contains("host") ||
+          e.error.toString().contains("unreachable")) {
+        return {"rsp": false, "message": "No Internet Connection."};
+      }
+      if (e.response!.statusCode == 409) {
+        return {
+          "rsp": false,
+          "message": "Sorry, Phone or Email already in Use"
+        };
+      }
+    } catch (e) {
+      // printLog(e);
+
+      printLog('24e  ae Error ${e.toString()}');
+    }
+
+    return {"rsp": false, "message": "Unable to Process Request."};
+  }
+
+
+  Future<Map<String, dynamic>> QueryAPIDelete(
+      String endpoint, BuildContext context) async {
+    printLog(
+        "QueryAPIpost $base_url$endpoint ${current_user!.access_token!} ");
+    Appbloc blog = context.read<Appbloc>();
+    try {
+      blog.changeLoading(true);
+      if (!(endpoint == "login" ||
+          endpoint == 'users/register-service' ||
+          endpoint == "register" ||
+          endpoint == "otp")) {
+        _dio.options.headers['Authorization'] =
+            'Bearer ${current_user!.access_token!}';
+      } else {
+        printLog("Hit $base_url to $endpoint ");
+      }
+
+      printLog("Hit $base_url to $endpoint ");
+
+      Response response = await _dio.delete("$endpoint",);
+      printLog("Response sttaus code ${response.statusCode}");
+      
+      blog.changeLoading(false);
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      if (response.statusCode == 201) {
+        return response.data;
+      }
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        printLog("Logout. Sesion Expired");
+
+        //    Get.to(const Logout());
+      }
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+      // return {"rsp": false, "message": "Unable to process"};
+    } on DioException catch (e) {
+      // printLog("$e");
+
+      blog.changeLoading(false);
       if (e.response != null) {
         printLog("Response sttaus code ${e.response!.statusCode}");
 

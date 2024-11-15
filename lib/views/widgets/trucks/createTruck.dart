@@ -57,7 +57,7 @@ class _CreateTruckWidgetState extends State<CreateTruckWidget> {
 
       print('Truck Data: $truckData');
 
-      await comms_repo.QueryAPIpost("fp/register", truckData).then((value) {
+      await comms_repo.QueryAPIpost("fp/register", truckData,context).then((value) {
         printLog("Save truck  info $value");
 
         setState(() {

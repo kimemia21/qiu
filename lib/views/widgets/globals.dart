@@ -1,8 +1,8 @@
-import 'package:application/Models/DriverModel.dart';
-import 'package:application/Models/Drivermodel.dart';
-import 'package:application/Models/OrderModel.dart';
-import 'package:application/main.dart';
-import 'package:application/views/state/appbloc.dart';
+import '../../Models/DriverModel.dart';
+import '../../Models/Drivermodel.dart';
+import '../../Models/OrderModel.dart';
+import '../../main.dart';
+import '../state/appbloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

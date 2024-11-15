@@ -1,272 +1,267 @@
+import 'package:application/Models/AccountTypes.dart';
+import 'package:application/Models/OrderModel.dart';
+import 'package:application/Models/Tarrifs.dart';
+import 'package:application/comms/Req.dart';
+import 'package:application/comms/credentials.dart';
 import 'package:application/utils/utils.dart';
-import 'package:application/views/OnBoardScreen.dart';
-import 'package:application/views/loginPage.dart';
+import 'package:application/views/widgets/Fps/homepage/infocard.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
-import 'package:application/views/widgets/globals.dart';
-import 'package:application/views/widgets/trucks/Trucks.dart';
+import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
+import 'package:application/views/widgets/WSP/homepage/wsptarrif.dart';
+
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:application/utils/utils.dart';
-import 'package:application/views/OnBoardScreen.dart';
-import 'package:application/views/loginPage.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
-class WSPHomepage extends StatefulWidget {
-  const WSPHomepage({super.key});
-
+class WSPHomePage extends StatefulWidget {
   @override
-  State<WSPHomepage> createState() => _WSPHomepageState();
+  State<WSPHomePage> createState() => _WSPHomePageState();
 }
 
-class _WSPHomepageState extends State<WSPHomepage> {
+class _WSPHomePageState extends State<WSPHomePage> {
+  Accountypes? accounttype;
+  bool saving = false;
+
+  late Future<List<TarrifsModel>> _tarriffsFuture;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+  void initState() {
+    super.initState();
+    _tarriffsFuture = AppRequest.fetchWspTarrifs();
+  }
+
+  // Add method to refresh data when needed
+  void refreshTarrifs() {
+    setState(() {
+      _tarriffsFuture = AppRequest.fetchWspTarrifs();
+    });
+  }
+
+  PopupMenuItem<String> _buildPopupMenuItem(
+      String value, String text, IconData icon,
+      {bool isDestructive = false}) {
+    return PopupMenuItem<String>(
+      value: value,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Background gradient container
-          Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF9FA8DA),
-                  Color(0xFF7E57C2),
-                ],
-              ),
-            ),
+          Icon(
+            icon,
+            size: 20,
+            color: isDestructive ? Colors.red[400] : Colors.grey[700],
           ),
-
-          // White rounded container
-          Positioned(
-            top: 200,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: Offset(0, -5),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Profile image
-          Positioned(
-            top: 120,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 10,
-                          spreadRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: Image.network(
-                        "https://imgix.ranker.com/list_img_v2/8131/3168131/original/3168131?fit=crop&fm=pjpg&q=80&dpr=2&w=1200&h=720",
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 30,
-                    right: 0,
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Scrollable content
-          Positioned(
-            top: 250,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Sasa Stark',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'sansa@example.com',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                    
-                    // New Action Buttons
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF7E57C2),
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                            icon: Icon(Icons.add_road, color: Colors.white),
-                            label: Text(
-                              'Add Traffic',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            onPressed: () {
-                              // Handle Add Traffic
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF9FA8DA),
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                            icon: Icon(Icons.assignment, color: Colors.white),
-                            label: Text(
-                              'Manage Orders',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            onPressed: () {
-                              // Handle Manage Orders
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    
-                    SizedBox(height: 32),
-                    
-                    // Menu Items
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          if (current_role == "SC")
-                            ListTile(
-                              leading: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF9FA8DA).withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Icon(Icons.swap_horiz, color: Color(0xFF7E57C2)),
-                              ),
-                              title: Text(
-                                'Change to Service Provider',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (ctx) => OnBoardScreen()),
-                                );
-                              },
-                            ),
-                          Divider(height: 1),
-                          ListTile(
-                            leading: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.red.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Icon(Icons.logout, color: Colors.red),
-                            ),
-                            title: Text(
-                              'Logout',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            onTap: () {
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: LoginPage(),
-                                withNavBar: false,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          SizedBox(width: 12),
+          Text(
+            text,
+            style: GoogleFonts.poppins(
+              color: isDestructive ? Colors.red[400] : Colors.grey[800],
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // resizeToAvoidBottomInset: true,
+
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF7E64D4),
+              Color(0xFF9DD6F8),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Column(children: [
+          Expanded(
+            flex: 45,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    'assets/images/Logo.svg',
+                    height: 50,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Your end to end water utility App',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Buy. Manage. Monitor',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.white, Color(0xFFF5F5F5)],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Colors.grey.shade200,
+                        width: 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFF7E57C2).withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            // Add setState here to retry the future
+                            await showWSPModals(
+                                context: context,
+                                capcityController: TextEditingController(),
+                                priceController: TextEditingController(),
+                                isCreate: true);
+                            refreshTarrifs();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade400,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 8),
+                              Text('Add'),
+                            ],
+                          ),
+                        ),
+                        FutureBuilder<List<TarrifsModel>>(
+                          future: _tarriffsFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container(
+                                padding: EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xFF7E57C2)),
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      'Loading Tariffs...',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return ErrorState(
+                                  context: context,
+                                  error: snapshot.error.toString(),
+                                  function: () {});
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return EmptyState(type: "Tarrifs");
+                            } else {
+                              final List<TarrifsModel> tarrifsModel =
+                                  snapshot.data!;
+                              return WspTarrifs(tarrifsModel: tarrifsModel);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                      flex: 30,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        elevation: 4,
+                        child: FutureBuilder<List<Ordermodel>>(
+                          future: AppRequest.fetchOrders(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container(
+                                padding: EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xFF7E57C2)),
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      'Loading Orders...',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return ErrorState(
+                                  context: context,
+                                  error: snapshot.error.toString(),
+                                  function: () {});
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return EmptyState(type: "Orders");
+                            } else {
+                              final List<Ordermodel> orderModel =
+                                  snapshot.data!;
+                              return  WspOrders(orders: orderModel);
+                            }
+                          },
+                        ),
+                      ))
+                ],
+              ),
+            ),
+          )
+        ]),
       ),
     );
   }

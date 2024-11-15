@@ -1,16 +1,18 @@
 import 'dart:convert';
 
-import 'package:application/Models/DriverModel.dart';
-import 'package:application/Models/TrucksModel.dart';
-import 'package:application/Models/Wsp.dart';
-import 'package:application/Models/Wsp_Orders.dart';
-import 'package:application/comms/comms_repo.dart';
-import 'package:application/comms/credentials.dart';
-import 'package:application/main.dart';
-import 'package:application/utils/utils.dart';
-import 'package:application/views/state/appbloc.dart';
-import 'package:application/views/widgets/WSP/homepage/WSPHomeScreen.dart';
-import 'package:application/views/widgets/globals.dart';
+import 'package:application/Models/Tarrifs.dart';
+
+import '../Models/DriverModel.dart';
+import '../Models/TrucksModel.dart';
+import '../Models/Wsp.dart';
+import '../Models/Wsp_Orders.dart';
+import 'comms_repo.dart';
+import 'credentials.dart';
+import '../main.dart';
+import '../utils/utils.dart';
+import '../views/state/appbloc.dart';
+import '../views/widgets/WSP/homepage/WSPHomeScreen.dart';
+import '../views/widgets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +32,7 @@ class AppRequest {
       {required bool isProfile}) async {
     final uri =
         isProfile ? "${base_url}drivers/profile" : "${base_url}fp/drivers";
-    final Map<String, dynamic> drivers = await CommsRepository().queryApi(uri);
+    final Map<String, dynamic> drivers = await comms_repo.queryApi(uri);
     if (drivers["success"]) {
       final data = drivers['data'] as List<dynamic>;
 
@@ -57,11 +59,11 @@ class AppRequest {
 //   return Future.value(order);
 // }
 
-  // using  a generic function CommsRepository().queryApi for get requests
+  // using  a generic function comms_repo.queryApi for get requests
 // fetch requests
   static Future<List<Trucksmodel>> fetchTrucks() async {
     final Map<String, dynamic> trucks =
-        await CommsRepository().queryApi("${base_url}fp/trucks");
+        await comms_repo.queryApi("${base_url}fp/trucks");
 
     printLog("trucks RSP $trucks");
 
@@ -83,7 +85,7 @@ class AppRequest {
 
   static Future<List<WspModel>> fetchWSP() async {
     final Map<String, dynamic> wsp =
-        await CommsRepository().queryApi('${base_url}wsp/all');
+        await comms_repo.queryApi('${base_url}wsp/all');
     if (wsp["rsp"]) {
       final data = wsp['result'] as List<dynamic>;
       return data.map((e) => WspModel.fromJson(e)).toList();
@@ -93,10 +95,35 @@ class AppRequest {
     }
   }
 
+  static Future<List<TarrifsModel>> fetchWspTarrifs() async {
+    printLog("\n\nfetchWSP_Orders called");
+    final Map<String, dynamic> tarrifs =
+        await comms_repo.queryApi('${base_url}wsp/tariffs');
+    if (tarrifs["success"]) {
+      print(tarrifs);
+      print("success");
+      print(tarrifs["data"]);
+
+      if (tarrifs["data"] == null) {
+        throw Exception(tarrifs["message"] );
+      }
+
+      final data = tarrifs['data'] as List<dynamic>;
+
+      return data.map((e) => TarrifsModel.fromJson(e)).toList();
+    } else {
+      printLog("\n\n fetchWspTarrifs error ${tarrifs["msg"]}");
+
+      throw Exception(tarrifs["message"]);
+    }
+  }
+
+  
+
   static Future<List<WspOrders>> fetchWSP_Orders() async {
     printLog("\n\nfetchWSP_Orders called");
     final Map<String, dynamic> wspOrders =
-        await CommsRepository().queryApi('${base_url}fp/wsp-orders');
+        await comms_repo.queryApi('${base_url}fp/wsp-orders');
     if (wspOrders["success"]) {
       print("success");
       final data = wspOrders['data'] as List<dynamic>;
@@ -116,8 +143,8 @@ class AppRequest {
     final jsonString = jsonEncode(data);
     print("changing global loading state to true");
     blog.changeLoading(true);
-    final Map<String, dynamic> signup = await CommsRepository()
-        .QueryAPIpost('${base_url}users/register-service', jsonString);
+    final Map<String, dynamic> signup = await comms_repo
+        .QueryAPIpost('${base_url}users/register-service', jsonString,context);
 
     print("changing global loading state to false");
     blog.changeLoading(false);

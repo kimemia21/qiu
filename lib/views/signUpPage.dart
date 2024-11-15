@@ -1,6 +1,6 @@
-import 'package:application/Models/user.dart';
-import 'package:application/comms/credentials.dart';
-import 'package:application/utils/widgets.dart';
+import '../Models/user.dart';
+import '../comms/credentials.dart';
+import '../utils/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
@@ -321,7 +321,7 @@ final _phoneNumberController = TextEditingController(text: "+254769922984");
                                   };
 
                                   await comms_repo.QueryAPIpost(
-                                          "auth/register", params)
+                                          "auth/register", params,context)
                                       .then((value) async {
                                     printLog("USer ifo $value");
                                     setState(() {

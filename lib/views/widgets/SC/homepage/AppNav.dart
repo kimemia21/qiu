@@ -1,7 +1,7 @@
-import 'package:application/views/widgets/Maps/MapScreen.dart';
-import 'package:application/views/widgets/Orders/CreatOrder.dart';
-import 'package:application/views/widgets/Orders/orders.dart';
-import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
+import '../../Maps/MapScreen.dart';
+import '../../Orders/CreatOrder.dart';
+import '../../Orders/orders.dart';
+import '../../drivers/homepage/DriverHomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 

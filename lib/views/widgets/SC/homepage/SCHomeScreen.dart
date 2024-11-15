@@ -1,4 +1,4 @@
-import 'package:application/views/widgets/SC/homepage/AppNav.dart';
+import 'AppNav.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

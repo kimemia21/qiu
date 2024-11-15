@@ -1,5 +1,5 @@
-import 'package:application/views/signUpPage.dart';
-import 'package:application/views/login.dart';
+import 'signUpPage.dart';
+import 'login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -156,7 +156,7 @@ upass = TextEditingController(text: "dummyPassword123");
                                       printLog("Login $body");
 
                                       await comms_repo.QueryAPIpost(
-                                              "auth/login", body)
+                                              "auth/login", body,context)
                                           .then((value) {
                                         printLog("User info $value");
                                         setState(() {

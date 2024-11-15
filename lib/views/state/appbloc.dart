@@ -1,4 +1,4 @@
-import 'package:application/Models/Location.dart';
+import '../../Models/Location.dart';
 import 'package:flutter/material.dart';
 
 class Appbloc extends ChangeNotifier {

@@ -1,9 +1,9 @@
 import 'dart:ffi';
 
-import 'package:application/views/state/appbloc.dart';
-import 'package:application/Models/Location.dart';
-import 'package:application/views/widgets/Orders/ConfirmOrder.dart';
-import 'package:application/views/widgets/Orders/CreatOrder.dart';
+import '../../state/appbloc.dart';
+import '../../../Models/Location.dart';
+import '../Orders/ConfirmOrder.dart';
+import '../Orders/CreatOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

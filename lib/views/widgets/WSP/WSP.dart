@@ -1,5 +1,5 @@
-import 'package:application/Models/Wsp.dart';
-import 'package:application/comms/Req.dart';
+import '../../../Models/Wsp.dart';
+import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 

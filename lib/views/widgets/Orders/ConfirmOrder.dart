@@ -1,7 +1,7 @@
-import 'package:application/main.dart';
-import 'package:application/views/state/appbloc.dart';
-import 'package:application/Models/Location.dart';
-import 'package:application/views/widgets/Orders/CreatOrder.dart';
+import '../../../main.dart';
+import '../../state/appbloc.dart';
+import '../../../Models/Location.dart';
+import 'CreatOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';

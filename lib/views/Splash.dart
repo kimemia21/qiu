@@ -1,5 +1,5 @@
-import 'package:application/Models/AccountTypes.dart';
-import 'package:application/views/signinUpPage.dart';
+import '../Models/AccountTypes.dart';
+import 'signinUpPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

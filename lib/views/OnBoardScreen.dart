@@ -1,12 +1,13 @@
 
 
-import 'package:application/Models/AccountTypes.dart';
-import 'package:application/comms/Req.dart';
-import 'package:application/utils/utils.dart';
-import 'package:application/utils/widgets.dart';
-import 'package:application/views/login.dart';
+import '../Models/AccountTypes.dart';
+import '../comms/Req.dart';
+import '../utils/utils.dart';
+import '../utils/widgets.dart';
+import 'login.dart';
+import 'widgets/WSP/homepage/WSPHomePage.dart';
 
-import 'package:application/views/widgets/globals.dart';
+import 'widgets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -167,13 +168,18 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
     return [
       const SizedBox(height: 20),
       buildWideButton(context, 'Water Service Provider', Colors.blue, () {
-        setState(() {
-          accounttype = Accountypes.WSP;
-        });
+        // setState(() {
+        //   accounttype = Accountypes.WSP;
+        // });
+        Navigator.push(
+        context, MaterialPageRoute(builder: (context) => WSPHomePage()));
+      
       }, showarrow: false),
       buildWideButton(context, 'Fulfillment Partner', Colors.transparent, () {
         // PersistentNavBarNavigator.pushNewScreen(
         //     withNavBar: true, context, screen: FPHomePage()); // Trucks());
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => FPHomePage()));  
 
         print("Shwo new home page");
 
@@ -293,7 +299,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
 
      
           printLog("Login $body");
-          await comms_repo.QueryAPIpost("users/register-service", body)
+          await comms_repo.QueryAPIpost("users/register-service", body,context)
               .then((value) async {
             printLog("USer ifo $value");
             setState(() {

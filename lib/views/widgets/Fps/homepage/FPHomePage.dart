@@ -1,9 +1,9 @@
-import 'package:application/Models/AccountTypes.dart';
-import 'package:application/utils/utils.dart';
-import 'package:application/utils/widgets.dart';
-import 'package:application/views/login.dart';
+import '../../../../Models/AccountTypes.dart';
+import '../../../../utils/utils.dart';
+import '../../../../utils/widgets.dart';
+import '../../../login.dart';
 
-import 'package:application/views/widgets/globals.dart';
+import '../../globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -71,6 +71,9 @@ class _FPHomePageState extends State<FPHomePage> {
                 ),
               ),
               const SizedBox(height: 40),
+
+              Container(
+                child: Column(),),
 
               // Trucks Card
               InfoCard(
