@@ -11,6 +11,7 @@ import '../utils/utils.dart';
 import '../utils/widgets.dart';
 import 'widgets/globals.dart';
 import 'widgets/drivers/homepage/DriverHomeScreen.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -18,8 +19,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-   TextEditingController uname = TextEditingController();
-   TextEditingController upass = TextEditingController();
+  TextEditingController uname = TextEditingController();
+  TextEditingController upass = TextEditingController();
   bool loginin = false;
   String title = "";
 
@@ -27,8 +28,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-uname = TextEditingController(text: "johndoe@example.com");
-upass = TextEditingController(text: "dummyPassword123");
+    uname = TextEditingController(text: "johndoe@example.com");
+    upass = TextEditingController(text: "dummyPassword123");
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -156,7 +157,7 @@ upass = TextEditingController(text: "dummyPassword123");
                                       printLog("Login $body");
 
                                       await comms_repo.QueryAPIpost(
-                                              "auth/login", body,context)
+                                              "auth/login", body, context)
                                           .then((value) {
                                         printLog("User info $value");
                                         setState(() {
@@ -164,6 +165,7 @@ upass = TextEditingController(text: "dummyPassword123");
                                         });
 
                                         if (value["success"] ?? false) {
+                                          print(" -------login data $value");
                                           current_user =
                                               userModel.fromMap(value);
                                           current_user.access_token =

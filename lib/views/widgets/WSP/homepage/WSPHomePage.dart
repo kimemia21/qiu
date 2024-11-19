@@ -195,7 +195,14 @@ class _WSPHomePageState extends State<WSPHomePage> {
                               return ErrorState(
                                   context: context,
                                   error: snapshot.error.toString(),
-                                  function: () {});
+                                  function: () {
+                                    setState(() {
+                                      _tarriffsFuture =
+                                          AppRequest.fetchWspTarrifs();
+                                    }); 
+
+
+                                  });
                             } else if (!snapshot.hasData ||
                                 snapshot.data!.isEmpty) {
                               return EmptyState(type: "Tarrifs");

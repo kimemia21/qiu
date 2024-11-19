@@ -15,8 +15,10 @@ class TarrifsModel {
         print(' TarrifsModel The value for $key is null');
       }
     });
+
+
     return TarrifsModel(
-        Id: json["Id"],
+        Id: json["id"],
         capacityPrice: json["capacityPrice"],
         truckCapacity: json["truckCapacity"]);
   }
