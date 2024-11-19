@@ -24,6 +24,7 @@ CommsRepository comms_repo = new CommsRepository();
 // ImageRepository image_repo = new ImageRepository();
 
 enum SnackBarType { success, error, info, warning }
+  final formkey = GlobalKey<FormState>();
 
 class CustomSnackBar {
   static void show({
@@ -200,12 +201,12 @@ Future<void> showWSPModals(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
-        final formkey = GlobalKey<FormState>();
+      
 
-        return FractionallySizedBox(
-          heightFactor: 0.7, // Set the modal height to half the screen
-          child: Form(
-            key: formkey,
+        return Form(
+             key: formkey,
+          child: FractionallySizedBox(
+            heightFactor: 0.75,
             child: Padding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -275,14 +276,14 @@ Future<void> showWSPModals(
                                 if (formkey.currentState?.validate() ?? false) {
                                   final String endpoint =
                                       "${base_url}wsp/${isCreate ? "tariff" : "tariff/:${model!.Id}"}";
-
+            
                                   print("this is the wspId ${current_user.id}");
-
+            
                                   final jsonstring = isCreate
                                       ? jsonEncode({
                                           "truckCapacity":
                                               int.parse(capcityController.text),
-                                          "price":
+                                          "price Kshs":
                                               double.parse(priceController.text)
                                         })
                                       : jsonEncode({
@@ -294,17 +295,17 @@ Future<void> showWSPModals(
                                                 priceController.text)
                                         
                                         });
-
+            
                                   print(
                                       "--------------$jsonstring---------------");
                                   print("---------endpoint is $endpoint");
-
+            
                                   final function = await isCreate
                                       ? comms_repo.QueryAPIpost(
                                           endpoint, jsonstring, context)
                                       : comms_repo.QueryAPIPatch(
                                           endpoint, jsonstring, context);
-
+            
                                   await function.then((value) {
                                     print(value);
                                     if (value["success"]) {
@@ -314,7 +315,7 @@ Future<void> showWSPModals(
                                             'Tarrif  ${isCreate ? "Created" : "Updated"}',
                                         type: SnackBarType.success,
                                       );
-
+            
                                       Navigator.of(context).pop();
                                     } else {
                                       CustomSnackBar.show(
@@ -338,7 +339,8 @@ Future<void> showWSPModals(
                               child: context.watch<Appbloc>().isLoading
                                   ? CircularProgressIndicator()
                                   : Text(
-                                      "Add",
+                                    isCreate?
+                                      "Add":"Update",
                                       style: GoogleFonts.poppins(
                                           color: Colors.white),
                                     ),
