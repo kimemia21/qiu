@@ -80,6 +80,7 @@ class userModel {
   factory userModel.fromMap(json) {
     printLog("\n\nDEcipher user from ${json}");
 
+print(" -----${current_role == "WSP"} --");
     return userModel(
       email: json["email"] ?? "".toString(),
       first_name: json["firstName"] ?? "".toString(),
@@ -90,10 +91,14 @@ class userModel {
       user_name: json["user_name"] ?? "".toString(),
       active:
           true, // (json["active"] ?? "").toString().toLowerCase() == "true",
+
       islandlord: json["user_type"] == "LANDLORD",
       access_token: json["token"] ?? "".toString(),
       role: json["role"] ?? "".toString(),
-      id: (json["id"] ?? "").toString(),
+      id: current_role == "WSP"
+
+          ? (json["wspId"] ?? "").toString()
+          : (json["id"] ?? "").toString(),
       refresh_token: (json["refresh_token"] ?? "").toString().trim(),
       date_created: (json["date_created"] ?? "").toString().trim(),
       updated_on: (json["updated_on"] ?? "").toString().trim(),

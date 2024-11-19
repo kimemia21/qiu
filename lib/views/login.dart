@@ -165,7 +165,7 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
                                 printLog("Login $body");
 
                                 await comms_repo.QueryAPIpost(
-                                        "auth/login", body,context)
+                                        "auth/login", body, context)
                                     .then((value) {
                                   printLog("USer ifo $value");
                                   setState(() {
@@ -183,6 +183,8 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
                                     print(
                                         " a current_user.access_token ${current_user.access_token}");
                                     print("value $value");
+                                    print(
+                                        "current_user id  ${current_user.id}");
 
                                     showalert(true, context, "Success",
                                         value["message"] ?? "Welcome");

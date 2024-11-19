@@ -130,12 +130,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-final _lastnameController = TextEditingController(text: "Doe");
-final _nameController = TextEditingController(text: "John");
-final _emailController = TextEditingController(text: "johndoe@example.com");
-final _passwordController = TextEditingController(text: "dummyPassword123");
-final _confirmPasswordController = TextEditingController(text: "dummyPassword123");
-final _phoneNumberController = TextEditingController(text: "+254769922984");
+    final _lastnameController = TextEditingController(text: "Doe");
+    final _nameController = TextEditingController(text: "John");
+    // TextEditingController _emailController = TextEditingController();
+    
+    // text: "johndoe@example.com");
+    TextEditingController _passwordController =
+        TextEditingController(text: "dummyPassword123");
+    final _confirmPasswordController =
+        TextEditingController(text: "dummyPassword123");
+    final _phoneNumberController = TextEditingController(text: "+254769922986");
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -321,7 +325,7 @@ final _phoneNumberController = TextEditingController(text: "+254769922984");
                                   };
 
                                   await comms_repo.QueryAPIpost(
-                                          "auth/register", params,context)
+                                          "auth/register", params, context)
                                       .then((value) async {
                                     printLog("USer ifo $value");
                                     setState(() {
@@ -351,7 +355,7 @@ final _phoneNumberController = TextEditingController(text: "+254769922984");
                                           "Success",
                                           value["message"] ??
                                               "User Created Successfully");
-                                      Navigator.pop(context);
+                                   Navigator.pop(context);
                                     } else {
                                       showalert(
                                           false,

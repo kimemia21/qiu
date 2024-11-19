@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:application/Models/Tarrifs.dart';
+import 'package:application/utils/utils.dart';
 import 'package:application/views/state/appbloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -181,7 +182,7 @@ Widget _buildTextField(String label, IconData icon,
 }
 
 // Method to open the edit modal and add model   for the wsp method , it's dynamic for all use
-Future? showWSPModals(
+Future<void> showWSPModals(
     {required BuildContext context,
     TarrifsModel? model,
     required TextEditingController capcityController,
@@ -191,7 +192,8 @@ Future? showWSPModals(
     capcityController.text = model!.truckCapacity;
     priceController.text = model.capacityPrice;
   }
-  showModalBottomSheet(
+  print("-----${capcityController.text}-----${priceController.text} ");
+  return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
@@ -199,8 +201,7 @@ Future? showWSPModals(
       ),
       builder: (BuildContext context) {
         final formkey = GlobalKey<FormState>();
-        capcityController.text = "2500";
-        priceController.text = "1000";
+
         return FractionallySizedBox(
           heightFactor: 0.7, // Set the modal height to half the screen
           child: Form(
@@ -275,19 +276,32 @@ Future? showWSPModals(
                                   final String endpoint =
                                       "${base_url}wsp/${isCreate ? "tariff" : "tariff/:${model!.Id}"}";
 
-                                  final jsonstring = jsonEncode({
-                                    isCreate ? "wspId" : "id":
-                                        isCreate ? 4 : model!.Id,
-                                    "truckCapacity": int.parse(capcityController.text)    ,
-                                    "capacityPrice": int.parse(priceController.text)
-                                  });
+                                  print("this is the wspId ${current_user.id}");
+
+                                  final jsonstring = isCreate
+                                      ? jsonEncode({
+                                          "truckCapacity":
+                                              int.parse(capcityController.text),
+                                          "price":
+                                              double.parse(priceController.text)
+                                        })
+                                      : jsonEncode({
+                                          
+                                            "id": model!.Id,
+                                            "truckCapacity": int.parse(
+                                                capcityController.text),
+                                            "capacityPrice": double.parse(
+                                                priceController.text)
+                                        
+                                        });
 
                                   print(
                                       "--------------$jsonstring---------------");
+                                  print("---------endpoint is $endpoint");
 
                                   final function = await isCreate
                                       ? comms_repo.QueryAPIpost(
-                                          endpoint, jsonstring,context)
+                                          endpoint, jsonstring, context)
                                       : comms_repo.QueryAPIPatch(
                                           endpoint, jsonstring, context);
 
@@ -301,7 +315,7 @@ Future? showWSPModals(
                                         type: SnackBarType.success,
                                       );
 
-                                       Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
                                     } else {
                                       CustomSnackBar.show(
                                           context: context,
