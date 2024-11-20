@@ -21,11 +21,18 @@ import '../Models/Location.dart';
 import '../Models/OrderModel.dart';
 
 class AppRequest {
-  static Future<List<Ordermodel>> fetchOrders() {
-    final orders =
-        dummyData.map((orders) => Ordermodel.fromJson(orders)).toList();
-    return Future.value(orders);
+  static Future<List<OrderModel>> fetchOrders() async{
+    final uri ="${base_url}wsp/orders";
+    final Map<String, dynamic> wspOrders = await comms_repo.queryApi(uri);
+    if (wspOrders["success"]) {
+      final data = wspOrders['data'] as List<dynamic>;
+
+      return data.map((e) => OrderModel.fromJson(e)).toList();
+    } else {
+      throw Exception(wspOrders["message"]);
+    }
   }
+
 
 //  Drivers request
   static Future<List<Drivermodel>> fetchDrivers(
@@ -83,12 +90,13 @@ class AppRequest {
     return Future.value(locations);
   }
 
-  static Future<List<WspModel>> fetchWSP() async {
+  static Future<List<WsProviders>> fetchWSP() async {
     final Map<String, dynamic> wsp =
         await comms_repo.queryApi('${base_url}wsp/all');
-    if (wsp["rsp"]) {
+    if (wsp["success"]) {
       final data = wsp['result'] as List<dynamic>;
-      return data.map((e) => WspModel.fromJson(e)).toList();
+      print("wspDetails---$data");
+      return data.map((e) => WsProviders.fromJson(e)).toList();
     } else {
       print("Wsp error ${wsp["msg"]}");
       throw Exception(wsp["msg"]);
@@ -120,14 +128,14 @@ class AppRequest {
 
   
 
-  static Future<List<WspOrders>> fetchWSP_Orders() async {
+  static Future<List<OrderModel>> fetchWSP_Orders() async {
     printLog("\n\nfetchWSP_Orders called");
     final Map<String, dynamic> wspOrders =
         await comms_repo.queryApi('${base_url}fp/wsp-orders');
     if (wspOrders["success"]) {
       print("success");
       final data = wspOrders['data'] as List<dynamic>;
-      return data.map((e) => WspOrders.fromJson(e)).toList();
+      return data.map((e) => OrderModel.fromJson(e)).toList();
     } else {
       printLog("\n\nfetchWSP_Orders error ${wspOrders["msg"]}");
 

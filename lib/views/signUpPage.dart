@@ -1,3 +1,5 @@
+import 'package:application/views/loginPage.dart';
+
 import '../Models/user.dart';
 import '../comms/credentials.dart';
 import '../utils/widgets.dart';
@@ -133,13 +135,13 @@ class _SignupScreenState extends State<SignupScreen> {
     final _lastnameController = TextEditingController(text: "Doe");
     final _nameController = TextEditingController(text: "John");
     // TextEditingController _emailController = TextEditingController();
-    
+
     // text: "johndoe@example.com");
     TextEditingController _passwordController =
         TextEditingController(text: "dummyPassword123");
     final _confirmPasswordController =
         TextEditingController(text: "dummyPassword123");
-    final _phoneNumberController = TextEditingController(text: "+254769922986");
+    _phoneNumberController.text = "+254769922990";
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -175,16 +177,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         'assets/images/Logo.svg',
                         height: 150,
                       ),
-                      // SizedBox(height: 20),
-                      // Text(
-                      //   'Sign Up',
-                      //   style: TextStyle(
-                      //     fontSize: 20,
-                      //     color: Colors.white,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      //   textAlign: TextAlign.center,
-                      // ),
                       SizedBox(height: 10),
                       Text(
                         'Join us to Buy, Manage, and Monitor',
@@ -306,13 +298,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                     logging_on = true;
                                   });
 
-                                  final Map<String, dynamic> body = {
-                                    "fullname": _nameController.text.trim(),
-                                    "email": _emailController.text.trim(),
-                                    "phoneNumber":
-                                        _phoneNumberController.text.trim(),
-                                    "password": _passwordController.text.trim(),
-                                  };
+                                  // final Map<String, dynamic> body = {
+                                  //   "fullname": _nameController.text.trim(),
+                                  //   "email": _emailController.text.trim(),
+                                  //   "phoneNumber":
+                                  //       _phoneNumberController.text.trim(),
+                                  //   "password": _passwordController.text.trim(),
+                                  // };
 
                                   var params = {
                                     "firstName": _nameController.text.trim(),
@@ -355,7 +347,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                           "Success",
                                           value["message"] ??
                                               "User Created Successfully");
-                                   Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LoginPage()));
                                     } else {
                                       showalert(
                                           false,

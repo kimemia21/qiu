@@ -4,7 +4,6 @@ import 'views/signinUpPage.dart';
 import 'views/OnBoardScreen.dart';
 import 'views/state/appbloc.dart';
 import 'views/widgets/Orders/orders.dart';
-import 'views/widgets/WSP/WSP.dart';
 import 'views/widgets/WSP/wsp_orders.dart';
 import 'views/widgets/drivers/DriverProfile.dart';
 import 'views/widgets/drivers/drivers.dart';

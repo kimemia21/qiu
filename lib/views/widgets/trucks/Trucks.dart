@@ -1,4 +1,5 @@
 import 'package:application/Models/TrucksModel.dart';
+import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
 import 'package:application/views/widgets/globals.dart';
 import 'package:application/comms/Req.dart';
 import 'package:application/views/widgets/trucks/TruckCard.dart';
@@ -112,40 +113,17 @@ class _TrucksState extends State<Trucks> {
                             );
                           } else if (snapshot.hasError) {
                             return Center(
-                              child: Text(
-                                'Error: ${snapshot.error}',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.red,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            );
+                                child: ErrorState(
+                                    context: context,
+                                    error: snapshot.error.toString(),
+                                    function: () {}));
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
                             // setState(() {
                             //   gottrucks = false;
                             // });
                             return Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.local_shipping_outlined,
-                                    size: 70,
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    'No Trucks Available',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
+                                child: EmptyState(type: "Fp Trucks"));
                           }
 
                           return Center(

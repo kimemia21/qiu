@@ -12,8 +12,10 @@ import 'package:application/Models/Tarrifs.dart';
 
 class WspTarrifs extends StatefulWidget {
   final List<TarrifsModel> tarrifsModel;
+  final VoidCallback callback;
 
-  const WspTarrifs({super.key, required this.tarrifsModel});
+  const WspTarrifs(
+      {super.key, required this.tarrifsModel, required this.callback});
 
   @override
   State<WspTarrifs> createState() => _WspTarrifsState();
@@ -32,7 +34,7 @@ class _WspTarrifsState extends State<WspTarrifs> {
       final number = double.parse(value.toString());
       return NumberFormat('#,###').format(number);
     } catch (e) {
-      return value.toString(); // Return original value if parsing fails
+      return value.toString();
     }
   }
 
@@ -66,7 +68,7 @@ class _WspTarrifsState extends State<WspTarrifs> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      height: MediaQuery.of(context).size.height * 0.85,
+      height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -243,8 +245,6 @@ class _WspTarrifsState extends State<WspTarrifs> {
                         ),
                         onSelected: (String value) {
                           if (value == 'Edit') {
-                 
-
                             showWSPModals(
                               context: context,
                               capcityController: capacity,
@@ -252,9 +252,11 @@ class _WspTarrifsState extends State<WspTarrifs> {
                               model: tarrif,
                               isCreate: value != 'Edit',
                             );
+                            widget.callback();
                           } else if (value == 'Delete') {
                             DeleteAlertDialog.show(
                                 context: context, model: tarrif);
+                            widget.callback();
                           }
                         },
                         itemBuilder: (BuildContext context) => [

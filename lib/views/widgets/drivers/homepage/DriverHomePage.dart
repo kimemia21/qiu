@@ -1,3 +1,5 @@
+import 'package:application/views/widgets/WSP/wsp_orders.dart';
+
 import '../../../../utils/utils.dart';
 import '../../../OnBoardScreen.dart';
 import '../../../loginPage.dart';
@@ -155,7 +157,7 @@ class _DriverHomepageState extends State<DriverHomepage> {
                       icon: Icons.list_alt_outlined,
                       onPressed: () {
                         PersistentNavBarNavigator.pushNewScreen(
-                            withNavBar: true, context, screen: Orders());
+                            withNavBar: true, context, screen: OrdersScreen());
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),

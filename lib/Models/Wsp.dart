@@ -1,6 +1,6 @@
 
 
-class WspModel {
+class WsProviders {
   final int wspId;
   final String wspName;
   final String source;
@@ -10,7 +10,7 @@ class WspModel {
   final String address;
   final List<Rates> rates;
 
-  WspModel(
+ WsProviders(
       {required this.wspId,
       required this.wspName,
       required this.source,
@@ -20,7 +20,7 @@ class WspModel {
       required this.address,
       required this.rates});
 
-  factory WspModel.fromJson(Map<String, dynamic> json) {
+  factory WsProviders.fromJson(Map<String, dynamic> json) {
     json.forEach((key, value) {
       if (value == null) {
         print('Null value found for key: $key');
@@ -31,7 +31,7 @@ class WspModel {
 
     final List<Rates> rates = jrates.map((e) => Rates.fromJson(e)).toList();
 
-    return WspModel(
+    return WsProviders(
         wspId: json["wspId"],
         wspName: json["wspName"],
         source: json["source"],

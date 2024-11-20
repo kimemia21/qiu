@@ -24,7 +24,8 @@ CommsRepository comms_repo = new CommsRepository();
 // ImageRepository image_repo = new ImageRepository();
 
 enum SnackBarType { success, error, info, warning }
-  final formkey = GlobalKey<FormState>();
+
+final formkey = GlobalKey<FormState>();
 
 class CustomSnackBar {
   static void show({
@@ -193,7 +194,6 @@ Future<void> showWSPModals(
     capcityController.text = model!.truckCapacity;
     priceController.text = model.capacityPrice;
   }
-  print("-----${capcityController.text}-----${priceController.text} ");
   return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -201,10 +201,8 @@ Future<void> showWSPModals(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (BuildContext context) {
-      
-
         return Form(
-             key: formkey,
+          key: formkey,
           child: FractionallySizedBox(
             heightFactor: 0.75,
             child: Padding(
@@ -276,36 +274,34 @@ Future<void> showWSPModals(
                                 if (formkey.currentState?.validate() ?? false) {
                                   final String endpoint =
                                       "${base_url}wsp/${isCreate ? "tariff" : "tariff/:${model!.Id}"}";
-            
+
                                   print("this is the wspId ${current_user.id}");
-            
+
                                   final jsonstring = isCreate
                                       ? jsonEncode({
                                           "truckCapacity":
                                               int.parse(capcityController.text),
-                                          "price Kshs":
+                                          "price":
                                               double.parse(priceController.text)
                                         })
                                       : jsonEncode({
-                                          
-                                            "id": model!.Id,
-                                            "truckCapacity": int.parse(
-                                                capcityController.text),
-                                            "capacityPrice": double.parse(
-                                                priceController.text)
-                                        
+                                          "id": model!.Id,
+                                          "truckCapacity":
+                                              int.parse(capcityController.text),
+                                          "capacityPrice":
+                                              double.parse(priceController.text)
                                         });
-            
+
                                   print(
                                       "--------------$jsonstring---------------");
                                   print("---------endpoint is $endpoint");
-            
+
                                   final function = await isCreate
                                       ? comms_repo.QueryAPIpost(
                                           endpoint, jsonstring, context)
                                       : comms_repo.QueryAPIPatch(
                                           endpoint, jsonstring, context);
-            
+
                                   await function.then((value) {
                                     print(value);
                                     if (value["success"]) {
@@ -315,7 +311,7 @@ Future<void> showWSPModals(
                                             'Tarrif  ${isCreate ? "Created" : "Updated"}',
                                         type: SnackBarType.success,
                                       );
-            
+
                                       Navigator.of(context).pop();
                                     } else {
                                       CustomSnackBar.show(
@@ -339,8 +335,7 @@ Future<void> showWSPModals(
                               child: context.watch<Appbloc>().isLoading
                                   ? CircularProgressIndicator()
                                   : Text(
-                                    isCreate?
-                                      "Add":"Update",
+                                      isCreate ? "Add" : "Update",
                                       style: GoogleFonts.poppins(
                                           color: Colors.white),
                                     ),
