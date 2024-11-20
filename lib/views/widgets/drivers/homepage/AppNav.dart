@@ -1,3 +1,5 @@
+import 'package:application/views/widgets/WSP/wsp_orders.dart';
+
 import '../../Maps/MapScreen.dart';
 import '../../Orders/CreatOrder.dart';
 import '../../Orders/orders.dart';
@@ -40,7 +42,7 @@ class _AppnavState extends State<Appnav> {
   }
 
   List<Widget> _buildScreens() {
-    return [DriverHomepage(), Orders(), CreateOrderScreen()];
+    return [DriverHomepage(), OrdersScreen(), CreateOrderScreen()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() => [

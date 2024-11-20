@@ -155,7 +155,7 @@ class _SCHomepageState extends State<SCHomepage> {
                       icon: Icons.list_alt_outlined,
                       onPressed: () {
                         PersistentNavBarNavigator.pushNewScreen(
-                            withNavBar: true, context, screen: Orders());
+                            withNavBar: true, context, screen: AppOrders());
                       },
                       iconColor: Theme.of(context).primaryColor,
                     ),

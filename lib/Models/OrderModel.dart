@@ -1,39 +1,62 @@
-class Ordermodel {
-  final String status;
-  final String name;
-  final dynamic id;
-  final DateTime deliveryDate;
-  final dynamic price;
+class OrderModel {
+  final String orderStatus;
+  final String? driverName;
+  final String orderId;
+  final int orderCapacity;
+  final double? orderAmount;
+  final DateTime? orderDate;
+  final String paymentStatus;
+  final String? wspCompanyName;
+  final String? wpWaterSrc;
+  final String? wspAdrress;
 
-  Ordermodel({
-    required this.status,
-    required this.name,
-    required this.id,
-    required this.deliveryDate,
-    required this.price,
+  OrderModel({
+    required this.orderStatus,
+    this.driverName,
+    required this.orderId,
+    required this.orderCapacity,
+    required this.orderAmount,
+    this.orderDate,
+    required this.paymentStatus,
+    this.wspCompanyName,
+    this.wpWaterSrc,
+    this.wspAdrress,
   });
 
-  factory Ordermodel.fromJson(Map<String, dynamic> json) {
-    json.forEach((key, value) {
-      if (value == null) {
-        print('The value for $key is null');
-      }
-    });
-
-    if (json["status"] == null || 
-        json["name"] == null || 
-        json["id"] == null || 
-        json["deliveryDate"] == null || 
-        json["price"] == null) {
-      throw Exception("Missing required fields in the JSON data.");
+  factory OrderModel.fromJson(Map<String, dynamic> json) {
+    if (json['details'] == null) {
+      throw Exception("Missing 'details' field in the JSON data.");
     }
 
-    return Ordermodel(
-      status: json["status"],
-      name: json["name"],
-      id: json["id"],
-      deliveryDate: json["deliveryDate"],
-      price: json["price"],
+    final details = json['details'] as Map<String, dynamic>;
+
+ 
+
+    return OrderModel(
+      orderStatus: json['orderStatus'??"status"] as String,
+      driverName: details['driverName'] as String ??null,
+      orderId: json['orderId'] as String,
+      orderCapacity: int.parse(details['orderCapacity'??"capacity"] as String),
+      orderAmount: double.parse(details['orderAmount'] as String),
+      orderDate: DateTime.parse(details['orderDate'] ??null),
+      paymentStatus: details['paymentStatus'] as String,
+      wspCompanyName: details['wspCompanyName'] as String ??null,
+      wpWaterSrc: details['wpWaterSrc'] as String ??null,
+      wspAdrress: details['wspAdrress'] as String ??null,
     );
   }
+
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     "orderStatus": orderStatus,
+  //     "orderId": orderId,
+  //     "details": {
+  //       "driverName": driverName,
+  //       "orderCapacity": orderCapacity.toString(),
+  //       "orderAmount": orderAmount.toStringAsFixed(2),
+  //       "orderDate": orderDate.toIso8601String(),
+  //       "paymentStatus": paymentStatus,
+  //     },
+  //   };
+  // }
 }

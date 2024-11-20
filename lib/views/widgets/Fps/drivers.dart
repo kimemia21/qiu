@@ -1,17 +1,20 @@
+import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
+import 'package:application/views/widgets/drivers/createDriver.dart';
+
 import '../../../Models/DriverModel.dart';
 import '../drivers/DriverCard.dart';
 import '../globals.dart';
 import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 
-class Drivers extends StatefulWidget {
-  const Drivers({super.key});
+class FpDrivers extends StatefulWidget {
+  const FpDrivers({super.key});
 
   @override
-  State<Drivers> createState() => _DriversState();
+  State<FpDrivers> createState() => _FpDriversState();
 }
 
-class _DriversState extends State<Drivers> {
+class _FpDriversState extends State<FpDrivers> {
   late Future<List<Drivermodel>> _driversFuture;
   final _scrollController = ScrollController();
 
@@ -22,7 +25,8 @@ class _DriversState extends State<Drivers> {
   }
 
   void _initializeData() {
-    _driversFuture = AppRequest.fetchDrivers(isProfile: false).catchError((error) {
+    _driversFuture =
+        AppRequest.fetchDrivers(isProfile: false).catchError((error) {
       throw Exception('Failed to load drivers: $error');
     });
   }
@@ -106,13 +110,20 @@ class _DriversState extends State<Drivers> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _buildLoadingState();
         }
-        
+
         if (snapshot.hasError) {
-          return _buildErrorState(snapshot.error.toString());
+          return Center(
+            child: ErrorState(
+                context: context,
+                error: snapshot.error.toString(),
+                function: () {}),
+          );
         }
-        
+
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return _buildEmptyState();
+          return Center(
+            child: EmptyState(type: "Drivers"),
+          );
         }
 
         return CustomScrollView(
@@ -125,7 +136,7 @@ class _DriversState extends State<Drivers> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Our Drivers',
+                      'Your Drivers',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -186,105 +197,6 @@ class _DriversState extends State<Drivers> {
     );
   }
 
-  Widget _buildErrorState(String error) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                Icons.error_outline,
-                size: 48,
-                color: Colors.red.shade300,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Oops! Something went wrong',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade800,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              error,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: _refreshDrivers,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF7E57C2),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.people_outline,
-              size: 48,
-              color: Colors.blue.shade300,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No Drivers Yet',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey.shade800,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Add your first driver to get started',
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 14,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildAddButton() {
     return Positioned(
       left: 16,
@@ -311,7 +223,7 @@ class _DriversState extends State<Drivers> {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              // Add your button action here
+              CreateNewDriver(context);
             },
             borderRadius: BorderRadius.circular(12),
             child: Container(

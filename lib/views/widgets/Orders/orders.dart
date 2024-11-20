@@ -1,20 +1,28 @@
+import 'package:application/comms/credentials.dart';
+import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
+
 import '../../../Models/OrderModel.dart';
 import '../globals.dart';
 import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 
-class Orders extends StatefulWidget {
-  const Orders({super.key});
+class AppOrders extends StatefulWidget {
+  const AppOrders({super.key});
 
   @override
-  State<Orders> createState() => _OrdersState();
+  State<AppOrders> createState() => _AppOrdersState();
 }
 
-// virginia
-class _OrdersState extends State<Orders> {
+class _AppOrdersState extends State<AppOrders> {
+  late Future<List<OrderModel>> _ordersFuture;
   @override
   void initState() {
     super.initState();
+    _ordersFuture = fetchorders();
+  }
+
+  Future<List<OrderModel>> fetchorders() async {
+    return await AppRequest.fetchOrders();
   }
 
   @override
@@ -61,20 +69,22 @@ class _OrdersState extends State<Orders> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: FutureBuilder<List<Ordermodel>>(
-                  future: AppRequest.fetchOrders(),
+                child: FutureBuilder<List<OrderModel>>(
+                  future: _ordersFuture,
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<Ordermodel>> snapshot) {
+                      AsyncSnapshot<List<OrderModel>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(
-                          child: Text(
-                              'Error: ${snapshot.error}')); // Show error if any
+                          child: ErrorState(
+                              context: context,
+                              error: snapshot.error.toString(),
+                              function: () {})); // Show error if any
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return Center(
-                          child: Text(
-                              'No Orders Available')); // Show message if no data
+                          child: EmptyState(
+                              type: "Orders")); // Show message if no data
                     }
 
                     return ListView.builder(
@@ -100,7 +110,7 @@ class _OrdersState extends State<Orders> {
 }
 
 class WspOrders extends StatefulWidget {
-  final List<Ordermodel> orders;
+  final List<OrderModel> orders;
   const WspOrders({super.key, required this.orders});
 
   @override
@@ -138,7 +148,7 @@ class _WspOrdersState extends State<WspOrders> {
 }
 
 class OrderStatusWidget extends StatelessWidget {
-  final Ordermodel model;
+  final OrderModel model;
 
   const OrderStatusWidget({
     super.key,
@@ -147,10 +157,10 @@ class OrderStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _buildOrderCard();
+    return _buildOrderCard(context);
   }
 
-  Widget _buildOrderCard() {
+  Widget _buildOrderCard( context) {
     return Container(
       margin: EdgeInsets.all(5),
       padding: const EdgeInsets.all(20),
@@ -171,7 +181,7 @@ class OrderStatusWidget extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Order NO. ${model.id}',
+              'Order NO. ${model.orderId}',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -183,7 +193,7 @@ class OrderStatusWidget extends StatelessWidget {
           const SizedBox(height: 25),
           _buildOrderDetails(),
           const SizedBox(height: 20),
-          _buildArchiveButton(),
+          _fulfilledButton(orderId: model.orderId, context:context ),
         ],
       ),
     );
@@ -193,10 +203,10 @@ class OrderStatusWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildStatusDot('PENDING', model.status == "PENDING"),
-        _buildStatusDot('CONFIRMED', model.status == "CONFIRMED"),
-        _buildStatusDot('CANCELLED', model.status == "CANCELLED"),
-        _buildStatusDot('FULFILLED', model.status == "FULFILLED"),
+        _buildStatusDot('PENDING', model.orderStatus == "PENDING"),
+        _buildStatusDot('CONFIRMED', model.orderStatus == "CONFIRMED"),
+        _buildStatusDot('CANCELLED', model.orderStatus == "CANCELLED"),
+        _buildStatusDot('FULFILLED', model.orderStatus == "FULFILLED"),
       ],
     );
   }
@@ -258,24 +268,36 @@ class OrderStatusWidget extends StatelessWidget {
   Widget _buildOrderDetails() {
     return Column(
       children: [
-        Text('Customer: ${model.name}'),
+        Text('Customer: ${model.driverName}'),
         const SizedBox(height: 8),
-        Text('Order No: ${model.id}'),
+        Text('Order No: ${model.orderId}'),
         const SizedBox(height: 8),
-        Text('Status: ${model.status}'),
+        Text('Status: ${model.orderStatus}'),
         const SizedBox(height: 8),
-        Text('Estimated Delivery Time: ${_formatDateTime(model.deliveryDate)}'),
+        Text('Estimated Delivery Time: ${model.orderDate}'),
         const SizedBox(height: 8),
-        Text('Estimated Cost: ${model.price.toStringAsFixed(0)} ksh'),
+        Text('Estimated Cost: ${model.orderAmount.toString} ksh'),
       ],
     );
   }
 
-  Widget _buildArchiveButton() {
+  Widget _fulfilledButton(
+      {required String orderId, required BuildContext context}) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          final jsonString = {
+            "order_id": orderId,
+          };
+          comms_repo.QueryAPIPatch("wsp/orders/fulfill", jsonString, context)
+              .then((value) {
+            if (value["success"]) {
+              print("fulfilled");
+            }
+            print(value);
+          });
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF7B89F4),
           foregroundColor: Colors.white,
@@ -284,50 +306,8 @@ class OrderStatusWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        child: const Text('ARCHIVE ORDER'),
+        child: const Text('Mark As Fulfilled '),
       ),
     );
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    final hour = dateTime.hour.toString().padLeft(2, '0');
-    final minute = dateTime.minute.toString().padLeft(2, '0');
-    final day = dateTime.day;
-    final month = _getMonth(dateTime.month);
-    final year = dateTime.year;
-
-    return '$hour:$minute AM $day${_getDaySuffix(day)} $month $year';
-  }
-
-  String _getMonth(int month) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return months[month - 1];
-  }
-
-  String _getDaySuffix(int day) {
-    if (day >= 11 && day <= 13) return 'th';
-    switch (day % 10) {
-      case 1:
-        return 'st';
-      case 2:
-        return 'nd';
-      case 3:
-        return 'rd';
-      default:
-        return 'th';
-    }
   }
 }

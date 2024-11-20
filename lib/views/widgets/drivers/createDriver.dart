@@ -1,15 +1,17 @@
+import 'package:application/comms/credentials.dart';
+import 'package:application/utils/utils.dart';
+import 'package:application/utils/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../comms/credentials.dart';
-import '../../../utils/utils.dart';
-import '../../../utils/widgets.dart';
+//  "firstName": "William",
+//   "lastName": "Waweru",
+//   "phoneNo": "254123876543",
+//   "truckId": 2
 
-Future<dynamic> CreateNewTruck(BuildContext context) async {
+Future<dynamic> CreateNewDriver(BuildContext context) async {
   return showModalBottomSheet(
-
-    
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
       backgroundColor: Colors.white,
@@ -21,62 +23,63 @@ Future<dynamic> CreateNewTruck(BuildContext context) async {
       builder: (context) => Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: const CreateTruckWidget()));
+          child: const CreateDriverkWidget()));
 }
 
-class CreateTruckWidget extends StatefulWidget {
-  const CreateTruckWidget({super.key});
+class CreateDriverkWidget extends StatefulWidget {
+  const CreateDriverkWidget({super.key});
   @override
-  _CreateTruckWidgetState createState() => _CreateTruckWidgetState();
+  _CreateDriverkWidgetState createState() => _CreateDriverkWidgetState();
 }
 
-class _CreateTruckWidgetState extends State<CreateTruckWidget> {
+class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _capacityController = TextEditingController();
-  final TextEditingController _licensePlateController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  bool savingtruck = false;
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumber = TextEditingController();
+
+  // final TextEditingController _priceController = TextEditingController();
+  bool savingDriver = false;
 
   String _selectedQuality = 'Soft Water';
 
   @override
   void dispose() {
-    _capacityController.dispose();
-    _licensePlateController.dispose();
-    _priceController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+
     super.dispose();
   }
 
   Future<void> _submitForm() async {
-    
     if (_formKey.currentState!.validate()) {
-      
-        setState(() {
-          savingtruck = false;
-        });
-      final truckData = {
-        'capacity': _capacityController.text.replaceAll(",", ""),
-        'quality': _selectedQuality,
-        'licensePlate': _licensePlateController.text.trim().replaceAll(" ", ""),
-        'price': _priceController.text.replaceAll(",", ""),
+      setState(() {
+        savingDriver = false;
+      });
+      final driverData = {
+        'firstName': _firstNameController.text.replaceAll(",", ""),
+        'phoneNo': _phoneNumber.text.replaceAll(",",""),
+        'lastName': _lastNameController.text.trim().replaceAll(" ", ""),
+        'truckId': 2,
       };
 
-      print('Truck Data: $truckData');
+      print('Truck Data: $driverData');
 
-      await comms_repo.QueryAPIpost("fp/register", truckData,context).then((value) {
-        printLog("Save truck  info $value");
+      await comms_repo.QueryAPIpost("fp/add-driver", driverData, context)
+          .then((value) {
+        printLog("Save driver  info $value");
 
         setState(() {
-          savingtruck = false;
+          savingDriver = false;
         });
 
         if (value["success"] ?? false) {
           showalert(
-              true, context, "Success", value["message"] ?? "Truck Saved");
+              true, context, "Success", value["message"] ?? "driver Saved");
         } else {
           showalert(false, context, "Failed",
-              value["message"] ?? "Unable to Save Truck");
+              value["message"] ?? "Unable to Save driver");
         }
       });
     }
@@ -97,15 +100,45 @@ class _CreateTruckWidgetState extends State<CreateTruckWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextFormField(
-                    controller: _capacityController,
+                    controller: _firstNameController,
                     decoration: InputDecoration(
-                      labelText: 'Capacity',
-                      hintText: 'Enter truck capacity (e.g., 10000)',
+                      labelText: 'First name ',
+                      hintText: 'Enter  driver first name',
                     ),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter the capacity';
+                        return 'Please enter the First  name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                       TextFormField(
+                    controller: _lastNameController,
+                    decoration: InputDecoration(
+                      labelText: 'Last name ',
+                      hintText: 'Enter  driver\'s last name',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter last name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _phoneNumber,
+                    decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      hintText: 'Enter Driver\'s phone number',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter the driver\s phone number';
                       }
                       return null;
                     },
@@ -114,7 +147,7 @@ class _CreateTruckWidgetState extends State<CreateTruckWidget> {
                   DropdownButtonFormField<String>(
                     value: _selectedQuality,
                     decoration: InputDecoration(
-                      labelText: 'Water Quality',
+                      labelText: 'Available Trucks',
                     ),
                     items: [
                       DropdownMenuItem(
@@ -128,37 +161,8 @@ class _CreateTruckWidgetState extends State<CreateTruckWidget> {
                       });
                     },
                   ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _licensePlateController,
-                    decoration: InputDecoration(
-                      labelText: 'License Plate',
-                      hintText: 'Enter license plate (e.g., KBC1234)',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the license plate';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _priceController,
-                    decoration: InputDecoration(
-                      labelText: 'Price',
-                      hintText: 'Enter price (e.g., 10000)',
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the price';
-                      }
-                      return null;
-                    },
-                  ),
                   SizedBox(height: 32),
-                  savingtruck
+                  savingDriver
                       ? SpinKitThreeInOut(
                           color: Colors.blue,
                         )

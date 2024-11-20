@@ -185,10 +185,15 @@ class CommsRepository {
     return false;
   }
 
-  Future<bool> Report(Ordermodel? meter, String issue) async {
+  Future<bool> Report(OrderModel? meter, String issue) async {
     var pload = {
-      "meter_id": meter == null ? "-1" : meter.id,
-      "meter_number": meter == null ? "" : meter.name,
+      // kimemia changed from  
+      
+      // "meter_id": meter == null ? "-1" : meter.id,
+      // "meter_number": meter == null ? "" : meter.name,
+
+      "meter_id": meter == null ? "-1" : meter.orderId,
+      "meter_number": meter == null ? "" : meter.driverName,
       "issue": issue,
       "user_id": current_user.id,
       "is_landlord": current_user.islandlord ? 1 : 0
@@ -891,7 +896,7 @@ class CommsRepository {
 // pay_to_merchant_pocket
 // pay_to_merchant_gate
   Future<Map<String, dynamic>> payByIndX(
-      Pocket pocket, Ordermodel? order, amount, trans_desc) async {
+      Pocket pocket, OrderModel? order, amount, trans_desc) async {
 //     var payload = {
 //       "merchant_id": order.pay_to_merchant_gate,
 //       "meter_id": order.id,

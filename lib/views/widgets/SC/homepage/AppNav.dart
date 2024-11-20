@@ -40,7 +40,7 @@ class _AppnavState extends State<Appnav> {
   }
 
   List<Widget> _buildScreens() {
-    return [DriverHomepage(), Orders(), CreateOrderScreen()];
+    return [DriverHomepage(), AppOrders(), CreateOrderScreen()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() => [

@@ -30,6 +30,7 @@ class _WSPHomePageState extends State<WSPHomePage> {
   }
 
   void refreshTarrifs() {
+    print("mems");
     setState(() {
       _tarriffsFuture = AppRequest.fetchWspTarrifs();
     });
@@ -64,6 +65,7 @@ class _WSPHomePageState extends State<WSPHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF7E64D4),
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -96,24 +98,31 @@ class _WSPHomePageState extends State<WSPHomePage> {
                           'assets/images/Logo.svg',
                           height: MediaQuery.of(context).size.height * 0.08,
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02),
                         Text(
                           'Your end to end water utility App',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.white70,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Colors.white70,
+                                  ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.01),
                         Text(
                           'Buy. Manage. Monitor',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                        
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02),
+
                         // Tariffs Section
                         Container(
                           width: double.infinity,
@@ -145,7 +154,8 @@ class _WSPHomePageState extends State<WSPHomePage> {
                                   onPressed: () async {
                                     await showWSPModals(
                                       context: context,
-                                      capcityController: TextEditingController(),
+                                      capcityController:
+                                          TextEditingController(),
                                       priceController: TextEditingController(),
                                       isCreate: true,
                                     );
@@ -164,7 +174,8 @@ class _WSPHomePageState extends State<WSPHomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.add, size: 18, color: Colors.white),
+                                      Icon(Icons.add,
+                                          size: 18, color: Colors.white),
                                       SizedBox(width: 8),
                                       Text('Add'),
                                     ],
@@ -174,30 +185,41 @@ class _WSPHomePageState extends State<WSPHomePage> {
                               FutureBuilder<List<TarrifsModel>>(
                                 future: _tarriffsFuture,
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return _buildLoadingState('Loading Tariffs...');
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return _buildLoadingState(
+                                        'Loading Tariffs...');
                                   } else if (snapshot.hasError) {
                                     return ErrorState(
                                       context: context,
                                       error: snapshot.error.toString(),
                                       function: () {
                                         setState(() {
-                                          _tarriffsFuture = AppRequest.fetchWspTarrifs();
+                                          _tarriffsFuture =
+                                              AppRequest.fetchWspTarrifs();
                                         });
                                       },
                                     );
-                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
                                     return EmptyState(type: "Tarrifs");
                                   }
-                                  return WspTarrifs(tarrifsModel: snapshot.data!);
+                                  return WspTarrifs(
+                                      tarrifsModel: snapshot.data!,
+                                      callback: () {
+                                        print("triggeredddddd");
+
+                                        refreshTarrifs();
+                                      });
                                 },
                               ),
                             ],
                           ),
                         ),
-                        
+
                         // Orders Section
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.02),
                         Container(
                           width: double.infinity,
                           height: MediaQuery.of(context).size.height * 0.35,
@@ -206,21 +228,24 @@ class _WSPHomePageState extends State<WSPHomePage> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             elevation: 4,
-                            child: FutureBuilder<List<Ordermodel>>(
+                            child: FutureBuilder<List<OrderModel>>(
                               future: AppRequest.fetchOrders(),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return _buildLoadingState('Loading Orders...');
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return _buildLoadingState(
+                                      'Loading Orders...');
                                 } else if (snapshot.hasError) {
                                   return ErrorState(
                                     context: context,
                                     error: snapshot.error.toString(),
                                     function: () {},
                                   );
-                                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
                                   return EmptyState(type: "Orders");
                                 }
-                                return WspOrders(orders: snapshot.data!);
+                                return AppOrders();
                               },
                             ),
                           ),

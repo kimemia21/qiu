@@ -1,16 +1,18 @@
+import 'package:application/Models/OrderModel.dart';
+
 import '../../../Models/Wsp_Orders.dart';
 import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 
-class WspOrdersScreen extends StatefulWidget {
-  const WspOrdersScreen({Key? key}) : super(key: key);
+class OrdersScreen extends StatefulWidget {
+  const OrdersScreen({Key? key}) : super(key: key);
 
   @override
-  State<WspOrdersScreen> createState() => _WspOrdersScreenState();
+  State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
-class _WspOrdersScreenState extends State<WspOrdersScreen> {
-  late Future<List<WspOrders>> _ordersData;
+class _OrdersScreenState extends State<OrdersScreen> {
+  late Future<List<OrderModel>> _ordersData;
   final _gradientColors = const [Color(0xFF7E64D4), Color(0xFF9DD6F8)];
 
   @override
@@ -21,7 +23,9 @@ class _WspOrdersScreenState extends State<WspOrdersScreen> {
 
   void _fetchOrders() {
     setState(() {
-      _ordersData = AppRequest.fetchWSP_Orders().catchError((error) {
+      _ordersData = AppRequest.fetchOrders().
+      
+      catchError((error) {
         throw Exception('Failed to load orders: $error');
       });
     });
@@ -41,7 +45,7 @@ class _WspOrdersScreenState extends State<WspOrdersScreen> {
           ),
         ),
         child: SafeArea(
-          child: FutureBuilder<List<WspOrders>>(
+          child: FutureBuilder<List<OrderModel>>(
             future: _ordersData,
             builder: _buildOrdersList,
           ),
@@ -71,7 +75,7 @@ class _WspOrdersScreenState extends State<WspOrdersScreen> {
 
   Widget _buildOrdersList(
     BuildContext context,
-    AsyncSnapshot<List<WspOrders>> snapshot,
+    AsyncSnapshot<List<OrderModel>> snapshot,
   ) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return const Center(
@@ -96,7 +100,7 @@ class _WspOrdersScreenState extends State<WspOrdersScreen> {
 }
 
 class _OrderCard extends StatelessWidget {
-  final WspOrders order;
+  final OrderModel order;
 
   const _OrderCard({Key? key, required this.order}) : super(key: key);
 
@@ -127,7 +131,7 @@ class _OrderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  order.wspCompanyName,
+                  order.wspCompanyName!,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -144,7 +148,7 @@ class _OrderCard extends StatelessWidget {
               ],
             ),
           ),
-          _StatusBadge(status: order.status),
+          _StatusBadge(status: order.orderStatus),
         ],
       ),
     );
@@ -159,7 +163,7 @@ class _OrderCard extends StatelessWidget {
             first: _DetailItem(
               icon: Icons.water_drop,
               label: 'Capacity',
-              value: '${order.capacity} L',
+              value: '${order.orderCapacity} L',
             ),
             second: _DetailItem(
               icon: Icons.attach_money,
@@ -172,7 +176,7 @@ class _OrderCard extends StatelessWidget {
             first: _DetailItem(
               icon: Icons.source,
               label: 'Water Source',
-              value: order.wpWaterSrc,
+              value: order.wpWaterSrc!,
             ),
             second: _DetailItem(
               icon: Icons.payment,
@@ -185,7 +189,7 @@ class _OrderCard extends StatelessWidget {
           _DetailItem(
             icon: Icons.location_on,
             label: 'Address',
-            value: order.wspAddress,
+            value: order.wspAdrress!,
           ),
         ],
       ),
