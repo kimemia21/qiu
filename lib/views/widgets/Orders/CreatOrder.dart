@@ -14,7 +14,7 @@ class CreateOrderScreen extends StatefulWidget {
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
   int quantity = 0;
-  String selectedDeliveryOption = 'Express Delivery';
+  String selectedDeliveryOption = 'EXP';
   TextEditingController quantityController = TextEditingController();
   void increaseQuantity() {
     setState(() {
@@ -45,6 +45,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   void selectDeliveryOption(String option) {
     setState(() {
       selectedDeliveryOption = option;
+      // context.read<Appbloc>().changeDeliveryDetails(deliveryType: option);
+      
     });
   }
 
@@ -56,7 +58,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       quantityController.text = 0.toString();
     } else {
       quantity =
-          (Provider.of<Appbloc>(context, listen: false).quantityLiters!/1000)
+          (Provider.of<Appbloc>(context, listen: false).quantityLiters! / 1000)
               .toInt();
       quantityController.text = quantity.toString();
     }
@@ -196,32 +198,32 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             ListTile(
                               title: Text('Express Delivery'),
                               trailing: Icon(
-                                selectedDeliveryOption == 'Express Delivery'
+                                selectedDeliveryOption == 'EXP'
                                     ? Icons.check_circle
                                     : Icons.radio_button_off,
                                 color:
-                                    selectedDeliveryOption == 'Express Delivery'
+                                    selectedDeliveryOption == 'EXP'
                                         ? Colors.blueAccent
                                         : Colors.grey,
                               ),
                               onTap: () {
-                                selectDeliveryOption('Express Delivery');
+                                selectDeliveryOption('EXP');
                               },
                             ),
                             Divider(),
                             ListTile(
                               title: Text('Scheduled Delivery'),
                               trailing: Icon(
-                                selectedDeliveryOption == 'Scheduled Delivery'
+                                selectedDeliveryOption == 'SCH'
                                     ? Icons.check_circle
                                     : Icons.radio_button_off,
                                 color: selectedDeliveryOption ==
-                                        'Scheduled Delivery'
+                                        'SCH'
                                     ? Colors.blueAccent
                                     : Colors.grey,
                               ),
                               onTap: () {
-                                selectDeliveryOption('Scheduled Delivery');
+                                selectDeliveryOption('SCH');
                               },
                             ),
                           ],

@@ -11,6 +11,17 @@ class Drivermodel {
   final int? driverFp;
   final String assignedTruck;
 
+
+
+
+
+
+
+
+
+
+
+
   Drivermodel({
     required this.driverId,
     required this.lastName,

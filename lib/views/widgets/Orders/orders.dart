@@ -22,7 +22,7 @@ class _AppOrdersState extends State<AppOrders> {
   }
 
   Future<List<OrderModel>> fetchorders() async {
-    return await AppRequest.fetchOrders();
+    return await AppRequest.fetchOrders(false);
   }
 
   @override

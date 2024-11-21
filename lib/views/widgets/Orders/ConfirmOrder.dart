@@ -1,3 +1,5 @@
+import 'package:application/comms/credentials.dart';
+
 import '../../../main.dart';
 import '../../state/appbloc.dart';
 import '../../../Models/Location.dart';
@@ -185,30 +187,60 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                         ),
                       ),
                       // Create Order Button
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 30),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Action for create order button
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            minimumSize: Size(double.infinity, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      context.watch<Appbloc>().isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 30),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  // Action for create order button
+                                  LocationModel? locationModel =
+                                      Provider.of<Appbloc>(context,
+                                              listen: false)
+                                          .location;
+                                  int? quantity = Provider.of<Appbloc>(context,
+                                          listen: false)
+                                      .quantityLiters;
+                                  String? destinationAddress =
+                                      locationModel!.description;
+                                  String? destinationLat =
+                                      locationModel!.lat.toString();
+                                  String? destinationLong =
+                                      locationModel!.lng.toString();
+
+                                  final Map<String, dynamic> jsonString = {
+                                    "quantity": quantity,
+                                    "deliveryType": "EXP",
+                                    "destinationAddress": destinationAddress,
+                                    "destinationLat": destinationLat,
+                                    "destinationLong": destinationLong,
+                                    "additionalInfo": "",
+                                    "scheduledTime": ""
+                                  };
+
+                                  await comms_repo.QueryAPIpost(
+                                      "orders/create", jsonString, context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  minimumSize: Size(double.infinity, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Text(
+                                  'CREATE ORDER',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          child: Text(
-                            'CREATE ORDER',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),

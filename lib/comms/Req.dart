@@ -21,8 +21,9 @@ import '../Models/Location.dart';
 import '../Models/OrderModel.dart';
 
 class AppRequest {
-  static Future<List<OrderModel>> fetchOrders() async{
-    final uri ="${base_url}wsp/orders";
+  static Future<List<OrderModel>> fetchOrders(bool isFp) async{
+    final uri ="${base_url}${isFp?'fp/wsp-orders':' wsp/orders'}";
+    
     final Map<String, dynamic> wspOrders = await comms_repo.queryApi(uri);
     if (wspOrders["success"]) {
       final data = wspOrders['data'] as List<dynamic>;

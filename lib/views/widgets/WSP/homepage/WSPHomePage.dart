@@ -229,7 +229,7 @@ class _WSPHomePageState extends State<WSPHomePage> {
                             ),
                             elevation: 4,
                             child: FutureBuilder<List<OrderModel>>(
-                              future: AppRequest.fetchOrders(),
+                              future: AppRequest.fetchOrders(false),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
