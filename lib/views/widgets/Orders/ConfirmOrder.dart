@@ -217,9 +217,10 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                                     "destinationAddress": destinationAddress,
                                     "destinationLat": destinationLat,
                                     "destinationLong": destinationLong,
-                                    "additionalInfo": "",
+                                    "additionalInfo": destinationAddress,
                                     "scheduledTime": ""
                                   };
+                                  print(jsonString);
 
                                   await comms_repo.QueryAPIpost(
                                       "orders/create", jsonString, context);
@@ -232,7 +233,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                                   ),
                                 ),
                                 child: Text(
-                                  'CREATE ORDER',
+                                  'Create Order',
                                   style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.white,
