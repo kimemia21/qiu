@@ -58,7 +58,7 @@ userModel current_user = userModel(
   role: "SC",
 );
 
-String firebaseToken =
+String my_firebase_token =
     "eP9J4TYoQaKEj2wY07N_c8:APA91bH1yl_Qsx6zU4ZVxzpEfiLNHZ8xzCrP1y7hQ4JYtD1G0VWztxw8NxO94NxM5yNrSZx_G0rYd3F7CQUJ6xiAhNuFgO4kXaF-GZ";
 
 bool validmpesa(String mpesaNo) {

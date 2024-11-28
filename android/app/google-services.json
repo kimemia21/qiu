@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "543163777695",
+    "project_id": "qiu-app-c93f9",
+    "storage_bucket": "qiu-app-c93f9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543163777695:android:1219687c814f594b41d8aa",
+        "android_client_info": {
+          "package_name": "com.gnovation.qiu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0QETju8IBqEZXrLsQ7io17Fi3UA5q_CI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

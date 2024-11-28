@@ -1,3 +1,7 @@
+import 'package:application/comms/notifications.dart';
+import 'package:application/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'utils/utils.dart';
 import 'views/login.dart';
 import 'views/signinUpPage.dart';
@@ -12,11 +16,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'views/Splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await Future.delayed(const Duration(seconds: 1));
+
+  // NotificationService().initialize();
+
+  NotificationService.initialize();
+
+  // my_firebase_token = await NotificationService.getFirebasetoken();
+  // printLog("my_firebase_token ${my_firebase_token}");
+
   await LocalStorage.init();
   current_role = LocalStorage().getString("current_role");
   current_role = current_role == "" ? "SC" : current_role;
@@ -48,14 +63,6 @@ class MyApp extends StatelessWidget {
         );
   }
 }
-
-
-
-
-
-
-
-
 
 class DynamicInputScreen extends StatefulWidget {
   @override
@@ -114,7 +121,7 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
       print(data); // Replace with your API call
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all the fields')),
+        const SnackBar(content: Text('Please fill in all the fields')),
       );
     }
   }
@@ -157,7 +164,7 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   if (int.parse(value) > 10) {
-                    AlertDialog(
+                    const AlertDialog(
                       title: Text("invalid number of trucks"),
                     );
                   }
@@ -166,7 +173,7 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Enter the number of trucks',
-                  hintStyle: TextStyle(color: Colors.white70),
+                  hintStyle: const TextStyle(color: Colors.white70),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -194,8 +201,8 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                                   _updateTruckData(index, 'capacity', value),
                               decoration: InputDecoration(
                                 hintText: 'Capacity',
-                                label: Text("Capacity"),
-                                border: OutlineInputBorder(),
+                                label: const Text("Capacity"),
+                                border: const OutlineInputBorder(),
                                 errorText: _truckData[index]['capacity'].isEmpty
                                     ? 'Required'
                                     : null,
@@ -222,9 +229,9 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                               onChanged: (value) => _updateTruckData(
                                   index, 'licencePlate', value),
                               decoration: InputDecoration(
-                                label: Text("License Plate"),
+                                label: const Text("License Plate"),
                                 hintText: 'License Plate',
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 errorText:
                                     _truckData[index]['licencePlate'].isEmpty
                                         ? 'Required'
@@ -237,9 +244,9 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                               onChanged: (value) =>
                                   _updateTruckData(index, 'price', value),
                               decoration: InputDecoration(
-                                label: Text("Price"),
+                                label: const Text("Price"),
                                 hintText: 'Price',
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 errorText: _truckData[index]['price'].isEmpty
                                     ? 'Required'
                                     : null,
@@ -250,7 +257,8 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
                                   onPressed: () => _deleteTruck(index),
                                 ),
                               ],
@@ -266,13 +274,13 @@ class _DynamicInputScreenState extends State<DynamicInputScreen> {
               ElevatedButton(
                 onPressed: _submitData,
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
-                child: Text('Submit', style: TextStyle(fontSize: 18)),
+                child: const Text('Submit', style: TextStyle(fontSize: 18)),
               ),
               const SizedBox(height: 20),
             ],

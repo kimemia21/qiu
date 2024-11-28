@@ -17,7 +17,7 @@ const googleApiKey = "AIzaSyCoGPmVqQGHigzn_8WPHdy6M0wgbLlLZ-E";
 const keyString = '0Dgkn6z1FH9qnVarospPi2F6iPlNzRIc';
 // final aesEcb = AESECB();
 final base_url = "http://185.141.63.56:8080/api/v2/"; // Qiu
-
+final chatwesbsockURL = "http://185.141.63.56:8080";
 final image_url = "https://api.cloudinary.com/v1_1/dt4yfuuuw/image/upload";
 
 CommsRepository comms_repo = new CommsRepository();

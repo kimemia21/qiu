@@ -187,8 +187,8 @@ class CommsRepository {
 
   Future<bool> Report(OrderModel? meter, String issue) async {
     var pload = {
-      // kimemia changed from  
-      
+      // kimemia changed from
+
       // "meter_id": meter == null ? "-1" : meter.id,
       // "meter_number": meter == null ? "" : meter.name,
 
@@ -598,16 +598,14 @@ class CommsRepository {
     return {"rsp": false, "msg": "Got some Error"};
   }
 
-  Future<Map<String, dynamic>> QueryAPIpost(String endpoint, jsonstring, BuildContext context) async {
+  Future<Map<String, dynamic>> QueryAPIpost(
+      String endpoint, jsonstring, BuildContext context) async {
     printLog(
         "QueryAPIpost $base_url$endpoint $jsonstring, ${current_user!.access_token!} ");
 
- Appbloc blog = context.read<Appbloc>();
-
-  
+    Appbloc blog = context.read<Appbloc>();
 
     try {
-      
       blog.changeLoading(true);
       if (!(endpoint == "login" ||
           endpoint == 'users/register-service' ||
@@ -623,7 +621,7 @@ class CommsRepository {
 
       Response response = await _dio.post("$endpoint", data: jsonstring);
       printLog("Response sttaus code ${response.statusCode}");
-      
+
       blog.changeLoading(false);
 
       if (response.statusCode == 200) {
@@ -643,7 +641,6 @@ class CommsRepository {
       // return {"rsp": false, "mess
       //age": "Unable to process"};
     } on DioException catch (e) {
-      
       blog.changeLoading(false);
       // printLog("$e");
 
@@ -705,7 +702,7 @@ class CommsRepository {
 
       Response response = await _dio.patch("$endpoint", data: jsonstring);
       printLog("Response sttaus code ${response.statusCode}");
-      
+
       blog.changeLoading(false);
 
       if (response.statusCode == 200) {
@@ -764,11 +761,9 @@ class CommsRepository {
     return {"rsp": false, "message": "Unable to Process Request."};
   }
 
-
   Future<Map<String, dynamic>> QueryAPIDelete(
       String endpoint, BuildContext context) async {
-    printLog(
-        "QueryAPIpost $base_url$endpoint ${current_user!.access_token!} ");
+    printLog("QueryAPIpost $base_url$endpoint ${current_user!.access_token!} ");
     Appbloc blog = context.read<Appbloc>();
     try {
       blog.changeLoading(true);
@@ -784,9 +779,11 @@ class CommsRepository {
 
       printLog("Hit $base_url to $endpoint ");
 
-      Response response = await _dio.delete("$endpoint",);
+      Response response = await _dio.delete(
+        "$endpoint",
+      );
       printLog("Response sttaus code ${response.statusCode}");
-      
+
       blog.changeLoading(false);
 
       if (response.statusCode == 200) {

@@ -313,7 +313,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     "password": _passwordController.text.trim(),
                                     "phoneNo":
                                         _phoneNumberController.text.trim(),
-                                    "deviceToken": firebaseToken
+                                    "deviceToken": my_firebase_token
                                   };
 
                                   await comms_repo.QueryAPIpost(
