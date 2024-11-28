@@ -5,10 +5,7 @@ import 'package:application/Models/Tarrifs.dart';
 import '../Models/DriverModel.dart';
 import '../Models/TrucksModel.dart';
 import '../Models/Wsp.dart';
-import '../Models/Wsp_Orders.dart';
-import 'comms_repo.dart';
 import 'credentials.dart';
-import '../main.dart';
 import '../utils/utils.dart';
 import '../views/state/appbloc.dart';
 import '../views/widgets/WSP/homepage/WSPHomeScreen.dart';
@@ -21,8 +18,9 @@ import '../Models/Location.dart';
 import '../Models/OrderModel.dart';
 
 class AppRequest {
-  static Future<List<OrderModel>> fetchOrders() async{
-    final uri ="${base_url}wsp/orders";
+  static Future<List<OrderModel>> fetchOrders(bool isFp) async{
+    final uri ="${base_url}${isFp?'fp/wsp-orders':' wsp/orders'}";
+
     final Map<String, dynamic> wspOrders = await comms_repo.queryApi(uri);
     if (wspOrders["success"]) {
       final data = wspOrders['data'] as List<dynamic>;

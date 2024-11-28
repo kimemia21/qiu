@@ -7,6 +7,7 @@ import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WspDetailsScreen extends StatefulWidget {
   @override
@@ -337,6 +338,14 @@ class _WspDetailsScreenState extends State<WspDetailsScreen> {
                                                                     'Close'),
                                                               ),
                                                               ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+
+                                                                        
+                                                                  backgroundColor:
+                                                                      Color(
+                                                                          0xFF7E64D4),
+                                                                ),
                                                                 onPressed: () {
                                                                   final jsonString =
                                                                       jsonEncode({
@@ -363,14 +372,13 @@ class _WspDetailsScreenState extends State<WspDetailsScreen> {
                                                                     } else {
                                                                       print(value[
                                                                           "msg"]);
-                                                                          Navigator.pop(
+                                                                      Navigator.pop(
                                                                           context);
-
-
                                                                     }
                                                                   });
                                                                 },
-                                                                child: Text(
+                                                                child: Text(style: GoogleFonts.poppins(color: Colors.white),
+                                                                  
                                                                     'Order'),
                                                               ),
                                                             ],

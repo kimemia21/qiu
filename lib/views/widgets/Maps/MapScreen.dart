@@ -123,6 +123,11 @@ class _MapScreenState extends State<MapScreen> {
             place: "Current Location");
 
         context.read<Appbloc>().changeLocation(location);
+        // context.read<Appbloc>().changeDeliveryDetails(
+        //       lat: "${currentLocation!.latitude}",
+        //       long: "${currentLocation!.longitude}",
+        //       additionalInfo: description,
+        //     );
 
         print(_location);
 
@@ -641,6 +646,13 @@ class _MapScreenState extends State<MapScreen> {
                               locationName =
                                   prediction.description ?? "no description";
                               _isSearchExpanded = false;
+
+                              // context.read<Appbloc>().changeDeliveryDetails(
+                              //       lat: "${lat}",
+                              //       long: "${lng}",
+                              //       address: locationName,
+                              //       additionalInfo: "description",
+                              //     );
                             });
                             _moveToLocation(lat!, lng!);
                           },

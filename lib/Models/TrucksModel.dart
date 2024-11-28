@@ -1,7 +1,6 @@
 class Trucksmodel {
   final int id;
   final capacity;
-
   final String licence_plate;
   final String Price;
   final String quality;
@@ -22,6 +21,8 @@ class Trucksmodel {
         json['licence_plate'] == null) {
       throw ArgumentError('One or more required fields are null');
     }
+
+
 
     return Trucksmodel(
       id: json['id'],
