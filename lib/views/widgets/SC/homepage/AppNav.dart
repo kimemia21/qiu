@@ -66,32 +66,33 @@ class _AppnavState extends State<Appnav> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true, stateManagement: true,
-      hideNavigationBarWhenKeyboardAppears: true,
-      // popBehaviorOnSelectedNavBarItemPress: PopActionScreensType.all,
-      padding: const EdgeInsets.only(top: 8),
-      backgroundColor: Colors.grey.shade200,
-      isVisible: true,
-      animationSettings: const NavBarAnimationSettings(
-        navBarItemAnimation: ItemAnimationSettings(
-          duration: Duration(milliseconds: 300),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimationSettings(
-          animateTabTransition: true,
-          duration: Duration(milliseconds: 400),
-          screenTransitionAnimationType: ScreenTransitionAnimationType.fadeIn,
-        ),
-      ),
-      confineToSafeArea: true,
-      navBarHeight: kBottomNavigationBarHeight,
-      navBarStyle: NavBarStyle.style3,
-    );
+    return DriverHomepage();
+    // PersistentTabView(
+    //   context,
+    //   controller: _controller,
+    //   screens: _buildScreens(),
+    //   items: _navBarsItems(),
+    //   handleAndroidBackButtonPress: true,
+    //   resizeToAvoidBottomInset: true, stateManagement: true,
+    //   hideNavigationBarWhenKeyboardAppears: true,
+    //   // popBehaviorOnSelectedNavBarItemPress: PopActionScreensType.all,
+    //   padding: const EdgeInsets.only(top: 8),
+    //   backgroundColor: Colors.grey.shade200,
+    //   isVisible: true,
+    //   animationSettings: const NavBarAnimationSettings(
+    //     navBarItemAnimation: ItemAnimationSettings(
+    //       duration: Duration(milliseconds: 300),
+    //       curve: Curves.ease,
+    //     ),
+    //     screenTransitionAnimation: ScreenTransitionAnimationSettings(
+    //       animateTabTransition: true,
+    //       duration: Duration(milliseconds: 400),
+    //       screenTransitionAnimationType: ScreenTransitionAnimationType.fadeIn,
+    //     ),
+    //   ),
+    //   confineToSafeArea: true,
+    //   navBarHeight: kBottomNavigationBarHeight,
+    //   navBarStyle: NavBarStyle.style3,
+    // );
   }
 }

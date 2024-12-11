@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class InfoCard extends StatelessWidget {
   final String title;
-  final String count;
+  final String? count;
   final IconData icon;
   final Color color;
   final GestureTapCallback? tapped;
@@ -12,7 +12,7 @@ class InfoCard extends StatelessWidget {
   const InfoCard(
       {Key? key,
       required this.title,
-      required this.count,
+       this.count,
       required this.icon,
       required this.color,
       required this.tapped})
@@ -49,14 +49,15 @@ class InfoCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 4),
+                  count!=null?
                   Text(
-                    count,
+                    count!,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: color,
                     ),
-                  ),
+                  ):SizedBox(),
                 ],
               ),
             ],

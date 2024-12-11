@@ -1,5 +1,7 @@
 
 
+import 'package:application/views/widgets/User/UserHomepage.dart';
+
 import '../Models/AccountTypes.dart';
 import '../comms/Req.dart';
 import '../utils/utils.dart';
@@ -198,6 +200,20 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         setState(() {
           accounttype = Accountypes.DRIVER;
         });
+      }, showarrow: false),
+
+            buildWideButton(context, 'User', Colors.transparent, () {
+
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Userhomepage()));  
+
+        print("Shwo new home page");
+
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => FPHomePage()));
+        // // setState(() {
+        //   accounttype = Accountypes.FP;
+        // });
       }, showarrow: false),
     ];
   }

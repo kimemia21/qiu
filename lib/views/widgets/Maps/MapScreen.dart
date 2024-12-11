@@ -1,5 +1,8 @@
 import 'dart:ffi';
 
+import 'package:application/views/widgets/globals.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import '../../state/appbloc.dart';
 import '../../../Models/Location.dart';
 import '../Orders/ConfirmOrder.dart';
@@ -30,6 +33,7 @@ class _MapScreenState extends State<MapScreen> {
   final TextEditingController searchController = TextEditingController();
   bool _selectedCurrentLocation = false;
   bool _isSearchExpanded = false;
+
   List<Map<String, dynamic>> locationOptions = [
     {
       "Home": "50.11466 Longitude: -94.522643",
@@ -155,6 +159,15 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Delivery Location",
+          style: GoogleFonts.poppins(
+              color: Colors.white, fontWeight: FontWeight.w400),
+        ),
+        backgroundColor: appGradient[0],
+      ),
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
