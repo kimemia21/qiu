@@ -8,6 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+final List<Color> appGradient = [Color(0xFF7E64D4), Color(0xFF9DD6F8)];
+
 class CustomTextfield extends StatefulWidget {
   final TextEditingController myController;
   final String? hintText;
@@ -128,30 +130,28 @@ Widget CustomButton(BuildContext context, String text, pressed) {
           ),
         ),
         onPressed: pressed,
-        child: bloc.isLoading?
-        Center(
-        child: LoadingAnimationWidget.stretchedDots(
-         color: Colors.white,
-          size: 30,
-        ),):
-      
-
-
-         Stack(
-          alignment: Alignment.center,
-          children: [
-            Center(
-              child: Text(
-                text,
-                style: TextStyle(fontSize: 18),
+        child: bloc.isLoading
+            ? Center(
+                child: LoadingAnimationWidget.stretchedDots(
+                  color: Colors.white,
+                  size: 30,
+                ),
+              )
+            : Stack(
+                alignment: Alignment.center,
+                children: [
+                  Center(
+                    child: Text(
+                      text,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    child: Icon(Icons.arrow_forward),
+                  ),
+                ],
               ),
-            ),
-            Positioned(
-              right: 0,
-              child: Icon(Icons.arrow_forward),
-            ),
-          ],
-        ),
       ),
     ),
   );
