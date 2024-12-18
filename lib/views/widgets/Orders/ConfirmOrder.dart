@@ -1,4 +1,5 @@
 import 'package:application/comms/credentials.dart';
+import 'package:application/views/widgets/User/UserFp.dart';
 
 import '../../../main.dart';
 import '../../state/appbloc.dart';
@@ -223,7 +224,27 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                                   print(jsonString);
 
                                   await comms_repo.QueryAPIpost(
-                                      "orders/create", jsonString, context);
+                                          "orders/create", jsonString, context)
+                                      .then((data) {
+                                    if (!data['success']) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserFpDrivers()));
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                          data['message'],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    }
+                                  });
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue,

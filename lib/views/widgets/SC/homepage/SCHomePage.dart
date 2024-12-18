@@ -1,6 +1,7 @@
+import 'package:application/Authentication/OnBoardScreen.dart';
+import 'package:application/Authentication/loginPage.dart';
+
 import '../../../../utils/utils.dart';
-import '../../../OnBoardScreen.dart';
-import '../../../loginPage.dart';
 import '../../Orders/orders.dart';
 import '../../drivers/drivers.dart';
 import '../../globals.dart';

@@ -3,15 +3,12 @@ import 'package:application/Models/OrderModel.dart';
 import 'package:application/Models/Tarrifs.dart';
 import 'package:application/comms/Req.dart';
 import 'package:application/comms/credentials.dart';
-import 'package:application/utils/utils.dart';
-import 'package:application/views/widgets/Fps/homepage/infocard.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
 import 'package:application/views/widgets/WSP/homepage/wsptarrif.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class WSPHomePage extends StatefulWidget {
   @override

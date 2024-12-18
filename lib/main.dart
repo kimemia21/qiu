@@ -1,11 +1,10 @@
+import 'package:application/Authentication/signinUpPage.dart';
 import 'package:application/comms/notifications.dart';
 import 'package:application/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'utils/utils.dart';
-import 'views/login.dart';
-import 'views/signinUpPage.dart';
-import 'views/OnBoardScreen.dart';
+
 import 'views/state/appbloc.dart';
 import 'views/widgets/Orders/orders.dart';
 import 'views/widgets/WSP/wsp_orders.dart';
@@ -16,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'views/Splash.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

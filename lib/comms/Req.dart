@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:application/Models/Tarrifs.dart';
+import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
 
 import '../Models/DriverModel.dart';
 import '../Models/TrucksModel.dart';
@@ -8,7 +9,6 @@ import '../Models/Wsp.dart';
 import 'credentials.dart';
 import '../utils/utils.dart';
 import '../views/state/appbloc.dart';
-import '../views/widgets/WSP/homepage/WSPHomeScreen.dart';
 import '../views/widgets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -158,7 +158,7 @@ class AppRequest {
       print("success");
 
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => WSPHomeScreen()));
+          context, MaterialPageRoute(builder: (context) => WSPHomePage()));
     } else {
       printLog("\n\singupWSP error ${signup["msg"]}");
 

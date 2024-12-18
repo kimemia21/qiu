@@ -1,15 +1,14 @@
-
-
+import 'package:application/views/widgets/Fps/homepage/FPHomePage.dart';
 import 'package:application/views/widgets/User/UserHomepage.dart';
+import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
+import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
+import 'package:application/views/widgets/globals.dart';
 
 import '../Models/AccountTypes.dart';
 import '../comms/Req.dart';
 import '../utils/utils.dart';
 import '../utils/widgets.dart';
-import 'login.dart';
-import 'widgets/WSP/homepage/WSPHomePage.dart';
-
-import 'widgets/globals.dart';
+import 'pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -18,9 +17,6 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 import '../comms/credentials.dart';
 import 'loginPage.dart';
-import 'widgets/Fps/homepage/FPHomePage.dart';
-import 'widgets/drivers/homepage/DriverHomeScreen.dart';
-import 'widgets/trucks/Trucks.dart';
 // import 'package:qiu/utils/utils.dart';
 
 class OnBoardScreen extends StatefulWidget {
@@ -44,10 +40,10 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
     address = TextEditingController(text: "123 Test Street, City");
     source = TextEditingController(text: "Local Market");
     name = TextEditingController(text: "John Doe");
-     quality = TextEditingController(text: "Soft");
+    quality = TextEditingController(text: "Soft");
     return Scaffold(
       body: Container(
-          height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -59,14 +55,13 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
           ),
         ),
         child: SafeArea(
-          child: 
-          SingleChildScrollView(
+          child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   const SizedBox(height: 70),
+                  const SizedBox(height: 70),
                   SvgPicture.asset(
                     'assets/images/Logo.svg',
                     height: 130,
@@ -93,7 +88,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   if (accounttype == null)
                     ...ListOptions()
                   else
-                  ListSelection(),
+                    ListSelection(),
                   const SizedBox(height: 20),
                   TextButton(
                     onPressed: () {
@@ -174,14 +169,13 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         //   accounttype = Accountypes.WSP;
         // });
         Navigator.push(
-        context, MaterialPageRoute(builder: (context) => WSPHomePage()));
-      
+            context, MaterialPageRoute(builder: (context) => WSPHomePage()));
       }, showarrow: false),
       buildWideButton(context, 'Fulfillment Partner', Colors.transparent, () {
         // PersistentNavBarNavigator.pushNewScreen(
         //     withNavBar: true, context, screen: FPHomePage()); // Trucks());
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => FPHomePage()));  
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => FPHomePage()));
 
         print("Shwo new home page");
 
@@ -200,14 +194,16 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         setState(() {
           accounttype = Accountypes.DRIVER;
         });
-      }, showarrow: false),
-
-            buildWideButton(context, 'User', Colors.transparent, () {
-
           Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Userhomepage()));  
+            context, MaterialPageRoute(builder: (context) => DriverHomepage()));
+      }, showarrow: false),
+      
 
-        print("Shwo new home page");
+      buildWideButton(context, 'User', Colors.transparent, () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Userhomepage()));
+
+ 
 
         // Navigator.push(
         //     context, MaterialPageRoute(builder: (context) => FPHomePage()));
@@ -220,135 +216,133 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
 
   ListSelection() {
     if (accounttype == Accountypes.WSP) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Form(
+      return Column(mainAxisSize: MainAxisSize.min, children: [
+        Form(
             key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextfield(
-                  myController: name,
-                  hintText: "Company Name",
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "Please enter company name";
-                    }
-                    return null;
-                  },
-                ),
-                CustomTextfield(
-                  myController: quality,
-                  hintText: "Water Quality",
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "Please enter water quality";
-                    }
-                    return null;
-                  },
-                ),
-                CustomTextfield(
-                  myController: source,
-                  hintText: "Water source",
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "Please enter water source";
-                    }
-                    return null;
-                  },
-                ),
-                CustomTextfield(
-                  myController: address,
-                  hintText: "Address",
-                  validator: (p0) {
-                    if (p0!.isEmpty) {
-                      return "Please enter Address";
-                    }
-                    return null;
-                  },
-                ),
-                Visibility(
-                  visible: accounttype != null,
-                  child: Center(
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          accounttype = null;
-                        });
-                      },
-                      child: Text(
-                        "Back",
-                        style: GoogleFonts.poppins(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              CustomTextfield(
+                myController: name,
+                hintText: "Company Name",
+                validator: (p0) {
+                  if (p0!.isEmpty) {
+                    return "Please enter company name";
+                  }
+                  return null;
+                },
+              ),
+              CustomTextfield(
+                myController: quality,
+                hintText: "Water Quality",
+                validator: (p0) {
+                  if (p0!.isEmpty) {
+                    return "Please enter water quality";
+                  }
+                  return null;
+                },
+              ),
+              CustomTextfield(
+                myController: source,
+                hintText: "Water source",
+                validator: (p0) {
+                  if (p0!.isEmpty) {
+                    return "Please enter water source";
+                  }
+                  return null;
+                },
+              ),
+              CustomTextfield(
+                myController: address,
+                hintText: "Address",
+                validator: (p0) {
+                  if (p0!.isEmpty) {
+                    return "Please enter Address";
+                  }
+                  return null;
+                },
+              ),
+              Visibility(
+                visible: accounttype != null,
+                child: Center(
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        accounttype = null;
+                      });
+                    },
+                    child: Text(
+                      "Back",
+                      style: GoogleFonts.poppins(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                CustomButton(context, "Sign Up", () async {
-
-                  if (formKey.currentState!.validate()) {
-                    printLog("sign up wsp");
-                    final roleMap = {
-                      Accountypes.WSP: 'WSP',
-                      Accountypes.FP: 'FP',
-                      Accountypes.SP: 'SP',
-                      Accountypes.OP: 'OP',
-                      Accountypes.DRIVER: 'Driver',
-                      Accountypes.USER: 'USER',
-                    };
+              ),
+              CustomButton(context, "Sign Up", () async {
+                if (formKey.currentState!.validate()) {
+                  printLog("sign up wsp");
+                  final roleMap = {
+                    Accountypes.WSP: 'WSP',
+                    Accountypes.FP: 'FP',
+                    Accountypes.SP: 'SP',
+                    Accountypes.OP: 'OP',
+                    Accountypes.DRIVER: 'Driver',
+                    Accountypes.USER: 'USER',
+                  };
 
 // using   big on notation  (O(1) lookup)
-                    String role = roleMap[accounttype] ?? 'OP';
+                  String role = roleMap[accounttype] ?? 'OP';
 
-                    final Map<String, dynamic> body = {
-                      "role": role,
-                      "lon": "36.86618503558242",
-                      "lat": "-1.3299836851363906",
-                      "physicalAddress": address.text.trim(),
-                      "quality": quality.text.trim(),
-                      "waterSource": source.text.trim(),
-                      "companyName": name.text.trim()
-                    };
+                  final Map<String, dynamic> body = {
+                    "role": role,
+                    "lon": "36.86618503558242",
+                    "lat": "-1.3299836851363906",
+                    "physicalAddress": address.text.trim(),
+                    "quality": quality.text.trim(),
+                    "waterSource": source.text.trim(),
+                    "companyName": name.text.trim()
+                  };
 
-     
-          printLog("Login $body");
-          await comms_repo.QueryAPIpost("users/register-service", body,context)
-              .then((value) async {
-            printLog("USer ifo $value");
-            
-            setState(() {
-              saving = false;
-            });
+                  printLog("Login $body");
+                  await comms_repo.QueryAPIpost(
+                          "users/register-service", body, context)
+                      .then((value) async {
+                    printLog("USer ifo $value");
 
-            if (value["success"] ?? false) {
-              printLog("Save current role");
+                    setState(() {
+                      saving = false;
+                    });
 
-              current_role = "WSP";
-              await LocalStorage().setString("current_role", current_role);
+                    if (value["success"] ?? false) {
+                      printLog("Save current role");
 
-              showalert(true, context, "Success",
-                  value["message"] ?? "COmpany Details Saved");
+                      current_role = "WSP";
+                      await LocalStorage()
+                          .setString("current_role", current_role);
 
-              Navigator.of(context).pushReplacement(
+                      showalert(true, context, "Success",
+                          value["message"] ?? "COmpany Details Saved");
 
-                MaterialPageRoute(builder: (ctx) => getHome()),
-              );
-            } else {
-              showalert(false, context, "Failed",
-                  value["message"] ?? "Unable to Login");
-            }
-          });
-        }
-          })]))]);
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (ctx) => getHome()),
+                      );
+                    } else {
+                      showalert(false, context, "Failed",
+                          value["message"] ?? "Unable to Login");
+                    }
+                  });
+                }
+              })
+            ]))
+      ]);
     }
     if (accounttype == Accountypes.FP) {
       return [];
     }
     return [];
-  }}
+  }
+}
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -449,11 +443,3 @@ class LoginScreen extends StatelessWidget {
                         ))))));
   }
 }
-
-
-
-
-
-
-
-

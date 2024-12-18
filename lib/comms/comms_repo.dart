@@ -652,9 +652,9 @@ class CommsRepository {
         return e.response!.data as Map<String, dynamic>;
       }
       if (e.error != null) {
-        printLog("my new e ${e.response}");
-        printLog("my new ersp ${e.response!.data}");
-        return e.response!.data as Map<String, dynamic>;
+        printLog("my new e ${e.error}");
+        printLog("my new ersp ${e.error}");
+        return e.error as Map<String, dynamic>;
       }
       printLog(
           " Error ${e.message.toString()} erro ${e.error}  rsp ${e.response}");

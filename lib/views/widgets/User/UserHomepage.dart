@@ -1,6 +1,8 @@
+import 'package:application/Authentication/OnBoardScreen.dart';
 import 'package:application/views/widgets/Fps/homepage/infocard.dart';
 import 'package:application/views/widgets/Maps/MapScreen.dart';
 import 'package:application/views/widgets/Orders/CreatOrder.dart';
+import 'package:application/views/widgets/User/UserFp.dart';
 import 'package:application/views/widgets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -64,7 +66,7 @@ class _UserhomepageState extends State<Userhomepage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CreateOrderScreen()
+                                  builder: (context) => UserFpDrivers()
                         
                                   //  MapScreen()
                                   ));
@@ -82,6 +84,21 @@ class _UserhomepageState extends State<Userhomepage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CreateOrderScreen()
+                        
+                                  //  MapScreen()
+                                  ));
+
+                        }),
+                          SizedBox(height: 16), 
+                       InfoCard(
+                        title: "Change to Service Provider",
+                        icon: Icons.list,
+                        color: Colors.black,
+                        tapped: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OnBoardScreen()
                         
                                   //  MapScreen()
                                   ));

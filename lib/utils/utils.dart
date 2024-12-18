@@ -16,6 +16,8 @@ import '../Models/user.dart';
 enum PaymentOption { mpesa, cash, card }
 
 String current_role = "SC";
+
+
 void printLog(String s) {
   if (kReleaseMode) return;
   final RegExp pattern = RegExp('.{1,500}'); // 800 is the size of each chunk

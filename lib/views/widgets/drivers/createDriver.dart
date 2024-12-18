@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-//  "firstName": "William",
-//   "lastName": "Waweru",
-//   "phoneNo": "254123876543",
-//   "truckId": 2
+
 
 Future<dynamic> CreateNewDriver(BuildContext context) async {
   return showModalBottomSheet(
@@ -62,6 +59,7 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
         'phoneNo': _phoneNumber.text.replaceAll(",",""),
         'lastName': _lastNameController.text.trim().replaceAll(" ", ""),
         'truckId': 2,
+         "fp_id": 17,
       };
 
       print('Truck Data: $driverData');
@@ -105,7 +103,7 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
                       labelText: 'First name ',
                       hintText: 'Enter  driver first name',
                     ),
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter the First  name';
@@ -120,7 +118,7 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
                       labelText: 'Last name ',
                       hintText: 'Enter  driver\'s last name',
                     ),
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter last name';
