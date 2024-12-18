@@ -1,5 +1,7 @@
+import 'package:application/views/widgets/globals.dart';
+
 import 'signUpPage.dart';
-import 'login.dart';
+import 'pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -9,8 +11,6 @@ import '../Models/user.dart';
 import '../comms/credentials.dart';
 import '../utils/utils.dart';
 import '../utils/widgets.dart';
-import 'widgets/globals.dart';
-import 'widgets/drivers/homepage/DriverHomeScreen.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                                 )
                               : CustomButton(
                                   context,
-                                  "Log in",
+                                  "Login",
                                   () async {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() {
@@ -170,6 +170,8 @@ class _LoginPageState extends State<LoginPage> {
                                               userModel.fromMap(value);
                                           current_user.access_token =
                                               value["accessToken"];
+                                              
+
                                           showalert(
                                             true,
                                             context,

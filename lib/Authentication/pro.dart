@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:application/views/widgets/Fps/homepage/FPHomePage.dart';
+import 'package:application/views/widgets/SC/homepage/SCHomeScreen.dart';
+import 'package:application/views/widgets/User/UserHomepage.dart';
+import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
+import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
+import 'package:application/views/widgets/globals.dart';
+
 import '../Models/user.dart';
-import 'widgets/SC/homepage/SCHomeScreen.dart';
-import 'widgets/WSP/homepage/WSPHomeScreen.dart';
-import 'widgets/drivers/homepage/AppNav.dart';
-import 'widgets/drivers/homepage/DriverHomeScreen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,8 +18,8 @@ import '../Models/AccountTypes.dart';
 import '../comms/credentials.dart';
 import '../utils/utils.dart';
 import '../utils/widgets.dart';
-import 'widgets/globals.dart';
 
+//  renamed file name  from loginpage to pro
 Future<dynamic> LoginPagePop(
     BuildContext context, Accountypes qiuaccountType) async {
   return showModalBottomSheet(
@@ -237,9 +241,9 @@ class _LoginPageInfoState extends State<LoginPageInfo> {
 }
 
 getHome() {
-  if (current_role == "WSP") return WSPHomeScreen();
-  if (current_role == "DR") return DriverHomeScreen();
-  if (current_role == "FP") return DriverHomeScreen();
-
-  return SCHomeScreen();
+  print("-----------role is $current_role");
+  if (current_role == "WSP") return WSPHomePage();
+  if (current_role == "DR") return DriverHomepage();
+  if (current_role == "FP") return FPHomePage();
+  return Userhomepage();
 }

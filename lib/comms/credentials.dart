@@ -8,7 +8,8 @@ import 'package:application/views/state/appbloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart';
 import 'comms_repo.dart';
 
 const FCM_SERVER_KEY =
@@ -26,6 +27,17 @@ CommsRepository comms_repo = new CommsRepository();
 enum SnackBarType { success, error, info, warning }
 
 final formkey = GlobalKey<FormState>();
+// made socket to be global 
+ IO.Socket socket= IO.io(
+        'ws://185.141.63.56:8080',
+        IO.OptionBuilder()
+            .setTransports(['websocket'])
+            .enableAutoConnect()
+            .enableReconnection()
+            .setReconnectionAttempts(10)
+            .setReconnectionDelay(1000)
+            .build(),
+      );
 
 class CustomSnackBar {
   static void show({
