@@ -11,6 +11,8 @@ import '../Models/user.dart';
 import '../comms/credentials.dart';
 import '../utils/utils.dart';
 import '../utils/widgets.dart';
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -28,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    uname = TextEditingController(text: "johndoe@example.com");
-    upass = TextEditingController(text: "dummyPassword123");
+    uname = TextEditingController(text: "test6@gmail.com");
+    upass = TextEditingController(text: "Password123");
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -170,14 +172,28 @@ class _LoginPageState extends State<LoginPage> {
                                               userModel.fromMap(value);
                                           current_user.access_token =
                                               value["accessToken"];
-                                              
+                                        CherryToast.success(
 
-                                          showalert(
-                                            true,
-                                            context,
-                                            "Success",
-                                            value["message"] ?? "Welcome",
-                                          );
+                                            title: Text(
+                                              value["message"] ?? "Welcome",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            backgroundColor:
+                                                Color.fromARGB(255, 51, 83, 142),
+                                            toastPosition:
+                                                Position.top,
+                                            animationDuration:
+                                                Duration(milliseconds: 1000),
+                                            autoDismiss: true,
+                                          ).show(context);
+
+                                          // showalert(
+                                          //   true,
+                                          //   context,
+                                          //   "Success",
+                                          //   value["message"] ?? "Welcome",
+                                          // );
 
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(

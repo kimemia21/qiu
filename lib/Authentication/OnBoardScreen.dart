@@ -1,5 +1,7 @@
+import 'package:application/views/widgets/Fps/RegisterFp.dart';
 import 'package:application/views/widgets/Fps/homepage/FPHomePage.dart';
 import 'package:application/views/widgets/User/UserHomepage.dart';
+import 'package:application/views/widgets/WSP/RegisterWSP.dart';
 import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
 import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
 import 'package:application/views/widgets/globals.dart';
@@ -26,6 +28,8 @@ class OnBoardScreen extends StatefulWidget {
 
 class _OnBoardScreenState extends State<OnBoardScreen> {
   Accountypes? accounttype;
+  _OnBoardScreenState({this.accounttype});
+
   TextEditingController address = TextEditingController();
   TextEditingController source = TextEditingController();
   TextEditingController name = TextEditingController();
@@ -37,6 +41,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // accounttype = Accountypes.WSP;
     address = TextEditingController(text: "123 Test Street, City");
     source = TextEditingController(text: "Local Market");
     name = TextEditingController(text: "John Doe");
@@ -169,7 +174,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         //   accounttype = Accountypes.WSP;
         // });
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => WSPHomePage()));
+            context, MaterialPageRoute(builder: (context) => RegisterWsp()));
       }, showarrow: false),
       buildWideButton(context, 'Fulfillment Partner', Colors.transparent, () {
         // PersistentNavBarNavigator.pushNewScreen(
@@ -180,7 +185,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         print("Shwo new home page");
 
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => FPHomePage()));
+            context, MaterialPageRoute(builder: (context) => RegisterFp()));
         // setState(() {
         //   accounttype = Accountypes.FP;
         // });
@@ -194,23 +199,20 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         setState(() {
           accounttype = Accountypes.DRIVER;
         });
-          Navigator.push(
+        Navigator.push(
             context, MaterialPageRoute(builder: (context) => DriverHomepage()));
       }, showarrow: false),
-      
 
-      buildWideButton(context, 'User', Colors.transparent, () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Userhomepage()));
+      // buildWideButton(context, 'User', Colors.transparent, () {
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => Userhomepage()));
 
- 
-
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => FPHomePage()));
-        // // setState(() {
-        //   accounttype = Accountypes.FP;
-        // });
-      }, showarrow: false),
+      //   // Navigator.push(
+      //   //     context, MaterialPageRoute(builder: (context) => FPHomePage()));
+      //   // // setState(() {
+      //   //   accounttype = Accountypes.FP;
+      //   // });
+      // }, showarrow: false),
     ];
   }
 
@@ -303,6 +305,8 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                     "waterSource": source.text.trim(),
                     "companyName": name.text.trim()
                   };
+
+
 
                   printLog("Login $body");
                   await comms_repo.QueryAPIpost(

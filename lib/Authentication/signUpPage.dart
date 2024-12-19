@@ -1,6 +1,7 @@
-
-
 import 'package:application/Authentication/loginPage.dart';
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
+import 'package:flutter/foundation.dart';
 
 import '../Models/user.dart';
 import '../comms/credentials.dart';
@@ -21,7 +22,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _lastnameController = TextEditingController();
-  final _nameController = TextEditingController();
+  final _firstnameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -32,7 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool logging_on = false;
   @override
   void dispose() {
-    _nameController.dispose();
+    _firstnameController.dispose();
     _lastnameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -42,6 +43,89 @@ class _SignupScreenState extends State<SignupScreen> {
 
   // Email validation regex
   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
+  void _handleLogin() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    setState(() {
+      logging_on = true;
+    });
+
+    var params = {
+      "firstName": _firstnameController.text.trim(),
+      "lastName": _lastnameController.text.trim(),
+      "email": _emailController.text.trim(),
+      "password": _passwordController.text.trim(),
+      "phoneNo": _phoneNumberController.text.trim(),
+      "deviceToken": my_firebase_token
+    };
+
+    await comms_repo.QueryAPIpost("auth/register", params, context)
+        .then((value) async {
+      printLog("USer ifo $value");
+      setState(() {
+        logging_on = false;
+      });
+
+      if (value["success"] ?? false) {
+        // got o login
+
+        current_role = "SC";
+        await LocalStorage().setString("current_role", current_role);
+
+        current_user = userModel(
+          access_token: value["accessToken"],
+          active: true,
+          email: _emailController.text.trim(),
+          first_name: _firstnameController.text.trim(),
+          last_name: _lastnameController.text.trim(),
+          user_name: _firstnameController.text.trim(),
+        );
+
+        CherryToast.success(
+          title: Text(
+            value["message"] ?? "User Created Successfully",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Color.fromARGB(255, 51, 83, 142),
+          toastPosition: Position.top,
+          animationDuration: Duration(milliseconds: 1000),
+          autoDismiss: true,
+        ).show(context);
+
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      } else {
+        showalert(false, context, "Failed",
+            value["message"] ?? "Unable to Register"); // token generated
+        //   if ((value["otp"] ?? false)) {
+        // return Get.offAll(TwoStepVerify(
+        //     username: nameController.text,
+        //     password: passwordController.text,
+        //   //     sentto: value["sentto"]));
+        // } else {
+        //   // errortext =
+        //   //     'Sorry, ${value["msg"] ?? value["message"]}';
+        // }
+
+        // StatusAlert.show(
+        //   context,
+        //   duration: Duration(seconds: 2),
+        //   title: 'Failed',
+        //   subtitle: 'Sorry ${value["msg"] ?? value["message"]} ',
+        //   configuration: IconConfiguration(icon: Icons.warning),
+        //   maxWidth: 320,
+        // );
+      }
+    });
+
+    // Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) =>
+    //             HomeScreen()));
+  }
 
   // Reusable function to create text fields
   Widget _buildTextField({
@@ -133,16 +217,15 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _lastnameController = TextEditingController(text: "Doe");
-    final _nameController = TextEditingController(text: "John");
-    // TextEditingController _emailController = TextEditingController();
+    if (kDebugMode) {
+      _firstnameController.text = "meshak";
+      _lastnameController.text = "47";
+      _emailController.text = "test6@gmail.com";
 
-    // text: "johndoe@example.com");
-    TextEditingController _passwordController =
-        TextEditingController(text: "dummyPassword123");
-    final _confirmPasswordController =
-        TextEditingController(text: "dummyPassword123");
-    _phoneNumberController.text = "+254769922990";
+      _passwordController.text = "Password123";
+      _confirmPasswordController.text = "Password123";
+      _phoneNumberController.text = "+254769922994";
+    }
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -193,7 +276,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Column(
                           children: [
                             _buildTextField(
-                              controller: _nameController,
+                              controller: _firstnameController,
                               label: 'First Name',
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -287,148 +370,62 @@ class _SignupScreenState extends State<SignupScreen> {
                               },
                             ),
                             SizedBox(height: 30),
-                            Container(
-                              width: double.infinity,
-                              height: 55,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  if (!_formKey.currentState!.validate()) {
-                                    return;
-                                  }
-                                  setState(() {
-                                    logging_on = true;
-                                  });
-
-                                  // final Map<String, dynamic> body = {
-                                  //   "fullname": _nameController.text.trim(),
-                                  //   "email": _emailController.text.trim(),
-                                  //   "phoneNumber":
-                                  //       _phoneNumberController.text.trim(),
-                                  //   "password": _passwordController.text.trim(),
-                                  // };
-
-                                  var params = {
-                                    "firstName": _nameController.text.trim(),
-                                    "lastName": _lastnameController.text.trim(),
-                                    "email": _emailController.text.trim(),
-                                    "password": _passwordController.text.trim(),
-                                    "phoneNo":
-                                        _phoneNumberController.text.trim(),
-                                    "deviceToken": my_firebase_token
-                                  };
-
-                                  await comms_repo.QueryAPIpost(
-                                          "auth/register", params, context)
-                                      .then((value) async {
-                                    printLog("USer ifo $value");
-                                    setState(() {
-                                      logging_on = false;
-                                    });
-
-                                    if (value["success"] ?? false) {
-                                      // got o login
-
-                                      current_role = "SC";
-                                      await LocalStorage().setString(
-                                          "current_role", current_role);
-
-                                      current_user = userModel(
-                                        access_token: value["accessToken"],
-                                        active: true,
-                                        email: _emailController.text.trim(),
-                                        first_name: _nameController.text.trim(),
-                                        last_name:
-                                            _lastnameController.text.trim(),
-                                        user_name: _nameController.text.trim(),
-                                      );
-
-                                      showalert(
-                                          true,
-                                          context,
-                                          "Success",
-                                          value["message"] ??
-                                              "User Created Successfully");
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LoginPage()));
-                                    } else {
-                                      showalert(
-                                          false,
-                                          context,
-                                          "Failed",
-                                          value["message"] ??
-                                              "Unable to Register"); // token generated
-                                      //   if ((value["otp"] ?? false)) {
-                                      // return Get.offAll(TwoStepVerify(
-                                      //     username: nameController.text,
-                                      //     password: passwordController.text,
-                                      //   //     sentto: value["sentto"]));
-                                      // } else {
-                                      //   // errortext =
-                                      //   //     'Sorry, ${value["msg"] ?? value["message"]}';
-                                      // }
-
-                                      // StatusAlert.show(
-                                      //   context,
-                                      //   duration: Duration(seconds: 2),
-                                      //   title: 'Failed',
-                                      //   subtitle: 'Sorry ${value["msg"] ?? value["message"]} ',
-                                      //   configuration: IconConfiguration(icon: Icons.warning),
-                                      //   maxWidth: 320,
-                                      // );
-                                    }
-                                  });
-
-                                  // Navigator.pushReplacement(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             HomeScreen()));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Color(0xFF7E64D4),
-                                  padding: EdgeInsets.zero,
-                                  elevation: 5,
-                                  shadowColor: Colors.black.withOpacity(0.3),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    gradient: LinearGradient(
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                      colors: [
-                                        Colors.white,
-                                        Colors.white.withOpacity(0.9),
-                                      ],
+                            logging_on
+                                ? SpinKitThreeBounce(
+                                    color: Colors.blue,
+                                  )
+                                : Container(
+                                    width: double.infinity,
+                                    height: 55,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        _handleLogin();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Color(0xFF7E64D4),
+                                        padding: EdgeInsets.zero,
+                                        elevation: 5,
+                                        shadowColor:
+                                            Colors.black.withOpacity(0.3),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            colors: [
+                                              Colors.white,
+                                              Colors.white.withOpacity(0.9),
+                                            ],
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: logging_on
+                                              ? SpinKitThreeBounce(
+                                                  color: Colors.green,
+                                                )
+                                              : Text(
+                                                  'Sign Up',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF7E64D4),
+                                                    fontSize:
+                                                        18, // Slightly larger text
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing:
+                                                        1.2, // Spacing between letters
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  child: Center(
-                                    child: logging_on
-                                        ? SpinKitThreeBounce(
-                                            color: Colors.green,
-                                          )
-                                        : Text(
-                                            'Sign Up',
-                                            style: TextStyle(
-                                              color: Color(0xFF7E64D4),
-                                              fontSize:
-                                                  18, // Slightly larger text
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing:
-                                                  1.2, // Spacing between letters
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ),
                             SizedBox(height: 20),
                             TextButton(
                               onPressed: () {
