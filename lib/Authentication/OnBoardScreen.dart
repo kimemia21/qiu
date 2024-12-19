@@ -1,3 +1,4 @@
+import 'package:application/views/widgets/Fps/RegisterFp.dart';
 import 'package:application/views/widgets/Fps/homepage/FPHomePage.dart';
 import 'package:application/views/widgets/User/UserHomepage.dart';
 import 'package:application/views/widgets/WSP/RegisterWSP.dart';
@@ -184,7 +185,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         print("Shwo new home page");
 
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => FPHomePage()));
+            context, MaterialPageRoute(builder: (context) => RegisterFp()));
         // setState(() {
         //   accounttype = Accountypes.FP;
         // });

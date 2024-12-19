@@ -220,11 +220,11 @@ class _SignupScreenState extends State<SignupScreen> {
     if (kDebugMode) {
       _firstnameController.text = "meshak";
       _lastnameController.text = "47";
-      _emailController.text = "test5@gmail.com";
+      _emailController.text = "test6@gmail.com";
 
       _passwordController.text = "Password123";
       _confirmPasswordController.text = "Password123";
-      _phoneNumberController.text = "+254769922993";
+      _phoneNumberController.text = "+254769922994";
     }
     return Scaffold(
       body: Container(

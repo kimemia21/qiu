@@ -1,11 +1,14 @@
+import 'package:application/Authentication/loginPage.dart';
 import 'package:application/Models/AccountTypes.dart';
 import 'package:application/Models/OrderModel.dart';
 import 'package:application/Models/Tarrifs.dart';
 import 'package:application/comms/Req.dart';
 import 'package:application/comms/credentials.dart';
+import 'package:application/utils/utils.dart';
 import 'package:application/views/widgets/Orders/orders.dart';
 import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
 import 'package:application/views/widgets/WSP/homepage/wsptarrif.dart';
+import 'package:application/views/widgets/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,6 +65,37 @@ class _WSPHomePageState extends State<WSPHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: appGradient[0],
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+          'Water Utility Service Provider',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'logout') {
+                //  just pushing the user to the login screen  but no server side logout is happening
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+                // AppRequest.logout();
+              } else if (value == 'refresh') {
+                refreshTarrifs();
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              _buildPopupMenuItem('refresh', 'Refresh', Icons.refresh),
+              _buildPopupMenuItem('logout', 'Logout', Icons.logout,
+                  isDestructive: true),
+            ],
+          ),
+        ],
+      ),
       backgroundColor: Color(0xFF7E64D4),
       body: SafeArea(
         child: Container(
@@ -150,7 +184,6 @@ class _WSPHomePageState extends State<WSPHomePage> {
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     await showWSPModals(
-                                      
                                       context: context,
                                       capcityController:
                                           TextEditingController(),

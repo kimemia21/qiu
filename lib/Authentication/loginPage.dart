@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    uname = TextEditingController(text: "test5@gmail.com");
+    uname = TextEditingController(text: "test6@gmail.com");
     upass = TextEditingController(text: "Password123");
 
     return Scaffold(
