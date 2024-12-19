@@ -18,8 +18,8 @@ import '../Models/Location.dart';
 import '../Models/OrderModel.dart';
 
 class AppRequest {
-  static Future<List<OrderModel>> fetchOrders(bool isFp) async{
-    final uri ="${base_url}${isFp?'fp/wsp-orders':' wsp/orders'}";
+  static Future<List<OrderModel>> fetchOrders(bool isFp) async {
+    final uri = "${isFp ?'fp/wsp-orders':'wsp/orders'}";
 
     final Map<String, dynamic> wspOrders = await comms_repo.queryApi(uri);
     if (wspOrders["success"]) {
@@ -27,10 +27,10 @@ class AppRequest {
 
       return data.map((e) => OrderModel.fromJson(e)).toList();
     } else {
+      print("######################wsp orders error ${wspOrders["message"]}######################");
       throw Exception(wspOrders["message"]);
     }
   }
-
 
 //  Drivers request
   static Future<List<Drivermodel>> fetchDrivers(
@@ -111,7 +111,7 @@ class AppRequest {
       print(tarrifs["data"]);
 
       if (tarrifs["data"] == null) {
-        throw Exception(tarrifs["message"] );
+        throw Exception(tarrifs["message"]);
       }
 
       final data = tarrifs['data'] as List<dynamic>;
@@ -123,8 +123,6 @@ class AppRequest {
       throw Exception(tarrifs["message"]);
     }
   }
-
-  
 
   static Future<List<OrderModel>> fetchWSP_Orders() async {
     printLog("\n\nfetchWSP_Orders called");
@@ -149,8 +147,8 @@ class AppRequest {
     final jsonString = jsonEncode(data);
     print("changing global loading state to true");
     blog.changeLoading(true);
-    final Map<String, dynamic> signup = await comms_repo
-        .QueryAPIpost('${base_url}users/register-service', jsonString,context);
+    final Map<String, dynamic> signup = await comms_repo.QueryAPIpost(
+        '${base_url}users/register-service', jsonString, context);
 
     print("changing global loading state to false");
     blog.changeLoading(false);

@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:application/comms/comms_repo.dart';
 import 'package:application/comms/credentials.dart';
+import 'package:application/utils/utils.dart';
 import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
 import 'package:application/views/widgets/globals.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -41,30 +42,17 @@ class _RegisterWspState extends State<RegisterWsp> {
   final TextEditingController _companyName = TextEditingController();
 
   Map<String, dynamic> waterSource = {
-    "Borehole": "Borehole",
-    "Well": "Well",
-    "Spring": "Spring",
-    "Stream": "Stream",
-    "River": "River",
-    "Lake": "Lake",
-    "Pond": "Pond",
-    "Other": "Other",
+    "Local Market": "Local Market",
+  
   };
   Map<String, dynamic> waterQuality = {
-    "fresh": "fresh",
+    "Soft": "Soft",
+    "Hard":"Hard"
   };
   String? selectedWaterSource;
   String? selectedWaterQuality;
-  List<Map<String, dynamic>> locationOptions = [
-    {
-      "Home": "50.11466 Longitude: -94.522643",
-      "description": "HSE number 3568",
-    },
-    {
-      "Office": " 50.11466 Longitude: -94.522643",
-      "description": "HSE number 3568",
-    },
-  ];
+
+
   String? selectedLocation;
 
   // Default camera position (Nairobi)
@@ -173,6 +161,81 @@ class _RegisterWspState extends State<RegisterWsp> {
         ),
       ),
     );
+  }
+
+  void _handleCreateWsp() async {
+
+
+
+
+
+
+    // final Map<String, dynamic> body = {
+    //   "role": "WSP",
+    //   "lat": lat.toString(),
+    //   "log": lng.toString(),
+    //   "physicalAddress": "123 Test Street, City",
+    //   "quality": "Soft",
+    //   "waterSource": selectedWaterSource,
+    //   "companyName": "John Doe"
+    // };
+
+               
+
+                 
+
+                     
+
+   
+  
+
+    // await comms_repo.QueryAPIpost("users/register-service", body, context)
+      final Map<String, dynamic> body = {
+                    "role": "WSP",
+                    "lon": lng.toString(),
+                    "lat": lng.toString(),
+                    "physicalAddress": locationName!.toString(),
+                    "quality": selectedWaterQuality,
+                    "waterSource": selectedWaterSource,
+                    "companyName":_companyName.text.trim()
+                  };
+
+
+
+                  printLog("Login $body");
+                  await comms_repo.QueryAPIpost(
+                          "users/register-service", body, context)
+        .then((value) async {
+      if (value["success"]) {
+        current_role = "WSP";
+        await LocalStorage().setString("current_role", current_role);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WSPHomePage(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(value["message"] ?? "An error occurred"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+
+      print(value);
+    });
+
+    // print(Provider.of<Appbloc>(context,
+    //         listen: false)
+    //     .location);
+
+    // PersistentNavBarNavigator.pushNewScreen(
+    //   context,
+    //   screen: ConfirmOrder(),
+    //   withNavBar: true,
+    // );
   }
 
   @override
@@ -420,8 +483,7 @@ class _RegisterWspState extends State<RegisterWsp> {
                                       focusedErrorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide: const BorderSide(
-                                          color: Colors
-                                              .red, 
+                                          color: Colors.red,
                                           width: 2.0,
                                         ),
                                       ),
@@ -509,58 +571,8 @@ class _RegisterWspState extends State<RegisterWsp> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 16),
                                         child: ElevatedButton(
-                                          onPressed: () {
-                                            final Map<String, dynamic> body = {
-                                              "role": "WSP",
-                                              "lat": lat.toString(),
-                                              "log": lng.toString(),
-                                              "physicalAddress": locationName.toString(),
-                                              "quality": selectedWaterQuality,
-                                              "waterSource":
-                                                  selectedWaterSource,
-                                              "companyName":
-                                                  _companyName.text.trim()
-                                            };
-
-                                            CommsRepository()
-                                                .QueryAPIpost(
-                                                    "users/register-service",
-                                                    jsonEncode(body),
-                                                    context)
-                                                .then((value) {
-                                              if (value["status"] ==
-                                                  "success") {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        WSPHomePage(),
-                                                  ),
-                                                );
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(value[
-                                                            "message"] ??
-                                                        "An error occurred"),
-                                                    backgroundColor: Colors.red,
-                                                  ),
-                                                );
-                                              }
-
-                                              print(value);
-                                            });
-
-                                            // print(Provider.of<Appbloc>(context,
-                                            //         listen: false)
-                                            //     .location);
-
-                                            // PersistentNavBarNavigator.pushNewScreen(
-                                            //   context,
-                                            //   screen: ConfirmOrder(),
-                                            //   withNavBar: true,
-                                            // );
+                                          onPressed: () async {
+                                            _handleCreateWsp();
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.blue,

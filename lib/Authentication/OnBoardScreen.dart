@@ -27,6 +27,8 @@ class OnBoardScreen extends StatefulWidget {
 
 class _OnBoardScreenState extends State<OnBoardScreen> {
   Accountypes? accounttype;
+  _OnBoardScreenState({this.accounttype});
+
   TextEditingController address = TextEditingController();
   TextEditingController source = TextEditingController();
   TextEditingController name = TextEditingController();
@@ -38,6 +40,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // accounttype = Accountypes.WSP;
     address = TextEditingController(text: "123 Test Street, City");
     source = TextEditingController(text: "Local Market");
     name = TextEditingController(text: "John Doe");
@@ -195,16 +198,13 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         setState(() {
           accounttype = Accountypes.DRIVER;
         });
-          Navigator.push(
+        Navigator.push(
             context, MaterialPageRoute(builder: (context) => DriverHomepage()));
       }, showarrow: false),
-      
 
       // buildWideButton(context, 'User', Colors.transparent, () {
       //   Navigator.push(
       //       context, MaterialPageRoute(builder: (context) => Userhomepage()));
-
- 
 
       //   // Navigator.push(
       //   //     context, MaterialPageRoute(builder: (context) => FPHomePage()));
@@ -304,6 +304,8 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                     "waterSource": source.text.trim(),
                     "companyName": name.text.trim()
                   };
+
+
 
                   printLog("Login $body");
                   await comms_repo.QueryAPIpost(
