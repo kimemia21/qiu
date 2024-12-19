@@ -1,3 +1,4 @@
+import 'package:application/Authentication/Splash.dart';
 import 'package:application/Authentication/signinUpPage.dart';
 import 'package:application/comms/notifications.dart';
 import 'package:application/firebase_options.dart';
@@ -53,15 +54,17 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [ChangeNotifierProvider(create: (context) => Appbloc())],
         child: MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Qiu',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               useMaterial3: true,
             ),
-            home: SignUpScreen()) // SplashScreen()),
+            home: SplashScreen())
+            // SignUpScreen()) // SplashScreen()),
         );
   }
 }
+
 
 class DynamicInputScreen extends StatefulWidget {
   @override

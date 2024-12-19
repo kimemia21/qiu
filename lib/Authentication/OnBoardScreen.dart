@@ -1,5 +1,6 @@
 import 'package:application/views/widgets/Fps/homepage/FPHomePage.dart';
 import 'package:application/views/widgets/User/UserHomepage.dart';
+import 'package:application/views/widgets/WSP/RegisterWSP.dart';
 import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
 import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
 import 'package:application/views/widgets/globals.dart';
@@ -169,7 +170,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
         //   accounttype = Accountypes.WSP;
         // });
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => WSPHomePage()));
+            context, MaterialPageRoute(builder: (context) => RegisterWsp()));
       }, showarrow: false),
       buildWideButton(context, 'Fulfillment Partner', Colors.transparent, () {
         // PersistentNavBarNavigator.pushNewScreen(
@@ -199,18 +200,18 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
       }, showarrow: false),
       
 
-      buildWideButton(context, 'User', Colors.transparent, () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Userhomepage()));
+      // buildWideButton(context, 'User', Colors.transparent, () {
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => Userhomepage()));
 
  
 
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => FPHomePage()));
-        // // setState(() {
-        //   accounttype = Accountypes.FP;
-        // });
-      }, showarrow: false),
+      //   // Navigator.push(
+      //   //     context, MaterialPageRoute(builder: (context) => FPHomePage()));
+      //   // // setState(() {
+      //   //   accounttype = Accountypes.FP;
+      //   // });
+      // }, showarrow: false),
     ];
   }
 

@@ -76,8 +76,8 @@ class _UserhomepageState extends State<Userhomepage> {
                   
                     SizedBox(height: 16), // Add space between buttons
                            InfoCard(
-                        title: "Account",
-                        icon: Icons.account_circle,
+                        title: "Index Wallet",
+                        icon: Icons.monetization_on,
                         color: Colors.black,
                         tapped: () {
                           Navigator.push(

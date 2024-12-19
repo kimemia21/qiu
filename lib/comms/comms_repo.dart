@@ -24,7 +24,7 @@ class CommsRepository {
     sendTimeout: const Duration(seconds: 30),
     responseType: ResponseType.json,
     contentType: ContentType.json.toString(),
-  ));
+     ));
   final _baseUrl = base_url;
 
   // Stream<RequestsModel> getrequests({required userid}) async* {
@@ -605,21 +605,27 @@ class CommsRepository {
 
     Appbloc blog = context.read<Appbloc>();
 
+
     try {
+     
       blog.changeLoading(true);
       if (!(endpoint == "login" ||
           endpoint == 'users/register-service' ||
           endpoint == "register" ||
           endpoint == "otp")) {
         _dio.options.headers['Authorization'] =
-            'Bearer ${current_user!.access_token!}';
+          'Bearer ${current_user.access_token}';
       } else {
-        printLog("Hit $base_url to $endpoint $jsonstring");
+        _dio.options.headers['Authorization'] =
+          'Bearer ${current_user.access_token}';
+
+        printLog("Hit $base_url to $endpoint $jsonstring, ${current_user.access_token}");
       }
 
       printLog("Hit $base_url to $endpoint $jsonstring");
 
-      Response response = await _dio.post("$endpoint", data: jsonstring);
+      Response response = await _dio.post("$endpoint", data: jsonstring,);
+
       printLog("Response sttaus code ${response.statusCode}");
 
       blog.changeLoading(false);

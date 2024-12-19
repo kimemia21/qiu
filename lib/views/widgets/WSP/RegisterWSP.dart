@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:application/comms/comms_repo.dart';
 import 'package:application/comms/credentials.dart';
+import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
 import 'package:application/views/widgets/globals.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../state/appbloc.dart';
@@ -20,21 +24,37 @@ import 'package:provider/provider.dart';
 
 import '../../../comms/Req.dart';
 
-class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+class RegisterWsp extends StatefulWidget {
+  const RegisterWsp({Key? key}) : super(key: key);
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<RegisterWsp> createState() => _RegisterWspState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _RegisterWspState extends State<RegisterWsp> {
   GoogleMapController? mapController;
   LatLng? currentLocation;
   bool isLoading = true;
   final TextEditingController searchController = TextEditingController();
   bool _selectedCurrentLocation = false;
   bool _isSearchExpanded = false;
+  final TextEditingController _companyName = TextEditingController();
 
+  Map<String, dynamic> waterSource = {
+    "Borehole": "Borehole",
+    "Well": "Well",
+    "Spring": "Spring",
+    "Stream": "Stream",
+    "River": "River",
+    "Lake": "Lake",
+    "Pond": "Pond",
+    "Other": "Other",
+  };
+  Map<String, dynamic> waterQuality = {
+    "fresh": "fresh",
+  };
+  String? selectedWaterSource;
+  String? selectedWaterQuality;
   List<Map<String, dynamic>> locationOptions = [
     {
       "Home": "50.11466 Longitude: -94.522643",
@@ -46,7 +66,6 @@ class _MapScreenState extends State<MapScreen> {
     },
   ];
   String? selectedLocation;
-
 
   // Default camera position (Nairobi)
   final LatLng defaultLocation = const LatLng(-1.2921, 36.8219);
@@ -158,11 +177,15 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      selectedWaterSource = waterSource.keys.first;
+      selectedWaterQuality = waterQuality.keys.first;
+    });
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Delivery Location",
+          "Register Wsp Details",
           style: GoogleFonts.poppins(
               color: Colors.white, fontWeight: FontWeight.w400),
         ),
@@ -222,7 +245,7 @@ class _MapScreenState extends State<MapScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  'Set delivery location',
+                                  'Set WSP Location',
                                   style: Theme.of(context).textTheme.titleLarge,
                                   textAlign: TextAlign.center,
                                 ),
@@ -259,187 +282,8 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 16),
 
-                                // FutureBuilder
-                                Flexible(
-                                  child: FutureBuilder<List<LocationModel>>(
-                                    future: AppRequest.fetchLocations(),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<List<LocationModel>>
-                                            snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return const Center(
-                                            child: CircularProgressIndicator());
-                                      } else if (snapshot.hasError) {
-                                        return Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(Icons.error_outline,
-                                                  color: Colors.red, size: 48),
-                                              const SizedBox(height: 16),
-                                              Text(
-                                                'Error: ${snapshot.error}',
-                                                style: TextStyle(
-                                                    color: Colors.red[700]),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      } else if (!snapshot.hasData ||
-                                          snapshot.data!.isEmpty) {
-                                        return const Center(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(Icons.location_off,
-                                                  color: Colors.grey, size: 48),
-                                              SizedBox(height: 16),
-                                              Text(
-                                                'No saved locations available',
-                                                style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      } else {
-                                        final data = snapshot.data!;
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 16, vertical: 8),
-                                              child: Text(
-                                                'Saved Places',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black87,
-                                                ),
-                                              ),
-                                            ),
-                                            ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: data.length,
-                                              itemBuilder: (context, index) {
-                                                final location = data[index];
-                                                return InkWell(
-                                                  onTap: () {
-                                                    _moveToLocation(
-                                                        location.lat,
-                                                        location.lng);
-
-                                                    setState(() {
-                                                      selectedLocation =
-                                                          location.place;
-                                                      _selectedCurrentLocation =
-                                                          false;
-                                                    });
-
-                                                    context
-                                                        .read<Appbloc>()
-                                                        .changeLocation(
-                                                            location);
-                                                  },
-                                                  child: Container(
-                                                    margin: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 16,
-                                                      vertical: 4,
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            16),
-                                                    decoration: BoxDecoration(
-                                                      color: !_selectedCurrentLocation &&
-                                                              selectedLocation ==
-                                                                  location.place
-                                                          ? Colors.blue
-                                                              .withOpacity(0.1)
-                                                          : Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      border: Border.all(
-                                                        color: !_selectedCurrentLocation &&
-                                                                selectedLocation ==
-                                                                    location
-                                                                        .place
-                                                            ? Colors.blue
-                                                                .withOpacity(
-                                                                    0.3)
-                                                            : Colors.grey
-                                                                .withOpacity(
-                                                                    0.2),
-                                                      ),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.05),
-                                                          blurRadius: 8,
-                                                          offset: const Offset(
-                                                              0, 2),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.location_on,
-                                                          color: !_selectedCurrentLocation &&
-                                                                  selectedLocation ==
-                                                                      location
-                                                                          .place
-                                                              ? Colors.blue
-                                                              : Colors.grey,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 12),
-                                                        Expanded(
-                                                          child: Text(
-                                                            location.place,
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontWeight: !_selectedCurrentLocation &&
-                                                                      selectedLocation ==
-                                                                          location
-                                                                              .place
-                                                                  ? FontWeight
-                                                                      .w600
-                                                                  : FontWeight
-                                                                      .normal,
-                                                              color: Colors
-                                                                  .black87,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 10),
                                 Container(
                                   margin: const EdgeInsets.symmetric(
                                       horizontal: 16),
@@ -536,59 +380,220 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                   ),
                                 ),
-
-                                const SizedBox(height: 24),
-
-// Proceed Button
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // final Map<String, dynamic> body = {
-                                      //   "lat": lat,
-                                      //   "lng": lng,
-                                      //   "locationName": locationName,
-                                      // };
-                                      // print(Provider.of<Appbloc>(context,
-                                      //         listen: false)
-                                      //     .location);
-
-                                      PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        screen: ConfirmOrder(),
-                                        withNavBar: true,
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue,
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16),
-                                      shape: RoundedRectangleBorder(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    controller: _companyName,
+                                    decoration: InputDecoration(
+                                      labelText: "Enter Company name",
+                                      hintText: "Company name......",
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 12),
+                                      enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      elevation: 2,
-                                      shadowColor: Colors.blue.withOpacity(0.3),
-                                    ),
-                                    child: const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'PROCEED TO ORDER',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 0.5,
-                                          ),
+                                        borderSide: const BorderSide(
+                                          color: Colors
+                                              .blueAccent, // Border color when not focused
+                                          width: 2.5, // Border thickness
                                         ),
-                                        SizedBox(width: 8),
-                                        Icon(Icons.arrow_forward, size: 20),
-                                      ],
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: Colors
+                                              .deepPurple, // Border color when focused
+                                          width:
+                                              2.0, // Border thickness when focused
+                                        ),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: Colors
+                                              .redAccent, // Border color when error occurs
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(
+                                          color: Colors
+                                              .red, 
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black87,
                                     ),
                                   ),
                                 ),
+
+                                const SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: DropdownMenu<String>(
+                                    hintText: "Select water type",
+                                    menuStyle: MenuStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                      elevation: MaterialStateProperty.all(
+                                          8), // Menu shadow
+                                    ),
+                                    inputDecorationTheme:
+                                        const InputDecorationTheme(
+                                      contentPadding: EdgeInsets.all(12),
+                                      border: InputBorder
+                                          .none, // Remove default input border
+                                    ),
+                                    initialSelection: selectedWaterSource,
+                                    dropdownMenuEntries: waterSource.entries
+                                        .map((entry) =>
+                                            DropdownMenuEntry<String>(
+                                              value: entry.value,
+                                              label: entry.key,
+                                            ))
+                                        .toList(),
+                                    onSelected: (value) {
+                                      setState(() {
+                                        selectedWaterSource = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: DropdownMenu<String>(
+                                    hintText: "Select water quality",
+                                    menuStyle: MenuStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                      elevation: MaterialStateProperty.all(
+                                          8), // Menu shadow
+                                    ),
+                                    inputDecorationTheme:
+                                        const InputDecorationTheme(
+                                      contentPadding: EdgeInsets.all(12),
+                                      border: InputBorder
+                                          .none, // Remove default input border
+                                    ),
+                                    initialSelection: selectedWaterQuality,
+                                    dropdownMenuEntries: waterQuality.entries
+                                        .map((entry) =>
+                                            DropdownMenuEntry<String>(
+                                              value: entry.value,
+                                              label: entry.key,
+                                            ))
+                                        .toList(),
+                                    onSelected: (value) {
+                                      setState(() {
+                                        selectedWaterQuality = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+
+// Proceed Button
+                                context.watch<Appbloc>().isLoading
+                                    ? SpinKitThreeBounce(
+                                        color: Colors.blue,
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            final Map<String, dynamic> body = {
+                                              "role": "WSP",
+                                              "lat": lat.toString(),
+                                              "log": lng.toString(),
+                                              "physicalAddress": locationName.toString(),
+                                              "quality": selectedWaterQuality,
+                                              "waterSource":
+                                                  selectedWaterSource,
+                                              "companyName":
+                                                  _companyName.text.trim()
+                                            };
+
+                                            CommsRepository()
+                                                .QueryAPIpost(
+                                                    "users/register-service",
+                                                    jsonEncode(body),
+                                                    context)
+                                                .then((value) {
+                                              if (value["status"] ==
+                                                  "success") {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WSPHomePage(),
+                                                  ),
+                                                );
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(value[
+                                                            "message"] ??
+                                                        "An error occurred"),
+                                                    backgroundColor: Colors.red,
+                                                  ),
+                                                );
+                                              }
+
+                                              print(value);
+                                            });
+
+                                            // print(Provider.of<Appbloc>(context,
+                                            //         listen: false)
+                                            //     .location);
+
+                                            // PersistentNavBarNavigator.pushNewScreen(
+                                            //   context,
+                                            //   screen: ConfirmOrder(),
+                                            //   withNavBar: true,
+                                            // );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.blue,
+                                            foregroundColor: Colors.white,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            elevation: 2,
+                                            shadowColor:
+                                                Colors.blue.withOpacity(0.3),
+                                          ),
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Register',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.5,
+                                                ),
+                                              ),
+                                              SizedBox(width: 8),
+                                              Icon(Icons.arrow_forward,
+                                                  size: 20),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
@@ -636,7 +641,7 @@ class _MapScreenState extends State<MapScreen> {
                           textEditingController: searchController,
                           googleAPIKey: googleMapsApiKey,
                           inputDecoration: InputDecoration(
-                            hintText: 'Search location',
+                            hintText: 'Search Location',
                             filled: true,
                             fillColor: Colors.grey[100],
                             border: OutlineInputBorder(
