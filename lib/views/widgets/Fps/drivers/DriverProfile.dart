@@ -155,11 +155,11 @@ class _DriverProfileState extends State<DriverProfile> {
           _buildDetailRow(
             icon: Icons.access_time,
             title: 'Availability',
-            value: driverModel.avaiable == 1 ? "Available" : "Unavailable",
-            iconColor: driverModel.avaiable == 1
+            value: driverModel.available == 1 ? "Available" : "Unavailable",
+            iconColor: driverModel.available == 1
                 ? Colors.green.shade700
                 : Colors.red.shade700,
-            backgroundColor: driverModel.avaiable == 1
+            backgroundColor: driverModel.available == 1
                 ? Colors.green.shade50
                 : Colors.red.shade50,
           ),

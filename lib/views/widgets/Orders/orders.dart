@@ -1,5 +1,7 @@
 import 'package:application/comms/credentials.dart';
 import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
+import 'package:cherry_toast/cherry_toast.dart';
+import 'package:cherry_toast/resources/arrays.dart';
 
 import '../../../Models/OrderModel.dart';
 import '../globals.dart';
@@ -160,7 +162,7 @@ class OrderStatusWidget extends StatelessWidget {
     return _buildOrderCard(context);
   }
 
-  Widget _buildOrderCard( context) {
+  Widget _buildOrderCard(context) {
     return Container(
       margin: EdgeInsets.all(5),
       padding: const EdgeInsets.all(20),
@@ -193,7 +195,7 @@ class OrderStatusWidget extends StatelessWidget {
           const SizedBox(height: 25),
           _buildOrderDetails(),
           const SizedBox(height: 20),
-          _fulfilledButton(orderId: model.orderId, context:context ),
+          _fulfilledButton(orderId: model.orderId, context: context),
         ],
       ),
     );
@@ -287,13 +289,21 @@ class OrderStatusWidget extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          final jsonString = {
+          final Map<String, dynamic> jsonString = {
             "order_id": orderId,
           };
-          comms_repo.QueryAPIPatch("wsp/orders/fulfill", jsonString, context)
+          comms_repo.QueryAPIpost("wsp/orders/fulfill", jsonString, context)
               .then((value) {
+            print("##$value");
+
             if (value["success"]) {
               print("fulfilled");
+            } else {
+              CherryToast.error(title: Text("Order error"),
+              toastPosition: Position.top,
+              toastDuration: Duration(seconds: 5),
+              description: Text("${value["message"]}"),
+              ).show(context);
             }
             print(value);
           });

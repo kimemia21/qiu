@@ -33,17 +33,20 @@ class OrderModel {
  
 
     return OrderModel(
-      orderStatus: json['orderStatus'??"status"] as String,
-      driverName: details['driverName'] as String ??null,
-      orderId: json['orderId'] as String,
-      orderCapacity: int.parse(details['orderCapacity'??"capacity"] as String),
-      orderAmount: double.parse(details['orderAmount'] as String),
-      orderDate: DateTime.parse(details['orderDate'] ??null),
-      paymentStatus: details['paymentStatus'] as String,
-      wspCompanyName: details['wspCompanyName'] as String ??null,
-      wpWaterSrc: details['wpWaterSrc'] as String ??null,
-      wspAdrress: details['wspAdrress'] as String ??null,
-    );
+  orderStatus: (json['orderStatus'] ?? json['status'] ?? "") as String,
+  driverName: details['driverName']?.toString() ?? "",
+  orderId: json['orderId']?.toString() ?? "",
+  orderCapacity: int.tryParse(details['orderCapacity'] ?? details['capacity'] ?? "") ?? 0,
+  orderAmount: double.tryParse(details['orderAmount']?.toString() ?? "") ?? 0.0,
+  orderDate: details['orderDate'] != null 
+      ? DateTime.tryParse(details['orderDate']) 
+      : null,
+  paymentStatus: details['paymentStatus']?.toString() ?? "",
+  wspCompanyName: details['wspCompanyName']?.toString() ?? "",
+  wpWaterSrc: details['wpWaterSrc']?.toString() ?? "",
+  wspAdrress: details['wspAdrress']?.toString() ?? "",
+);
+
   }
 
   // Map<String, dynamic> toJson() {

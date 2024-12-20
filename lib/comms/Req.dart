@@ -23,6 +23,8 @@ class AppRequest {
 
     final Map<String, dynamic> wspOrders = await comms_repo.queryApi(uri);
     if (wspOrders["success"]) {
+      print("#####################wsp orders  $wspOrders");
+
       final data = wspOrders['data'] as List<dynamic>;
 
       return data.map((e) => OrderModel.fromJson(e)).toList();
@@ -39,6 +41,7 @@ class AppRequest {
     final uri =
         isProfile ? "${base_url}drivers/profile" : "${base_url}fp/drivers";
     final Map<String, dynamic> drivers = await comms_repo.queryApi(uri);
+    print("#######################$drivers");
     if (drivers["success"]) {
       final data = drivers['data'] as List<dynamic>;
       print("#####################drivers  $data");
