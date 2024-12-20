@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:application/comms/credentials.dart';
 import 'package:application/utils/utils.dart';
+import 'package:application/views/widgets/Fps/drivers/DriverProfile.dart';
 import 'package:application/views/widgets/Fps/homepage/WspList.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -177,34 +178,7 @@ class _DriverHomepageState extends State<DriverHomepage> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                height: 400,
-                width: 500,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white),
-                child: Column(children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Your Current Location",
-                      style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20),
-                    ),
-                  ),
-                  isLoading
-                      ? CircularProgressIndicator()
-                      : Text(
-                          "Latitude: $lat, Longitude: $lng",
-                          style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20),
-                        ),
-                ]),
-              ),
+ 
               SizedBox(height: 16),
               Text(
                 "What would you like to do?",
@@ -239,6 +213,19 @@ class _DriverHomepageState extends State<DriverHomepage> {
                                   ));
                         }),
                     SizedBox(height: 16),
+                     InfoCard(
+                        title: "Account",
+                        icon: Icons.person,
+                        color: Colors.black,
+                        tapped: () {
+                           Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DriverProfile()
+
+                                  //  MapScreen()
+                                  ));
+                        }),
 
                     // InfoCard(
                     //     title: "Change to Service Provider",

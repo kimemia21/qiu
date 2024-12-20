@@ -31,9 +31,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    uname = TextEditingController(text: "fp1@gmail.com");
+    uname = TextEditingController(text: "user2@gmail.com");
     // fp1@gmail.com is fp 
-    //user@gmail.com is user
+
+    //user2@gmail.com is user
+    // wspone@gmail.com is wsp
 
     upass = TextEditingController(text: "Password123");
 
@@ -157,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                       final Map<String, dynamic> body = {
                                         "email": uname.text.trim(),
                                         "password": upass.text.trim(),
-                                        "role": current_role,
+                                         "role": current_role,
                                       };
 
                                       printLog("Login $body");

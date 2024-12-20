@@ -119,9 +119,9 @@ class DriverCard extends StatelessWidget {
           _buildDetailRow(
             icon: Icons.access_time,
             title: 'Availability',
-            value: model.avaiable == 1 ? "Available" : "Unavailable",
-            iconColor: model.avaiable == 1 ? Colors.green.shade700 : Colors.red.shade700,
-            backgroundColor: model.avaiable == 1 ? Colors.green.shade50 : Colors.red.shade50,
+            value: model.available == 1 ? "Available" : "Unavailable",
+            iconColor: model.available == 1 ? Colors.green.shade700 : Colors.red.shade700,
+            backgroundColor: model.available == 1 ? Colors.green.shade50 : Colors.red.shade50,
           ),
         ],
       ),
