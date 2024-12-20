@@ -8,7 +8,7 @@ class Drivermodel {
   final int avaiable;
   final int? isOnline;
   final String firstName;
-  final int? driverFp;
+  // final int? driverFp;
   final String assignedTruck;
 
 
@@ -28,7 +28,7 @@ class Drivermodel {
     required this.phone,
     required this.avaiable,
     // this is to make this model to be reuseable for both driver and driver profile usage
-     this.driverFp,
+    //  this.driverFp,
      this.isOnline,
     required this.firstName,
     required this.assignedTruck,
@@ -48,7 +48,7 @@ class Drivermodel {
       assignedTruck: json["assignedTruck"],
       phone: json["phone"],
       avaiable: json["isAvailable"],
-      driverFp: json["driverFp"]??"",
+    //  driverFp: json["driverFp"]??"",
       isOnline: json["isOnline"]??"",
     );
   }

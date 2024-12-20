@@ -1,9 +1,9 @@
 import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
 
-import '../../../Models/DriverModel.dart';
+import '../../../../Models/DriverModel.dart';
 import 'DriverCard.dart';
-import '../globals.dart';
-import '../../../comms/Req.dart';
+import '../../globals.dart';
+import '../../../../comms/Req.dart';
 import 'package:flutter/material.dart';
 
 class Drivers extends StatefulWidget {

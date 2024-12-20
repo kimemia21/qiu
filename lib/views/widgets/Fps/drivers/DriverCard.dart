@@ -1,4 +1,4 @@
-import '../../../Models/DriverModel.dart';
+import '../../../../Models/DriverModel.dart';
 import 'package:flutter/material.dart';
 
 class DriverCard extends StatelessWidget {

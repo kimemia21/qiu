@@ -19,7 +19,7 @@ import '../Models/OrderModel.dart';
 
 class AppRequest {
   static Future<List<OrderModel>> fetchOrders(bool isFp) async {
-    final uri = "${isFp ?'fp/wsp-orders':'wsp/orders'}";
+    final uri = "${isFp ? 'fp/wsp-orders' : 'wsp/orders'}";
 
     final Map<String, dynamic> wspOrders = await comms_repo.queryApi(uri);
     if (wspOrders["success"]) {
@@ -27,7 +27,8 @@ class AppRequest {
 
       return data.map((e) => OrderModel.fromJson(e)).toList();
     } else {
-      print("######################wsp orders error ${wspOrders["message"]}######################");
+      print(
+          "######################wsp orders error ${wspOrders["message"]}######################");
       throw Exception(wspOrders["message"]);
     }
   }
@@ -40,6 +41,7 @@ class AppRequest {
     final Map<String, dynamic> drivers = await comms_repo.queryApi(uri);
     if (drivers["success"]) {
       final data = drivers['data'] as List<dynamic>;
+      print("#####################drivers  $data");
 
       return data.map((e) => Drivermodel.fromJson(e)).toList();
     } else {

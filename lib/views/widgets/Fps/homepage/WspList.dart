@@ -4,6 +4,7 @@ import 'package:application/Models/Wsp.dart';
 import 'package:application/comms/Req.dart';
 import 'package:application/comms/credentials.dart';
 import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
+import 'package:cherry_toast/cherry_toast.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -340,8 +341,6 @@ class _WspDetailsScreenState extends State<WspDetailsScreen> {
                                                               ElevatedButton(
                                                                 style: ElevatedButton
                                                                     .styleFrom(
-
-                                                                        
                                                                   backgroundColor:
                                                                       Color(
                                                                           0xFF7E64D4),
@@ -364,9 +363,24 @@ class _WspDetailsScreenState extends State<WspDetailsScreen> {
                                                                           context)
                                                                       .then(
                                                                           (value) {
+                                                                    print(
+                                                                        "##########$value");
                                                                     if (value[
-                                                                            "sucess"] ==
-                                                                        "success") {
+                                                                        "success"]) {
+                                                                      CherryToast
+                                                                          .success(
+                                                                            toastDuration: Duration(seconds: 5),
+                                                                        title: Text(
+                                                                            "Success"),
+                                                                        description: Text(value["data"]
+                                                                            .toString()
+                                                                            .replaceAll("{",
+                                                                                "")
+                                                                            .replaceAll("}",
+                                                                                "")),
+                                                                      ).show(
+                                                                          context);
+
                                                                       Navigator.pop(
                                                                           context);
                                                                     } else {
@@ -377,8 +391,11 @@ class _WspDetailsScreenState extends State<WspDetailsScreen> {
                                                                     }
                                                                   });
                                                                 },
-                                                                child: Text(style: GoogleFonts.poppins(color: Colors.white),
-                                                                  
+                                                                child: Text(
+                                                                    style: GoogleFonts
+                                                                        .poppins(
+                                                                            color:
+                                                                                Colors.white),
                                                                     'Order'),
                                                               ),
                                                             ],

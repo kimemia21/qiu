@@ -4,7 +4,7 @@ import 'package:application/views/widgets/Fps/homepage/FPHomePage.dart';
 import 'package:application/views/widgets/SC/homepage/SCHomeScreen.dart';
 import 'package:application/views/widgets/User/UserHomepage.dart';
 import 'package:application/views/widgets/WSP/homepage/WSPHomePage.dart';
-import 'package:application/views/widgets/drivers/homepage/DriverHomePage.dart';
+import 'package:application/views/widgets/Fps/drivers/homepage/DriverHomePage.dart';
 import 'package:application/views/widgets/globals.dart';
 
 import '../Models/user.dart';

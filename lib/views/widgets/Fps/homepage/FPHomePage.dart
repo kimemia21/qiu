@@ -1,7 +1,8 @@
-import 'package:application/views/widgets/Fps/drivers.dart';
+import 'package:application/Authentication/OnBoardScreen.dart';
+import 'package:application/views/widgets/Fps/FpDrivers.dart';
 import 'package:application/views/widgets/Fps/homepage/OrdersWsp.dart';
 import 'package:application/views/widgets/Fps/homepage/WspList.dart';
-import 'package:application/views/widgets/drivers/drivers.dart';
+import 'package:application/views/widgets/Fps/drivers/drivers.dart';
 
 import '../../../../Models/AccountTypes.dart';
 import '../../../../utils/utils.dart';
@@ -151,7 +152,22 @@ class _FPHomePageState extends State<FPHomePage> {
                   },
                 ),
 
+
                 const SizedBox(height: 20),
+                 SizedBox(height: 16), 
+                       InfoCard(
+                        title: "Change to Service Provider",
+                        icon: Icons.list,
+                        color: Colors.black,
+                        tapped: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OnBoardScreen()
+                        
+                                  //  MapScreen()
+                                  ));
+                        }),
 
               ],
             ),

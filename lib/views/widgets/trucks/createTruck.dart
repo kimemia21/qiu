@@ -1,6 +1,9 @@
+import 'package:application/comms/comms_repo.dart';
+import 'package:application/views/state/appbloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../comms/credentials.dart';
 import '../../../utils/utils.dart';
@@ -8,8 +11,6 @@ import '../../../utils/widgets.dart';
 
 Future<dynamic> CreateNewTruck(BuildContext context) async {
   return showModalBottomSheet(
-
-    
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
       backgroundColor: Colors.white,
@@ -49,22 +50,28 @@ class _CreateTruckWidgetState extends State<CreateTruckWidget> {
   }
 
   Future<void> _submitForm() async {
-    
     if (_formKey.currentState!.validate()) {
-      
-        setState(() {
-          savingtruck = false;
-        });
+      setState(() {
+        savingtruck = false;
+      });
+      // kime100 no enpoint for adding a driver on the fp page this data is for reg fp 
       final truckData = {
-        'capacity': _capacityController.text.replaceAll(",", ""),
-        'quality': _selectedQuality,
-        'licensePlate': _licensePlateController.text.trim().replaceAll(" ", ""),
-        'price': _priceController.text.replaceAll(",", ""),
+        'trucksCount': 1,
+        "trucks": [
+          {
+            'capacity': _capacityController.text.replaceAll(",", ""),
+            'quality': _selectedQuality,
+            'licensePlate':
+                _licensePlateController.text.trim().replaceAll(" ", ""),
+            'price': _priceController.text.replaceAll(",", ""),
+          }
+        ]
       };
 
       print('Truck Data: $truckData');
 
-      await comms_repo.QueryAPIpost("fp/register", truckData,context).then((value) {
+      await comms_repo.QueryAPIpost("fp/register", truckData, context)
+          .then((value) {
         printLog("Save truck  info $value");
 
         setState(() {
@@ -158,7 +165,7 @@ class _CreateTruckWidgetState extends State<CreateTruckWidget> {
                     },
                   ),
                   SizedBox(height: 32),
-                  savingtruck
+                  context.watch<Appbloc>().isLoading
                       ? SpinKitThreeInOut(
                           color: Colors.blue,
                         )
