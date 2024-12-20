@@ -218,13 +218,14 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     if (kDebugMode) {
-      _firstnameController.text = "meshak";
+      _firstnameController.text = "ak";
       _lastnameController.text = "47";
-      _emailController.text = "test6@gmail.com";
+      _emailController.text = "fp1@gmail.com";
+
 
       _passwordController.text = "Password123";
       _confirmPasswordController.text = "Password123";
-      _phoneNumberController.text = "+254769922994";
+      _phoneNumberController.text = "+254769922998";
     }
     return Scaffold(
       body: Container(

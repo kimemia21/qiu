@@ -128,7 +128,7 @@ class userModel {
           true, // (json["active"] ?? "").toString().toLowerCase() == "true",
 
       islandlord: json["user_type"] == "LANDLORD",
-      access_token: json["token"] ?? "".toString(),
+    access_token: (json["token"] ?? json["accessToken"] ?? "").toString(),
       role: json["role"] ?? "".toString(),
       id: current_role == "WSP"
           ? (json["wspId"] ?? "").toString()

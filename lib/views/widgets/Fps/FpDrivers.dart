@@ -1,8 +1,8 @@
 import 'package:application/views/widgets/WSP/homepage/wspglobals.dart';
-import 'package:application/views/widgets/drivers/createDriver.dart';
+import 'package:application/views/widgets/Fps/drivers/createDriver.dart';
 
 import '../../../Models/DriverModel.dart';
-import '../drivers/DriverCard.dart';
+import 'drivers/DriverCard.dart';
 import '../globals.dart';
 import '../../../comms/Req.dart';
 import 'package:flutter/material.dart';

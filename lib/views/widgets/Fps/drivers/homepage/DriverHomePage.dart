@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:application/comms/credentials.dart';
 import 'package:application/utils/utils.dart';
+import 'package:application/views/widgets/Fps/homepage/WspList.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:application/Authentication/OnBoardScreen.dart';
@@ -13,7 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-import '../../globals.dart';
+import '../../../globals.dart';
 
 class DriverHomepage extends StatefulWidget {
   const DriverHomepage({super.key});
@@ -98,14 +99,14 @@ class _DriverHomepageState extends State<DriverHomepage> {
 
    
       socket.emit('update driver', {
-        "driverId": 2,
+        "driverId": current_user.DriverId,
         "fpId": 3,
         "latitude": lat,
         "longitude": lng,
         "isAvailable": 1,
-        "truckCapacity": 300000,
-        "truckPrice": 4500,
-        "truckLicencePlate": "kbc123r"
+        "truckCapacity": current_user.truckCapacity,
+        "truckPrice": current_user.truckCost,
+        "truckLicencePlate": current_user.truckLicencePlate
       });
      
       
@@ -223,19 +224,35 @@ class _DriverHomepageState extends State<DriverHomepage> {
                         color: Colors.blue,
                         tapped: () {}),
                     SizedBox(height: 16),
+                    
                     InfoCard(
-                        title: "Change to Service Provider",
-                        icon: Icons.list,
-                        color: Colors.black,
+                        title: "Wsp",
+                        icon: Icons.add_shopping_cart,
+                        color: Colors.blue,
                         tapped: () {
-                          Navigator.push(
+                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OnBoardScreen()
+                                  builder: (context) => WspDetailsScreen()
 
                                   //  MapScreen()
                                   ));
                         }),
+                    SizedBox(height: 16),
+
+                    // InfoCard(
+                    //     title: "Change to Service Provider",
+                    //     icon: Icons.list,
+                    //     color: Colors.black,
+                    //     tapped: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) => OnBoardScreen()
+
+                    //               //  MapScreen()
+                    //               ));
+                    //     }),
                   ],
                 ),
               ),

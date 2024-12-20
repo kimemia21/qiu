@@ -1,3 +1,4 @@
+import 'package:application/views/widgets/Fps/drivers/RegisterDriver.dart';
 import 'package:application/views/widgets/globals.dart';
 
 import 'signUpPage.dart';
@@ -30,7 +31,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    uname = TextEditingController(text: "test6@gmail.com");
+    uname = TextEditingController(text: "fp1@gmail.com");
+    // fp1@gmail.com is fp 
+    //user@gmail.com is user
+
     upass = TextEditingController(text: "Password123");
 
     return Scaffold(
@@ -214,6 +218,27 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 ),
                           SizedBox(height: isSmallScreen ? 16 : 20),
+                        ],
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DriverRegister(),
+                        ),
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Login as Driver",
+                            style: TextStyle(color: Colors.white70),
+                          ),
+                         
                         ],
                       ),
                     ),

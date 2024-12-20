@@ -1,11 +1,11 @@
+import 'package:application/Models/TrucksModel.dart';
+import 'package:application/comms/Req.dart';
 import 'package:application/comms/credentials.dart';
 import 'package:application/utils/utils.dart';
 import 'package:application/utils/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
 
 Future<dynamic> CreateNewDriver(BuildContext context) async {
   return showModalBottomSheet(
@@ -35,11 +35,24 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
+  late Future<List<Trucksmodel>> trucks;
+  Trucksmodel? selectedTruck; 
+  String? truckId;
 
   // final TextEditingController _priceController = TextEditingController();
   bool savingDriver = false;
 
   String _selectedQuality = 'Soft Water';
+
+  @override
+  void initState() {
+    super.initState();
+    trucks = getTrucks();
+  }
+
+  Future<List<Trucksmodel>> getTrucks() async {
+    return await AppRequest.fetchTrucks();
+  }
 
   @override
   void dispose() {
@@ -54,13 +67,14 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
       setState(() {
         savingDriver = false;
       });
-      final driverData = {
+      final Map<String, dynamic> driverData = {
         'firstName': _firstNameController.text.replaceAll(",", ""),
-        'phoneNo': _phoneNumber.text.replaceAll(",",""),
+        'phoneNo': _phoneNumber.text.replaceAll(",", ""),
         'lastName': _lastNameController.text.trim().replaceAll(" ", ""),
-        'truckId': 2,
-         "fp_id": 17,
+        'truckId': truckId,
+        "fp_id": current_user.id,
       };
+
 
       print('Truck Data: $driverData');
 
@@ -112,7 +126,7 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
                     },
                   ),
                   SizedBox(height: 16),
-                       TextFormField(
+                  TextFormField(
                     controller: _lastNameController,
                     decoration: InputDecoration(
                       labelText: 'Last name ',
@@ -145,7 +159,7 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
                   DropdownButtonFormField<String>(
                     value: _selectedQuality,
                     decoration: InputDecoration(
-                      labelText: 'Available Trucks',
+                      labelText: 'Water Type',
                     ),
                     items: [
                       DropdownMenuItem(
@@ -157,6 +171,39 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
                       setState(() {
                         _selectedQuality = value!;
                       });
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  FutureBuilder<List<Trucksmodel>>(
+                    future: trucks,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text('No trucks available');
+                      }
+
+                      return DropdownButtonFormField<Trucksmodel>(
+                        value: selectedTruck,
+                        decoration: InputDecoration(
+                          labelText: 'Trucks',
+                        ),
+                        items: snapshot.data!.map((truck) {
+                          return DropdownMenuItem<Trucksmodel>(
+                            value: truck,
+                            child: Text(truck.licence_plate
+                                .toString()), 
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedTruck = value;
+                            truckId = value!.id.toString();
+                          });
+                        },
+                      );
                     },
                   ),
                   SizedBox(height: 32),
@@ -179,7 +226,7 @@ class _CreateDriverkWidgetState extends State<CreateDriverkWidget> {
                               Icon(Icons.add, color: Colors.white),
                               SizedBox(width: 8),
                               Text(
-                                'Add Truck',
+                                'Add Driver',
                                 style: GoogleFonts.poppins(
                                   color: Colors.white,
                                   fontSize: 16,
